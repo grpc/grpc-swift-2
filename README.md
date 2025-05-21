@@ -9,9 +9,13 @@ about gRPC on the [gRPC project's website][grpcio].
 - 🪪 **License** is Apache 2.0, repeated in [LICENSE](License)
 - 🔒 **Security** issues should be reported via the process in [SECURITY.md](SECURITY.md)
 - 🔀 **Related Repositories**:
-  - [`grpc-swift-nio-transport`][grpc-swift-nio-transport] contains high-performance HTTP/2 client and server transport implementations for gRPC Swift built on top of SwiftNIO.
-  - [`grpc-swift-protobuf`][grpc-swift-protobuf] contains integrations with SwiftProtobuf for gRPC Swift.
-  - [`grpc-swift-extras`][grpc-swift-extras] contains optional extras for gRPC Swift.
+  - [`grpc-swift-nio-transport`][grpc-swift-nio-transport] contains
+    high-performance HTTP/2 client and server transport implementations for gRPC
+    Swift built on top of SwiftNIO.
+  - [`grpc-swift-protobuf`][grpc-swift-protobuf] contains integrations with
+    SwiftProtobuf for gRPC Swift.
+  - [`grpc-swift-extras`][grpc-swift-extras] contains optional extras for gRPC
+    Swift.
 
 
 ## Quick Start
@@ -27,15 +31,15 @@ let package = Package(
     name: "Application",
     platforms: [.macOS("15.0")],
     dependencies: [
-        .package(url: "https://github.com/grpc/grpc-swift.git", from: "2.0.0"),
-        .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "1.0.0"),
-        .package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "1.0.0"),
+        .package(url: "https://github.com/grpc/grpc-swift-2.git", from: "2.0.0"),
+        .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "2.0.0"),
+        .package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "2.0.0"),
     ],
     targets: [
         .executableTarget(
             name: "Server",
             dependencies: [
-                .product(name: "GRPCCore", package: "grpc-swift"),
+                .product(name: "GRPCCore", package: "grpc-swift-2"),
                 .product(name: "GRPCNIOTransportHTTP2", package: "grpc-swift-nio-transport"),
                 .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
             ]
@@ -46,7 +50,7 @@ let package = Package(
 
 [gh-grpc]: https://github.com/grpc/grpc
 [grpcio]: https://grpc.io
-[spi-grpc-swift]: https://swiftpackageindex.com/grpc/grpc-swift/documentation
+[spi-grpc-swift]: https://swiftpackageindex.com/grpc/grpc-swift-2/documentation
 [grpc-swift-nio-transport]: https://github.com/grpc/grpc-swift-nio-transport
 [grpc-swift-protobuf]: https://github.com/grpc/grpc-swift-protobuf
 [grpc-swift-extras]: https://github.com/grpc/grpc-swift-extras

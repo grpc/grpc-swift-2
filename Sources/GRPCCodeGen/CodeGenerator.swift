@@ -43,10 +43,8 @@ public struct CodeGenerator: Sendable {
     /// Whether or not server code should be generated.
     public var server: Bool
     /// The name of the core gRPC module.
-    @available(gRPCSwift 2.1, *)
     public var grpcCoreModuleName: String
     /// The availability annotations to use on the generated code.
-    @available(gRPCSwift 2.2, *)
     public var availability: AvailabilityAnnotations = .default
 
     /// Creates a new configuration.
@@ -92,7 +90,6 @@ public struct CodeGenerator: Sendable {
     }
 
     // The availability that generated code is annotated with.
-    @available(gRPCSwift 2.2, *)
     public struct AvailabilityAnnotations: Sendable, Hashable {
       public struct Platform: Sendable, Hashable {
         /// The name of the OS, e.g. 'macOS'.

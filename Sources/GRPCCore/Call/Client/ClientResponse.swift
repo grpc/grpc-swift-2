@@ -390,7 +390,6 @@ extension StreamingClientResponse {
   /// Returns the body parts (i.e. `messages` and `trailingMetadata`) returned from the server.
   ///
   /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws a ``RPCError``.
-  @available(gRPCSwift 2.1, *)
   public var bodyParts: RPCAsyncSequence<Contents.BodyPart, any Error> {
     switch self.accepted {
     case let .success(contents):

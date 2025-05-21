@@ -21,16 +21,16 @@ let package = Package(
   name: "route-guide",
   platforms: [.macOS("15.0")],
   dependencies: [
-    .package(url: "https://github.com/grpc/grpc-swift.git", from: "2.0.0"),
-    .package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "1.0.0"),
-    .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "1.0.0"),
+    .package(url: "https://github.com/grpc/grpc-swift-2.git", from: "2.0.0"),
+    .package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "2.0.0"),
+    .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "2.0.0"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
   ],
   targets: [
     .executableTarget(
       name: "route-guide",
       dependencies: [
-        .product(name: "GRPCCore", package: "grpc-swift"),
+        .product(name: "GRPCCore", package: "grpc-swift-2"),
         .product(name: "GRPCNIOTransportHTTP2", package: "grpc-swift-nio-transport"),
         .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),

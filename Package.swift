@@ -50,7 +50,7 @@ let dependencies: [Package.Dependency] = [
 
 // This adds some build settings which allow us to map "@available(gRPCSwift 2.x, *)" to
 // the appropriate OS platforms.
-let nextMinorVersion = 2
+let nextMinorVersion = 1
 let availabilitySettings: [SwiftSetting] = (0 ... nextMinorVersion).map { minor in
   let name = "gRPCSwift"
   let version = "2.\(minor)"
@@ -123,7 +123,7 @@ let targets: [Target] = [
 ]
 
 let package = Package(
-  name: "grpc-swift",
+  name: "grpc-swift-2",
   products: products,
   dependencies: dependencies,
   targets: targets

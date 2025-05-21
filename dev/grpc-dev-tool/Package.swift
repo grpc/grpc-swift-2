@@ -28,7 +28,7 @@ let package = Package(
     .executableTarget(
       name: "grpc-dev-tool",
       dependencies: [
-        .product(name: "GRPCCodeGen", package: "grpc-swift"),
+        .product(name: "GRPCCodeGen", package: "grpc-swift-2"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]
     )
