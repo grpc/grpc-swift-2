@@ -1,2 +1,2 @@
 $ swift build --product protoc-gen-swift
-$ swift build --product protoc-gen-grpc-swift
+$ swift build --product protoc-gen-grpc-swift-2

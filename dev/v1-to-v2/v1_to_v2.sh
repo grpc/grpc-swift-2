@@ -32,7 +32,7 @@ function checkout_v1 {
   log "Cloning grpc-swift to ${grpc_checkout_path}"
   git clone \
     --quiet \
-    https://github.com/grpc/grpc-swift.git \
+    https://github.com/grpc/grpc-swift-2.git \
     "${grpc_checkout_path}"
 
   # Get the latest version of 1.x.y.
@@ -49,7 +49,7 @@ function checkout_v1 {
   package_manifest="${grpc_checkout_path}/Package.swift"
   log "Updating ${package_manifest}"
   sed -i '' \
-    -e 's/let grpcPackageName = "grpc-swift"/let grpcPackageName = "grpc-swift-v1"/g' \
+    -e 's/let grpcPackageName = "grpc-swift-2"/let grpcPackageName = "grpc-swift-v1"/g' \
     -e 's/protoc-gen-grpc-swift/protoc-gen-grpc-swift-v1/g' \
     "${package_manifest}"
 

@@ -66,8 +66,8 @@ you've finished the migration.
 
 Now you need to update your package manifest (`Package.swift`) to use the local
 copy rather than the copy from GitHub. Replace your package dependency on
-"grpc-swift" with the local dependency, and update any target dependencies to
-use "grpc-swift-v1" instead of "grpc-swift":
+"grpc-swift-2" with the local dependency, and update any target dependencies to
+use "grpc-swift-v1" instead of "grpc-swift-2":
 
 ```swift
 let package = Package(
@@ -130,16 +130,16 @@ If there are any other build issues fix them up now and commit the changes.
 Now add the following package dependencies for gRPC Swift 2.x:
 
 ```
-.package(url: "https://github.com/grpc/grpc-swift.git", from: "2.0.0"),
-.package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "1.0.0"),
-.package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "1.0.0"),
+.package(url: "https://github.com/grpc/grpc-swift-2.git", from: "2.0.0"),
+.package(url: "https://github.com/grpc/grpc-swift-protobuf.git", from: "2.0.0"),
+.package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "2.0.0"),
 ```
 
 For each target which was previously importing the `GRPC` module add the
 following target dependencies:
 
 ```
-.product(name: "GRPCCore", package: "grpc-swift"),
+.product(name: "GRPCCore", package: "grpc-swift-2"),
 .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
 .product(name: "GRPCNIOTransportHTTP2", package: "grpc-swift-nio-transport"),
 ```
@@ -175,7 +175,7 @@ directory containing your generated code, for example:
 One of the patches applied to the local copy of 1.x was to rename
 `protoc-gen-grpc-swift` to `protoc-gen-grpc-swift-v1`. If you previously used a
 script to generate your code, then run it again, ensuring that the copy of
-`protoc-gen-grpc-swift` comes from this package (as it will now be for 2.x).
+`protoc-gen-grpc-swift-2` comes from this package (as it will now be for 2.x).
 
 If you didn't use a script to generate your code then refer to the
 [documentation][3] to learn how to generate gRPC Swift code.
