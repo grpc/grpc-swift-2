@@ -96,7 +96,11 @@ internal enum ClientStreamExecutor {
       try await stream.write(.metadata(request.metadata))
       try await request.producer(.map(into: stream) { .message(try serializer.serialize($0)) })
     }.castError(to: RPCError.self) { other in
-      RPCError(code: .unknown, message: "Write failed.", cause: other)
+      if let convertible = other as? any RPCErrorConvertible {
+        RPCError(convertible)
+      } else {
+        RPCError(code: .unknown, message: "Write failed.", cause: other)
+      }
     }
 
     switch result {

@@ -26,6 +26,13 @@ extension ClientInterceptor where Self == RejectAllClientInterceptor {
     return RejectAllClientInterceptor(throw: error)
   }
 
+  static func throwInBodyParts(_ error: any Error) -> Self {
+    return RejectAllClientInterceptor(throwInBodyParts: error)
+  }
+
+  static func throwInProducer(_ error: any Error) -> Self {
+    return RejectAllClientInterceptor(throwInProducer: error)
+  }
 }
 
 @available(gRPCSwift 2.0, *)
@@ -43,6 +50,10 @@ struct RejectAllClientInterceptor: ClientInterceptor {
     case `throw`(any Error)
     /// Reject the RPC with a given error.
     case reject(RPCError)
+    /// Throw an error in the body parts sequence.
+    case throwInBodyParts(any Error)
+    /// Throw an error in the message producer closure.
+    case throwInProducer(any Error)
   }
 
   let mode: Mode
@@ -53,6 +64,14 @@ struct RejectAllClientInterceptor: ClientInterceptor {
 
   init(reject error: RPCError) {
     self.mode = .reject(error)
+  }
+
+  init(throwInBodyParts error: any Error) {
+    self.mode = .throwInBodyParts(error)
+  }
+
+  init(throwInProducer error: any Error) {
+    self.mode = .throwInProducer(error)
   }
 
   func intercept<Input: Sendable, Output: Sendable>(
@@ -68,6 +87,29 @@ struct RejectAllClientInterceptor: ClientInterceptor {
       throw error
     case .reject(let error):
       return StreamingClientResponse(error: error)
+    case .throwInBodyParts(let error):
+      var response = try await next(request, context)
+      switch response.accepted {
+      case .success(var success):
+        let stream = AsyncThrowingStream<StreamingClientResponse<Output>.Contents.BodyPart, any Error>.makeStream()
+        stream.continuation.finish(throwing: error)
+
+        success.bodyParts = RPCAsyncSequence(wrapping: stream.stream)
+        response.accepted = .success(success)
+        return response
+      case .failure:
+        return response
+      }
+    case .throwInProducer(let error):
+      let wrappedProducer = request.producer
+
+      var request = request
+      request.producer = { writer in
+        try await wrappedProducer(writer)
+        throw error
+      }
+
+      return try await next(request, context)
     }
   }
 }
