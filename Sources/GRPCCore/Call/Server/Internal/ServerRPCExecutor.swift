@@ -213,12 +213,8 @@ struct ServerRPCExecutor {
         return try await contents.producer(
           .serializingToRPCResponsePart(into: outbound, with: serializer)
         )
-      }.castError(to: RPCError.self) { error in
-        if let convertible = error as? (any RPCErrorConvertible) {
-          return RPCError(convertible)
-        } else {
-          return RPCError(code: .unknown, message: "", cause: error)
-        }
+      }.castOrConvertRPCError { error in
+        RPCError(code: .unknown, message: "", cause: error)
       }
 
       switch result {
