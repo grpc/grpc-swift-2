@@ -91,7 +91,9 @@ struct RejectAllClientInterceptor: ClientInterceptor {
       var response = try await next(request, context)
       switch response.accepted {
       case .success(var success):
-        let stream = AsyncThrowingStream<StreamingClientResponse<Output>.Contents.BodyPart, any Error>.makeStream()
+        let stream = AsyncThrowingStream<
+          StreamingClientResponse<Output>.Contents.BodyPart, any Error
+        >.makeStream()
         stream.continuation.finish(throwing: error)
 
         success.bodyParts = RPCAsyncSequence(wrapping: stream.stream)

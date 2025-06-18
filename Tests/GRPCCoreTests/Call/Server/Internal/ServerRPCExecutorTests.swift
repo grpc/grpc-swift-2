@@ -423,10 +423,13 @@ final class ServerRPCExecutorTests: XCTestCase {
       var rpcErrorMetadata: Metadata { ["error": "yes"] }
     }
 
-    let harness = ServerRPCExecutorTestHarness(interceptors: [.throwInMessageSequence(CustomError())])
+    let harness = ServerRPCExecutorTestHarness(interceptors: [
+      .throwInMessageSequence(CustomError())
+    ])
     try await harness.execute(handler: .echo) { inbound in
       try await inbound.write(.metadata(["foo": "bar"]))
-      try await inbound.write(.message([0])) // the sequence throws instantly, this should not arrive
+      // the sequence throws instantly, this should not arrive
+      try await inbound.write(.message([0]))
       await inbound.finish()
     } consumer: { outbound in
       let parts = try await outbound.collect()
