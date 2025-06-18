@@ -403,14 +403,11 @@ final class ServerRPCExecutorTests: XCTestCase {
     }
 
     let harness = ServerRPCExecutorTestHarness(
-      interceptors: [.throwInProducer(CustomError(), after: .milliseconds(10))]
+      interceptors: [.throwInProducer(CustomError())]
     )
     try await harness.execute(handler: .echo) { inbound in
       try await inbound.write(.metadata(["foo": "bar"]))
       try await inbound.write(.message([0]))
-      try await Task.sleep(for: .milliseconds(50))
-      try await inbound.write(.message([1]))
-      await inbound.finish()
     } consumer: { outbound in
       let parts = try await outbound.collect()
       let status = Status(code: .alreadyExists, message: "foobar")

@@ -26,8 +26,8 @@ extension ServerInterceptor where Self == RejectAllServerInterceptor {
     RejectAllServerInterceptor(throw: error)
   }
 
-  static func throwInProducer(_ error: any Error, after duration: Duration) -> Self {
-    RejectAllServerInterceptor(throwInProducer: error, after: duration)
+  static func throwInProducer(_ error: any Error) -> Self {
+    RejectAllServerInterceptor(throwInProducer: error)
   }
 
   static func throwInMessageSequence(_ error: any Error) -> Self {
@@ -51,7 +51,7 @@ struct RejectAllServerInterceptor: ServerInterceptor {
     /// Reject the RPC with a given error.
     case reject(RPCError)
     /// Throw in the producer closure returned.
-    case throwInProducer(any Error, after: Duration)
+    case throwInProducer(any Error)
     /// Throw in the async sequence that stream inbound messages.
     case throwInMessageSequence(any Error)
   }
@@ -72,8 +72,8 @@ struct RejectAllServerInterceptor: ServerInterceptor {
     self.mode = .reject(error)
   }
 
-  init(throwInProducer error: any Error, after duration: Duration) {
-    self.mode = .throwInProducer(error, after: duration)
+  init(throwInProducer error: any Error) {
+    self.mode = .throwInProducer(error)
   }
 
   init(throwInMessageSequence error: any Error) {
@@ -93,45 +93,21 @@ struct RejectAllServerInterceptor: ServerInterceptor {
       throw error
     case .reject(let error):
       return StreamingServerResponse(error: error)
-    case .throwInProducer(let error, let duration):
+    case .throwInProducer(let error):
       var response = try await next(request, context)
       switch response.accepted {
       case .success(var success):
         let wrappedProducer = success.producer
         success.producer = { writer in
-          let result: Result<Metadata, any Error> = await withTaskGroup(of: TimeoutResult.self) { group in
+          try await withThrowingTaskGroup(of: Metadata.self) { group in
             group.addTask {
-              do {
-                try await Task.sleep(for: duration, tolerance: .nanoseconds(1))
-              } catch {
-                return .cancelled
-              }
-              return .throw(error)
+              try await wrappedProducer(writer)
             }
 
-            group.addTask {
-              do {
-                return .result(try await wrappedProducer(writer))
-              } catch {
-                return .throw(error)
-              }
-            }
-
-            let first = await group.next()!
             group.cancelAll()
-            let second = await group.next()!
-
-            switch (first, second) {
-            case (.throw(let error), _):
-              return .failure(error)
-            case (.result(let metadata), _):
-              return .success(metadata)
-            case (.cancelled, _):
-              return .failure(CancellationError())
-            }
+            _ = try await group.next()!
+            throw error
           }
-
-          return try result.get()
         }
 
         response.accepted = .success(success)
