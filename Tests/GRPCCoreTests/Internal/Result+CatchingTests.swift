@@ -63,4 +63,39 @@ final class ResultCatchingTests: XCTestCase {
       XCTAssertEqual(error, RPCError(code: .invalidArgument, message: "fallback"))
     }
   }
+
+  func testCastOrConvertRPCErrorConvertible() {
+    struct ConvertibleError: Error, RPCErrorConvertible {
+      let rpcErrorCode: RPCError.Code = .unknown
+      let rpcErrorMessage = "foo"
+    }
+
+    let result = Result<Void, any Error>.failure(ConvertibleError())
+    let typedFailure = result.castOrConvertRPCError { _ in
+      XCTFail("buildError(_:) was called")
+      return RPCError(code: .failedPrecondition, message: "shouldn't happen")
+    }
+
+    switch typedFailure {
+    case .success:
+      XCTFail()
+    case .failure(let error):
+      XCTAssertEqual(error, RPCError(code: .unknown, message: "foo"))
+    }
+  }
+
+  func testCastOrConvertToErrorOfIncorrectType() async {
+    struct WrongError: Error {}
+    let result = Result<Void, any Error>.failure(WrongError())
+    let typedFailure = result.castOrConvertRPCError { _ in
+      return RPCError(code: .invalidArgument, message: "fallback")
+    }
+
+    switch typedFailure {
+    case .success:
+      XCTFail()
+    case .failure(let error):
+      XCTAssertEqual(error, RPCError(code: .invalidArgument, message: "fallback"))
+    }
+  }
 }

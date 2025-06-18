@@ -56,11 +56,9 @@ extension Result {
   func castOrConvertRPCError(
     or buildError: (any Error) -> RPCError
   ) -> Result<Success, RPCError> {
-    return self.mapError { error in
-      if let rpcError = error as? RPCError {
-        return rpcError
-      } else if let convertibleError = error as? any RPCErrorConvertible {
-        return RPCError(convertibleError)
+    return self.castError(to: RPCError.self) { error in
+      if let convertible = error as? any RPCErrorConvertible {
+        return RPCError(convertible)
       } else {
         return buildError(error)
       }
