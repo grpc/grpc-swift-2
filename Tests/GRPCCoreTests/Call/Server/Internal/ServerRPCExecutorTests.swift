@@ -394,4 +394,48 @@ final class ServerRPCExecutorTests: XCTestCase {
       XCTAssertEqual(parts, [.status(status, metadata)])
     }
   }
+
+  func testInterceptorProducerErrorConversion() async throws {
+    struct CustomError: RPCErrorConvertible, Error {
+      var rpcErrorCode: RPCError.Code { .alreadyExists }
+      var rpcErrorMessage: String { "foobar" }
+      var rpcErrorMetadata: Metadata { ["error": "yes"] }
+    }
+
+    let harness = ServerRPCExecutorTestHarness(
+      interceptors: [.throwInProducer(CustomError())]
+    )
+    try await harness.execute(handler: .echo) { inbound in
+      try await inbound.write(.metadata(["foo": "bar"]))
+      try await inbound.write(.message([0]))
+    } consumer: { outbound in
+      let parts = try await outbound.collect()
+      let status = Status(code: .alreadyExists, message: "foobar")
+      let metadata: Metadata = ["error": "yes"]
+      XCTAssertEqual(parts, [.metadata(["foo": "bar"]), .message([0]), .status(status, metadata)])
+    }
+  }
+
+  func testInterceptorMessagesErrorConversion() async throws {
+    struct CustomError: RPCErrorConvertible, Error {
+      var rpcErrorCode: RPCError.Code { .alreadyExists }
+      var rpcErrorMessage: String { "foobar" }
+      var rpcErrorMetadata: Metadata { ["error": "yes"] }
+    }
+
+    let harness = ServerRPCExecutorTestHarness(interceptors: [
+      .throwInMessageSequence(CustomError())
+    ])
+    try await harness.execute(handler: .echo) { inbound in
+      try await inbound.write(.metadata(["foo": "bar"]))
+      // the sequence throws instantly, this should not arrive
+      try await inbound.write(.message([0]))
+      await inbound.finish()
+    } consumer: { outbound in
+      let parts = try await outbound.collect()
+      let status = Status(code: .alreadyExists, message: "foobar")
+      let metadata: Metadata = ["error": "yes"]
+      XCTAssertEqual(parts, [.metadata(["foo": "bar"]), .status(status, metadata)])
+    }
+  }
 }

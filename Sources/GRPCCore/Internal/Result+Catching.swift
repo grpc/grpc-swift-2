@@ -45,4 +45,23 @@ extension Result {
       return (error as? NewError) ?? buildError(error)
     }
   }
+
+  /// Attempt to map or convert the error to an `RPCError`.
+  ///
+  /// If the cast or conversion is not possible then the provided closure is used to create an error of the given type.
+  ///
+  /// - Parameter buildError: A closure which constructs the desired error if conversion is not possible.
+  @inlinable
+  @available(gRPCSwift 2.0, *)
+  func castOrConvertRPCError(
+    or buildError: (any Error) -> RPCError
+  ) -> Result<Success, RPCError> {
+    return self.castError(to: RPCError.self) { error in
+      if let convertible = error as? any RPCErrorConvertible {
+        return RPCError(convertible)
+      } else {
+        return buildError(error)
+      }
+    }
+  }
 }

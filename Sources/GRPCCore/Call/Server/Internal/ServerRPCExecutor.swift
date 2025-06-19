@@ -188,16 +188,12 @@ struct ServerRPCExecutor {
       ) { request, context in
         try await handler(request, context)
       }
-    }.castError(to: RPCError.self) { error in
-      if let convertible = error as? (any RPCErrorConvertible) {
-        return RPCError(convertible)
-      } else {
-        return RPCError(
-          code: .unknown,
-          message: "Service method threw an unknown error.",
-          cause: error
-        )
-      }
+    }.castOrConvertRPCError { error in
+      RPCError(
+        code: .unknown,
+        message: "Service method threw an unknown error.",
+        cause: error
+      )
     }.flatMap { response in
       response.accepted
     }
@@ -213,7 +209,7 @@ struct ServerRPCExecutor {
         return try await contents.producer(
           .serializingToRPCResponsePart(into: outbound, with: serializer)
         )
-      }.castError(to: RPCError.self) { error in
+      }.castOrConvertRPCError { error in
         RPCError(code: .unknown, message: "", cause: error)
       }
 

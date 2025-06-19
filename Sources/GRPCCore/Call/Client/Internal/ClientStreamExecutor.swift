@@ -26,7 +26,7 @@ internal enum ClientStreamExecutor {
   ///   - attempt: The attempt number for the RPC that will be executed.
   ///   - serializer: A request serializer.
   ///   - deserializer: A response deserializer.
-  ///   - stream: The stream to excecute the RPC on.
+  ///   - stream: The stream to execute the RPC on.
   /// - Returns: A streamed response.
   @inlinable
   static func execute<Input: Sendable, Output: Sendable, Bytes: GRPCContiguousBytes>(
@@ -95,7 +95,7 @@ internal enum ClientStreamExecutor {
     let result = await Result {
       try await stream.write(.metadata(request.metadata))
       try await request.producer(.map(into: stream) { .message(try serializer.serialize($0)) })
-    }.castError(to: RPCError.self) { other in
+    }.castOrConvertRPCError { other in
       RPCError(code: .unknown, message: "Write failed.", cause: other)
     }
 

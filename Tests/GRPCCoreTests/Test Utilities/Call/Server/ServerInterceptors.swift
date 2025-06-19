@@ -25,6 +25,14 @@ extension ServerInterceptor where Self == RejectAllServerInterceptor {
   static func throwError(_ error: any Error) -> Self {
     RejectAllServerInterceptor(throw: error)
   }
+
+  static func throwInProducer(_ error: any Error) -> Self {
+    RejectAllServerInterceptor(throwInProducer: error)
+  }
+
+  static func throwInMessageSequence(_ error: any Error) -> Self {
+    RejectAllServerInterceptor(throwInMessageSequence: error)
+  }
 }
 
 @available(gRPCSwift 2.0, *)
@@ -42,6 +50,16 @@ struct RejectAllServerInterceptor: ServerInterceptor {
     case `throw`(any Error)
     /// Reject the RPC with a given error.
     case reject(RPCError)
+    /// Throw in the producer closure returned.
+    case throwInProducer(any Error)
+    /// Throw in the async sequence that stream inbound messages.
+    case throwInMessageSequence(any Error)
+  }
+
+  private enum TimeoutResult {
+    case `throw`(any Error)
+    case cancelled
+    case result(Metadata)
   }
 
   let mode: Mode
@@ -52,6 +70,14 @@ struct RejectAllServerInterceptor: ServerInterceptor {
 
   init(reject error: RPCError) {
     self.mode = .reject(error)
+  }
+
+  init(throwInProducer error: any Error) {
+    self.mode = .throwInProducer(error)
+  }
+
+  init(throwInMessageSequence error: any Error) {
+    self.mode = .throwInMessageSequence(error)
   }
 
   func intercept<Input: Sendable, Output: Sendable>(
@@ -67,6 +93,36 @@ struct RejectAllServerInterceptor: ServerInterceptor {
       throw error
     case .reject(let error):
       return StreamingServerResponse(error: error)
+    case .throwInProducer(let error):
+      var response = try await next(request, context)
+      switch response.accepted {
+      case .success(var success):
+        let wrappedProducer = success.producer
+        success.producer = { writer in
+          try await withThrowingTaskGroup(of: Metadata.self) { group in
+            group.addTask {
+              try await wrappedProducer(writer)
+            }
+
+            group.cancelAll()
+            _ = try await group.next()!
+            throw error
+          }
+        }
+
+        response.accepted = .success(success)
+        return response
+      case .failure:
+        return response
+      }
+    case .throwInMessageSequence(let error):
+      let stream = AsyncThrowingStream<Input, any Error>.makeStream()
+      stream.continuation.finish(throwing: error)
+
+      var request = request
+      request.messages = RPCAsyncSequence(wrapping: stream.stream)
+
+      return try await next(request, context)
     }
   }
 }
