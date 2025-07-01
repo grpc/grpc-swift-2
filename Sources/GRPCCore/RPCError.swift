@@ -342,3 +342,14 @@ extension RPCError {
     self.cause = convertible.rpcErrorCause
   }
 }
+
+@available(gRPCSwift 2.0, *)
+extension RPCError: RPCErrorConvertible {
+  public var rpcErrorCode: Code {
+    self.code
+  }
+  
+  public var rpcErrorMessage: String {
+    self.message
+  }
+}
