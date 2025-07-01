@@ -343,13 +343,21 @@ extension RPCError {
   }
 }
 
-@available(gRPCSwift 2.0, *)
+@available(gRPCSwift 2.1, *)
 extension RPCError: RPCErrorConvertible {
   public var rpcErrorCode: Code {
     self.code
   }
-  
+
   public var rpcErrorMessage: String {
     self.message
+  }
+
+  public var rpcErrorMetadata: Metadata {
+    self.metadata
+  }
+
+  public var rpcErrorCause: (any Error)? {
+    self.cause
   }
 }
