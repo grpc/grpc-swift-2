@@ -27,7 +27,7 @@ public import Musl  // should be @usableFromInline
 
 @available(gRPCSwift 2.0, *)
 @usableFromInline
-struct RetryDelaySequence: Sequence {
+struct RetryDelaySequence: Sequence, Sendable {
   @usableFromInline
   typealias Element = Duration
 
@@ -45,7 +45,7 @@ struct RetryDelaySequence: Sequence {
   }
 
   @usableFromInline
-  struct Iterator: IteratorProtocol {
+  struct Iterator: IteratorProtocol, Sendable {
     @usableFromInline
     let policy: RetryPolicy
     @usableFromInline

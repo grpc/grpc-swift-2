@@ -16,7 +16,7 @@
 
 @available(gRPCSwift 2.0, *)
 @usableFromInline
-internal enum ClientStreamExecutor {
+internal enum ClientStreamExecutor: Sendable {
   /// Execute a request on the stream executor.
   ///
   /// - Parameters:
@@ -250,3 +250,6 @@ internal enum ClientStreamExecutor {
     }
   }
 }
+
+@available(*, unavailable)
+extension ClientStreamExecutor.RawBodyPartToMessageSequence.AsyncIterator: Sendable {}

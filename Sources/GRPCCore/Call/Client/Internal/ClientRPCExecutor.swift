@@ -16,7 +16,7 @@
 
 @available(gRPCSwift 2.0, *)
 @usableFromInline
-enum ClientRPCExecutor {
+enum ClientRPCExecutor: Sendable {
   /// Execute the request and handle its response.
   ///
   /// - Parameters:

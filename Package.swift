@@ -65,6 +65,7 @@ let defaultSwiftSettings: [SwiftSetting] =
     .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("InternalImportsByDefault"),
     .enableUpcomingFeature("MemberImportVisibility"),
+    .unsafeFlags(["-Xfrontend", "-require-explicit-sendable"]),
   ]
 
 // -------------------------------------------------------------------------------------------------

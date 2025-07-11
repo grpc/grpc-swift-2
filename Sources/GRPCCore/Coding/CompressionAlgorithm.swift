@@ -94,7 +94,7 @@ extension CompressionAlgorithmSet {
   }
 
   /// A sequence of ``CompressionAlgorithm`` values present in a ``CompressionAlgorithmSet``.
-  public struct Elements: Sequence {
+  public struct Elements: Sequence, Sendable {
     public typealias Element = CompressionAlgorithm
 
     private let algorithmSet: CompressionAlgorithmSet
@@ -107,7 +107,7 @@ extension CompressionAlgorithmSet {
       return Iterator(algorithmSet: self.algorithmSet)
     }
 
-    public struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol, Sendable {
       private let algorithmSet: CompressionAlgorithmSet
       private var iterator: IndexingIterator<[CompressionAlgorithm.Value]>
 
