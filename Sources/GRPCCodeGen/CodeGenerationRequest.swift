@@ -82,6 +82,9 @@ public struct CodeGenerationRequest {
   }
 }
 
+@available(*, unavailable)
+extension CodeGenerationRequest: Sendable {}
+
 @available(gRPCSwift 2.0, *)
 extension CodeGenerationRequest {
   @available(*, deprecated, renamed: "makeSerializerSnippet")
@@ -123,7 +126,7 @@ extension CodeGenerationRequest {
 
 /// Represents an import: a module or a specific item from a module.
 @available(gRPCSwift 2.0, *)
-public struct Dependency: Equatable {
+public struct Dependency: Equatable, Sendable {
   /// If the dependency is an item, the property's value is the item representation.
   /// If the dependency is a module, this property is nil.
   public var item: Item?
@@ -158,7 +161,7 @@ public struct Dependency: Equatable {
   }
 
   /// Represents an item imported from a module.
-  public struct Item: Equatable {
+  public struct Item: Equatable, Sendable {
     /// The keyword that specifies the item's kind (e.g. `func`, `struct`).
     public var kind: Kind
 
@@ -171,7 +174,7 @@ public struct Dependency: Equatable {
     }
 
     /// Represents the imported item's kind.
-    public struct Kind: Equatable {
+    public struct Kind: Equatable, Sendable {
       /// Describes the keyword associated with the imported item.
       internal enum Value: String {
         case `typealias`
@@ -233,7 +236,7 @@ public struct Dependency: Equatable {
   }
 
   /// Describes any requirement for the `@preconcurrency` attribute.
-  public struct PreconcurrencyRequirement: Equatable {
+  public struct PreconcurrencyRequirement: Equatable, Sendable {
     internal enum Value: Equatable {
       case required
       case notRequired
@@ -265,7 +268,7 @@ public struct Dependency: Equatable {
 
 /// Represents a service described in an IDL file.
 @available(gRPCSwift 2.0, *)
-public struct ServiceDescriptor: Hashable {
+public struct ServiceDescriptor: Hashable, Sendable {
   /// Documentation from comments above the IDL service description.
   /// It is already formatted, meaning it contains  "///" and new lines.
   public var documentation: String
@@ -323,7 +326,7 @@ extension ServiceDescriptor {
 
 /// Represents a method described in an IDL file.
 @available(gRPCSwift 2.0, *)
-public struct MethodDescriptor: Hashable {
+public struct MethodDescriptor: Hashable, Sendable {
   /// Documentation from comments above the IDL method description.
   /// It is already formatted, meaning it contains  "///" and new lines.
   public var documentation: String
@@ -388,7 +391,7 @@ extension MethodDescriptor {
 }
 
 @available(gRPCSwift 2.0, *)
-public struct ServiceName: Hashable {
+public struct ServiceName: Hashable, Sendable {
   /// The identifying name as used in the service/method descriptors including any namespace.
   ///
   /// This value is also used to identify the service to the remote peer, usually as part of the
@@ -423,7 +426,7 @@ public struct ServiceName: Hashable {
 }
 
 @available(gRPCSwift 2.0, *)
-public struct MethodName: Hashable {
+public struct MethodName: Hashable, Sendable {
   /// The identifying name as used in the service/method descriptors.
   ///
   /// This value is also used to identify the method to the remote peer, usually as part of the
@@ -455,7 +458,7 @@ public struct MethodName: Hashable {
 /// Represents the name associated with a namespace, service or a method, in three different formats.
 @available(*, deprecated, message: "Use ServiceName/MethodName instead.")
 @available(gRPCSwift 2.0, *)
-public struct Name: Hashable {
+public struct Name: Hashable, Sendable {
   /// The base name is the name used for the namespace/service/method in the IDL file, so it should follow
   /// the specific casing of the IDL.
   ///
