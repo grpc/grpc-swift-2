@@ -89,7 +89,7 @@ struct BroadcastAsyncSequence<Element: Sendable>: Sendable, AsyncSequence {
 @available(gRPCSwift 2.0, *)
 extension BroadcastAsyncSequence {
   @usableFromInline
-  struct AsyncIterator: AsyncIteratorProtocol, Sendable {
+  struct AsyncIterator: AsyncIteratorProtocol {
     @usableFromInline
     let _storage: _BroadcastSequenceStorage<Element>
     @usableFromInline
@@ -110,6 +110,9 @@ extension BroadcastAsyncSequence {
     }
   }
 }
+
+@available(*, unavailable)
+extension BroadcastAsyncSequence.AsyncIterator: Sendable {}
 
 // MARK: - Continuation
 

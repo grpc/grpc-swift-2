@@ -45,7 +45,7 @@ struct RetryDelaySequence: Sequence, Sendable {
   }
 
   @usableFromInline
-  struct Iterator: IteratorProtocol, Sendable {
+  struct Iterator: IteratorProtocol {
     @usableFromInline
     let policy: RetryPolicy
     @usableFromInline
@@ -99,3 +99,6 @@ struct RetryDelaySequence: Sequence, Sendable {
     }
   }
 }
+
+@available(*, unavailable)
+extension RetryDelaySequence.Iterator: Sendable {}

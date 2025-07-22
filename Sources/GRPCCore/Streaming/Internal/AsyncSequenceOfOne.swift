@@ -49,7 +49,7 @@ struct AsyncSequenceOfOne<Element: Sendable, Failure: Error>: AsyncSequence, Sen
   }
 
   @usableFromInline
-  struct AsyncIterator: AsyncIteratorProtocol, Sendable {
+  struct AsyncIterator: AsyncIteratorProtocol {
     @usableFromInline
     private(set) var result: Result<Element, Failure>?
 
@@ -74,3 +74,6 @@ struct AsyncSequenceOfOne<Element: Sendable, Failure: Error>: AsyncSequence, Sen
     }
   }
 }
+
+@available(*, unavailable)
+extension AsyncSequenceOfOne.AsyncIterator: Sendable {}
