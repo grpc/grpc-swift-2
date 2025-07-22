@@ -107,7 +107,7 @@ extension CompressionAlgorithmSet {
       return Iterator(algorithmSet: self.algorithmSet)
     }
 
-    public struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol, Sendable {
       private let algorithmSet: CompressionAlgorithmSet
       private var iterator: IndexingIterator<[CompressionAlgorithm.Value]>
 
@@ -128,6 +128,3 @@ extension CompressionAlgorithmSet {
     }
   }
 }
-
-@available(*, unavailable)
-extension CompressionAlgorithmSet.Elements.Iterator: Sendable {}
