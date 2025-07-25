@@ -111,6 +111,9 @@ extension BroadcastAsyncSequence {
   }
 }
 
+@available(*, unavailable)
+extension BroadcastAsyncSequence.AsyncIterator: Sendable {}
+
 // MARK: - Continuation
 
 @available(gRPCSwift 2.0, *)
@@ -1204,7 +1207,7 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
   }
 
   @usableFromInline
-  enum OnCancelSubscription {
+  enum OnCancelSubscription: Sendable {
     case none
     case resume(ConsumerContinuation, Result<Element?, any Error>)
   }
@@ -1244,7 +1247,7 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
   }
 
   @usableFromInline
-  enum OnSubscribe {
+  enum OnSubscribe: Sendable {
     case subscribed(_BroadcastSequenceStateMachine<Element>.Subscriptions.ID)
   }
 
@@ -1282,7 +1285,7 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
   }
 
   @usableFromInline
-  enum OnWaitToProduceMore {
+  enum OnWaitToProduceMore: Sendable {
     case none
     case resume(ProducerContinuation, Result<Void, any Error>)
   }
@@ -1498,7 +1501,7 @@ extension _BroadcastSequenceStateMachine {
     }
 
     @usableFromInline
-    enum ElementLookup {
+    enum ElementLookup: Sendable {
       /// The element was found in the collection.
       case found(Element)
       /// The element isn't in the collection, but it could be in the future.
@@ -1810,3 +1813,33 @@ extension _BroadcastSequenceStateMachine {
     case many([Value])
   }
 }
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.ConsumerContinuations: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.ProducerContinuations: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnInvalidateAllSubscriptions: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnYield: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnFinish: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnNext: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnNext.ReturnAndResumeProducers: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnSetContinuation: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine.OnDropResources: Sendable {}
+
+@available(*, unavailable)
+extension _BroadcastSequenceStateMachine._OneOrMany: Sendable {}

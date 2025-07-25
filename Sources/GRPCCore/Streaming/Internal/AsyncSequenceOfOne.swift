@@ -74,3 +74,6 @@ struct AsyncSequenceOfOne<Element: Sendable, Failure: Error>: AsyncSequence, Sen
     }
   }
 }
+
+@available(*, unavailable)
+extension AsyncSequenceOfOne.AsyncIterator: Sendable {}

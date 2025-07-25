@@ -80,3 +80,6 @@ final class UncheckedAsyncIteratorSequence<
     return AsyncIterator(base: self.base)
   }
 }
+
+@available(*, unavailable)
+extension UncheckedAsyncIteratorSequence.AsyncIterator: Sendable {}

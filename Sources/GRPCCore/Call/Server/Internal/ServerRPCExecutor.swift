@@ -16,7 +16,7 @@
 
 @available(gRPCSwift 2.0, *)
 @usableFromInline
-struct ServerRPCExecutor {
+struct ServerRPCExecutor: Sendable {
   /// Executes an RPC using the provided handler.
   ///
   /// - Parameters:
@@ -272,7 +272,7 @@ struct ServerRPCExecutor {
   }
 
   @usableFromInline
-  enum OnFirstRequestPart<Bytes: GRPCContiguousBytes> {
+  enum OnFirstRequestPart<Bytes: GRPCContiguousBytes>: Sendable {
     case process(
       Metadata,
       UnsafeTransfer<RPCAsyncSequence<RPCRequestPart<Bytes>, any Error>.AsyncIterator>

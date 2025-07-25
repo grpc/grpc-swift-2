@@ -501,7 +501,7 @@ extension ClientRPCExecutor.HedgingExecutor {
   }
 
   @usableFromInline
-  struct ScheduledState {
+  struct ScheduledState: Sendable {
     @usableFromInline
     var _handle: CancellableTaskHandle?
     @usableFromInline
