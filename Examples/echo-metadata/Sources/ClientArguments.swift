@@ -30,6 +30,6 @@ struct ClientArguments: ParsableArguments {
 
 extension ClientArguments {
   var target: any ResolvableTarget {
-    return .ipv4(host: "127.0.0.1", port: self.port)
+    return .dns(host: "localhost", port: self.port)
   }
 }

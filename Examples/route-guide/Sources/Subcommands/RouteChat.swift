@@ -32,7 +32,7 @@ struct RouteChat: AsyncParsableCommand {
   func run() async throws {
     try await withGRPCClient(
       transport: .http2NIOPosix(
-        target: .ipv4(host: "127.0.0.1", port: self.port),
+        target: .dns(host: "localhost", port: self.port),
         transportSecurity: .plaintext
       )
     ) { client in
