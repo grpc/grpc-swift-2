@@ -19,50 +19,95 @@
 /// You can configure interceptors to be applied to:
 /// - all RPCs and services;
 /// - requests directed only to specific services; or
-/// - requests directed only to specific methods (of a specific service).
+/// - requests directed only to specific methods (of a specific service); or
+/// - requests directed only to specific services or methods (of a specific service); or
+/// - all requests excluding requests directed to specific services or methods (of a specific service); or
+/// - requests whose ``MethodDescriptor`` satisfies a predicate.
 ///
 /// - SeeAlso: ``ClientInterceptor`` and ``ServerInterceptor`` for more information on client and
 ///   server interceptors, respectively.
 @available(gRPCSwift 2.0, *)
 public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
   public struct Subject: Sendable {
-    internal enum Wrapped: Sendable {
-      case all
-      case services(Set<ServiceDescriptor>)
-      case methods(Set<MethodDescriptor>)
-    }
 
-    private let wrapped: Wrapped
+    private let predicate: @Sendable (_ descriptor: MethodDescriptor) -> Bool
 
     /// An operation subject specifying an interceptor that applies to all RPCs across all services will be registered with this client.
-    public static var all: Self { .init(wrapped: .all) }
+    public static var all: Self {
+      Self { _ in true }
+    }
 
     /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified services.
+    ///
     /// - Parameters:
-    ///   - services: The list of service names for which this interceptor should intercept RPCs.
+    ///   - services: The list of service descriptors for which this interceptor should intercept RPCs.
     public static func services(_ services: Set<ServiceDescriptor>) -> Self {
-      Self(wrapped: .services(services))
+      Self { descriptor in
+        services.contains(descriptor.service)
+      }
     }
 
     /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified service methods.
+    ///
     /// - Parameters:
     ///   - methods: The list of method descriptors for which this interceptor should intercept RPCs.
     public static func methods(_ methods: Set<MethodDescriptor>) -> Self {
-      Self(wrapped: .methods(methods))
+      Self { descriptor in
+        methods.contains(descriptor)
+      }
+    }
+
+    /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified services or service methods.
+    ///
+    /// - Parameters:
+    ///   - services: The list of service descriptors for which this interceptor should intercept RPCs.
+    ///   - methods: The list of method descriptors for which this interceptor should intercept RPCs.
+    @available(gRPCSwift 2.2, *)
+    public static func only(
+      services: Set<ServiceDescriptor>,
+      methods: Set<MethodDescriptor>
+    ) -> Self {
+      Self { descriptor in
+        services.contains(descriptor.service) || methods.contains(descriptor)
+      }
+    }
+
+    /// An operation subject specifying an interceptor that will be applied to all RPCs across all services for this client excluding the specified services or service methods.
+    ///
+    /// - Parameters:
+    ///   - services: The list of service descriptors for which this interceptor should **not** intercept RPCs.
+    ///   - methods: The list of method descriptors for which this interceptor should **not** intercept RPCs.
+    @available(gRPCSwift 2.2, *)
+    public static func allExcluding(
+      services: Set<ServiceDescriptor>,
+      methods: Set<MethodDescriptor>
+    ) -> Self {
+      Self { descriptor in
+        !(services.contains(descriptor.service) || methods.contains(descriptor))
+      }
+    }
+
+    /// An operation subject specifying an interceptor that will be applied to RPCs whose ``MethodDescriptor`` satisfies a `predicate`.
+    ///
+    /// - Important: The result of `predicate` is **cached per `MethodDescriptor`** by the client.
+    ///   The predicate is evaluated the first time a given method is encountered, and that result
+    ///   is reused for subsequent RPCs of the same method for the lifetime of the client.
+    ///   As a consequence, the `predicate` closure should be **deterministic**.
+    ///   Do **not** base it on dynamic state (time, session, feature flags, etc.).
+    ///   If you need per-call decisions, put that logic inside the interceptor itself.
+    ///
+    /// - Parameters:
+    ///   - predicate: A `@Sendable` closure evaluated per RPC. Return `true` to intercept.
+    @available(gRPCSwift 2.2, *)
+    public static func allMatching(
+      _ predicate: @Sendable @escaping (_ descriptor: MethodDescriptor) -> Bool
+    ) -> Self {
+      Self(predicate: predicate)
     }
 
     @usableFromInline
     package func applies(to descriptor: MethodDescriptor) -> Bool {
-      switch self.wrapped {
-      case .all:
-        return true
-
-      case .services(let services):
-        return services.contains(descriptor.service)
-
-      case .methods(let methods):
-        return methods.contains(descriptor)
-      }
+      self.predicate(descriptor)
     }
   }
 

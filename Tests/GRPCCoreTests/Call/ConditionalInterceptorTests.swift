@@ -20,7 +20,7 @@ import Testing
 @Suite("ConditionalInterceptor")
 struct ConditionalInterceptorTests {
   @Test(
-    "Applies to",
+    "Applies to all, services and methods",
     arguments: [
       (
         .all,
@@ -53,6 +53,60 @@ struct ConditionalInterceptorTests {
       #expect(!target.applies(to: notApplicableMethod))
     }
   }
+
+  @Test(
+    "Applies to only and allExcluding",
+    arguments: [
+      (
+        .only(services: [.foo], methods: [.barFoo]),
+        [.fooBar, .fooBaz, .barFoo],
+        [.barBaz]
+      ),
+      (
+        .allExcluding(services: [.foo], methods: [.barFoo]),
+        [.barBaz],
+        [.fooBar, .fooBaz, .barFoo]
+      ),
+    ] as [(ConditionalInterceptor<any Sendable>.Subject, [MethodDescriptor], [MethodDescriptor])]
+  )
+  @available(gRPCSwift 2.2, *)
+  func appliesToOnlyAndAllExcluding(
+    target: ConditionalInterceptor<any Sendable>.Subject,
+    applicableMethods: [MethodDescriptor],
+    notApplicableMethods: [MethodDescriptor]
+  ) {
+    for applicableMethod in applicableMethods {
+      #expect(target.applies(to: applicableMethod))
+    }
+
+    for notApplicableMethod in notApplicableMethods {
+      #expect(!target.applies(to: notApplicableMethod))
+    }
+  }
+
+  @Test("Applies to all matching")
+  @available(gRPCSwift 2.2, *)
+  func appliesToAllMatching() {
+    let target = ConditionalInterceptor<any Sendable>.Subject.allMatching { descriptor in
+      descriptor.method == "baz"
+    }
+    let applicableMethods: [MethodDescriptor] = [.fooBaz, .barBaz]
+    let notApplicableMethods: [MethodDescriptor] = [.fooBar, .barFoo]
+
+    for applicableMethod in applicableMethods {
+      #expect(target.applies(to: applicableMethod))
+    }
+
+    for notApplicableMethod in notApplicableMethods {
+      #expect(!target.applies(to: notApplicableMethod))
+    }
+  }
+}
+
+@available(gRPCSwift 2.2, *)
+extension ServiceDescriptor {
+  fileprivate static let foo = Self(fullyQualifiedService: "pkg.foo")
+  fileprivate static let bar = Self(fullyQualifiedService: "pkg.bar")
 }
 
 @available(gRPCSwift 2.0, *)
@@ -60,5 +114,5 @@ extension MethodDescriptor {
   fileprivate static let fooBar = Self(fullyQualifiedService: "pkg.foo", method: "bar")
   fileprivate static let fooBaz = Self(fullyQualifiedService: "pkg.foo", method: "baz")
   fileprivate static let barFoo = Self(fullyQualifiedService: "pkg.bar", method: "foo")
-  fileprivate static let barBaz = Self(fullyQualifiedService: "pkg.bar", method: "Baz")
+  fileprivate static let barBaz = Self(fullyQualifiedService: "pkg.bar", method: "baz")
 }
