@@ -275,23 +275,5 @@ enum Google_Rpc_Code: SwiftProtobuf.Enum, Swift.CaseIterable {
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 extension Google_Rpc_Code: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "OK"),
-    1: .same(proto: "CANCELLED"),
-    2: .same(proto: "UNKNOWN"),
-    3: .same(proto: "INVALID_ARGUMENT"),
-    4: .same(proto: "DEADLINE_EXCEEDED"),
-    5: .same(proto: "NOT_FOUND"),
-    6: .same(proto: "ALREADY_EXISTS"),
-    7: .same(proto: "PERMISSION_DENIED"),
-    8: .same(proto: "RESOURCE_EXHAUSTED"),
-    9: .same(proto: "FAILED_PRECONDITION"),
-    10: .same(proto: "ABORTED"),
-    11: .same(proto: "OUT_OF_RANGE"),
-    12: .same(proto: "UNIMPLEMENTED"),
-    13: .same(proto: "INTERNAL"),
-    14: .same(proto: "UNAVAILABLE"),
-    15: .same(proto: "DATA_LOSS"),
-    16: .same(proto: "UNAUTHENTICATED"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0OK\0\u{1}CANCELLED\0\u{1}UNKNOWN\0\u{1}INVALID_ARGUMENT\0\u{1}DEADLINE_EXCEEDED\0\u{1}NOT_FOUND\0\u{1}ALREADY_EXISTS\0\u{1}PERMISSION_DENIED\0\u{1}RESOURCE_EXHAUSTED\0\u{1}FAILED_PRECONDITION\0\u{1}ABORTED\0\u{1}OUT_OF_RANGE\0\u{1}UNIMPLEMENTED\0\u{1}INTERNAL\0\u{1}UNAVAILABLE\0\u{1}DATA_LOSS\0\u{1}UNAUTHENTICATED\0")
 }

@@ -134,16 +134,7 @@ fileprivate let _protobuf_package = "grpc.lookup.v1"
 
 extension Grpc_Lookup_V1_RouteLookupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(
-      reservedNames: ["server", "path"],
-      reservedRanges: [1..<3],
-      numberNameMappings: [
-        3: .standard(proto: "target_type"),
-        5: .same(proto: "reason"),
-        6: .standard(proto: "stale_header_data"),
-        4: .standard(proto: "key_map"),
-        7: .same(proto: "extensions"),
-  ])
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{4}\u{3}target_type\0\u{3}key_map\0\u{1}reason\0\u{3}stale_header_data\0\u{1}extensions\0\u{b}server\0\u{b}path\0\u{c}\u{1}\u{1}\u{c}\u{2}\u{1}")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -192,23 +183,12 @@ extension Grpc_Lookup_V1_RouteLookupRequest: SwiftProtobuf.Message, SwiftProtobu
 }
 
 extension Grpc_Lookup_V1_RouteLookupRequest.Reason: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "REASON_UNKNOWN"),
-    1: .same(proto: "REASON_MISS"),
-    2: .same(proto: "REASON_STALE"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0REASON_UNKNOWN\0\u{1}REASON_MISS\0\u{1}REASON_STALE\0")
 }
 
 extension Grpc_Lookup_V1_RouteLookupResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(
-      reservedNames: ["target"],
-      reservedRanges: [1..<2],
-      numberNameMappings: [
-        3: .same(proto: "targets"),
-        2: .standard(proto: "header_data"),
-        4: .same(proto: "extensions"),
-  ])
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{4}\u{2}header_data\0\u{1}targets\0\u{1}extensions\0\u{b}target\0\u{c}\u{1}\u{1}")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
