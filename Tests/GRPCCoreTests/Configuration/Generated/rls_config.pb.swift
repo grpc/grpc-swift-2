@@ -345,11 +345,7 @@ fileprivate let _protobuf_package = "grpc.lookup.v1"
 
 extension Grpc_Lookup_V1_NameMatcher: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".NameMatcher"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "key"),
-    2: .same(proto: "names"),
-    3: .standard(proto: "required_match"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{1}names\0\u{3}required_match\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -389,12 +385,7 @@ extension Grpc_Lookup_V1_NameMatcher: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
 extension Grpc_Lookup_V1_GrpcKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".GrpcKeyBuilder"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "names"),
-    3: .standard(proto: "extra_keys"),
-    2: .same(proto: "headers"),
-    4: .standard(proto: "constant_keys"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}names\0\u{1}headers\0\u{3}extra_keys\0\u{3}constant_keys\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -443,10 +434,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension Grpc_Lookup_V1_GrpcKeyBuilder.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_Lookup_V1_GrpcKeyBuilder.protoMessageName + ".Name"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "service"),
-    2: .same(proto: "method"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}service\0\u{1}method\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -481,11 +469,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder.Name: SwiftProtobuf.Message, SwiftProtob
 
 extension Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_Lookup_V1_GrpcKeyBuilder.protoMessageName + ".ExtraKeys"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "host"),
-    2: .same(proto: "service"),
-    3: .same(proto: "method"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}host\0\u{1}service\0\u{1}method\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -525,14 +509,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys: SwiftProtobuf.Message, SwiftP
 
 extension Grpc_Lookup_V1_HttpKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".HttpKeyBuilder"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "host_patterns"),
-    2: .standard(proto: "path_patterns"),
-    3: .standard(proto: "query_parameters"),
-    4: .same(proto: "headers"),
-    5: .standard(proto: "constant_keys"),
-    6: .same(proto: "method"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}host_patterns\0\u{3}path_patterns\0\u{3}query_parameters\0\u{1}headers\0\u{3}constant_keys\0\u{1}method\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -587,20 +564,7 @@ extension Grpc_Lookup_V1_HttpKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension Grpc_Lookup_V1_RouteLookupConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupConfig"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(
-      reservedNames: ["request_processing_strategy"],
-      reservedRanges: [10..<11],
-      numberNameMappings: [
-        1: .standard(proto: "http_keybuilders"),
-        2: .standard(proto: "grpc_keybuilders"),
-        3: .standard(proto: "lookup_service"),
-        4: .standard(proto: "lookup_service_timeout"),
-        5: .standard(proto: "max_age"),
-        6: .standard(proto: "stale_age"),
-        7: .standard(proto: "cache_size_bytes"),
-        8: .standard(proto: "valid_targets"),
-        9: .standard(proto: "default_target"),
-  ])
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}http_keybuilders\0\u{3}grpc_keybuilders\0\u{3}lookup_service\0\u{3}lookup_service_timeout\0\u{3}max_age\0\u{3}stale_age\0\u{3}cache_size_bytes\0\u{3}valid_targets\0\u{3}default_target\0\u{b}request_processing_strategy\0\u{c}\u{a}\u{1}")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -674,9 +638,7 @@ extension Grpc_Lookup_V1_RouteLookupConfig: SwiftProtobuf.Message, SwiftProtobuf
 
 extension Grpc_Lookup_V1_RouteLookupClusterSpecifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupClusterSpecifier"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "route_lookup_config"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}route_lookup_config\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {

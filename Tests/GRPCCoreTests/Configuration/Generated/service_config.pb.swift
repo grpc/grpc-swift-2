@@ -1799,15 +1799,7 @@ fileprivate let _protobuf_package = "grpc.service_config"
 
 extension Grpc_ServiceConfig_MethodConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".MethodConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .standard(proto: "wait_for_ready"),
-    3: .same(proto: "timeout"),
-    4: .standard(proto: "max_request_message_bytes"),
-    5: .standard(proto: "max_response_message_bytes"),
-    6: .standard(proto: "retry_policy"),
-    7: .standard(proto: "hedging_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{3}wait_for_ready\0\u{1}timeout\0\u{3}max_request_message_bytes\0\u{3}max_response_message_bytes\0\u{3}retry_policy\0\u{3}hedging_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1899,10 +1891,7 @@ extension Grpc_ServiceConfig_MethodConfig: SwiftProtobuf.Message, SwiftProtobuf.
 
 extension Grpc_ServiceConfig_MethodConfig.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_MethodConfig.protoMessageName + ".Name"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "service"),
-    2: .same(proto: "method"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}service\0\u{1}method\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1937,13 +1926,7 @@ extension Grpc_ServiceConfig_MethodConfig.Name: SwiftProtobuf.Message, SwiftProt
 
 extension Grpc_ServiceConfig_MethodConfig.RetryPolicy: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_MethodConfig.protoMessageName + ".RetryPolicy"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "max_attempts"),
-    2: .standard(proto: "initial_backoff"),
-    3: .standard(proto: "max_backoff"),
-    4: .standard(proto: "backoff_multiplier"),
-    5: .standard(proto: "retryable_status_codes"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}max_attempts\0\u{3}initial_backoff\0\u{3}max_backoff\0\u{3}backoff_multiplier\0\u{3}retryable_status_codes\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1997,11 +1980,7 @@ extension Grpc_ServiceConfig_MethodConfig.RetryPolicy: SwiftProtobuf.Message, Sw
 
 extension Grpc_ServiceConfig_MethodConfig.HedgingPolicy: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_MethodConfig.protoMessageName + ".HedgingPolicy"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "max_attempts"),
-    2: .standard(proto: "hedging_delay"),
-    3: .standard(proto: "non_fatal_status_codes"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}max_attempts\0\u{3}hedging_delay\0\u{3}non_fatal_status_codes\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2045,9 +2024,7 @@ extension Grpc_ServiceConfig_MethodConfig.HedgingPolicy: SwiftProtobuf.Message, 
 
 extension Grpc_ServiceConfig_PickFirstConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".PickFirstConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "shuffle_address_list"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}shuffle_address_list\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2096,14 +2073,7 @@ extension Grpc_ServiceConfig_RoundRobinConfig: SwiftProtobuf.Message, SwiftProto
 
 extension Grpc_ServiceConfig_WeightedRoundRobinLbConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".WeightedRoundRobinLbConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "enable_oob_load_report"),
-    2: .standard(proto: "oob_reporting_period"),
-    3: .standard(proto: "blackout_period"),
-    4: .standard(proto: "weight_expiration_period"),
-    5: .standard(proto: "weight_update_period"),
-    6: .standard(proto: "error_utilization_penalty"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}enable_oob_load_report\0\u{3}oob_reporting_period\0\u{3}blackout_period\0\u{3}weight_expiration_period\0\u{3}weight_update_period\0\u{3}error_utilization_penalty\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2162,15 +2132,7 @@ extension Grpc_ServiceConfig_WeightedRoundRobinLbConfig: SwiftProtobuf.Message, 
 
 extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".OutlierDetectionLoadBalancingConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "interval"),
-    2: .standard(proto: "base_ejection_time"),
-    3: .standard(proto: "max_ejection_time"),
-    4: .standard(proto: "max_ejection_percent"),
-    5: .standard(proto: "success_rate_ejection"),
-    6: .standard(proto: "failure_percentage_ejection"),
-    13: .standard(proto: "child_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}interval\0\u{3}base_ejection_time\0\u{3}max_ejection_time\0\u{3}max_ejection_percent\0\u{3}success_rate_ejection\0\u{3}failure_percentage_ejection\0\u{4}\u{7}child_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2234,12 +2196,7 @@ extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: SwiftProtobuf.
 
 extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.SuccessRateEjection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.protoMessageName + ".SuccessRateEjection"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "stdev_factor"),
-    2: .standard(proto: "enforcement_percentage"),
-    3: .standard(proto: "minimum_hosts"),
-    4: .standard(proto: "request_volume"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}stdev_factor\0\u{3}enforcement_percentage\0\u{3}minimum_hosts\0\u{3}request_volume\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2288,12 +2245,7 @@ extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.SuccessRateEjec
 
 extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.FailurePercentageEjection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.protoMessageName + ".FailurePercentageEjection"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "threshold"),
-    2: .standard(proto: "enforcement_percentage"),
-    3: .standard(proto: "minimum_hosts"),
-    4: .standard(proto: "request_volume"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}threshold\0\u{3}enforcement_percentage\0\u{3}minimum_hosts\0\u{3}request_volume\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2342,11 +2294,7 @@ extension Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.FailurePercenta
 
 extension Grpc_ServiceConfig_GrpcLbConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".GrpcLbConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "child_policy"),
-    2: .standard(proto: "service_name"),
-    3: .standard(proto: "initial_fallback_timeout"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}child_policy\0\u{3}service_name\0\u{3}initial_fallback_timeout\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2390,10 +2338,7 @@ extension Grpc_ServiceConfig_GrpcLbConfig: SwiftProtobuf.Message, SwiftProtobuf.
 
 extension Grpc_ServiceConfig_PriorityLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".PriorityLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "children"),
-    2: .same(proto: "priorities"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}children\0\u{1}priorities\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2428,10 +2373,7 @@ extension Grpc_ServiceConfig_PriorityLoadBalancingPolicyConfig: SwiftProtobuf.Me
 
 extension Grpc_ServiceConfig_PriorityLoadBalancingPolicyConfig.Child: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_PriorityLoadBalancingPolicyConfig.protoMessageName + ".Child"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "config"),
-    2: .standard(proto: "ignore_reresolution_requests"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}config\0\u{3}ignore_reresolution_requests\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2466,9 +2408,7 @@ extension Grpc_ServiceConfig_PriorityLoadBalancingPolicyConfig.Child: SwiftProto
 
 extension Grpc_ServiceConfig_WeightedTargetLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".WeightedTargetLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "targets"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}targets\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2498,10 +2438,7 @@ extension Grpc_ServiceConfig_WeightedTargetLoadBalancingPolicyConfig: SwiftProto
 
 extension Grpc_ServiceConfig_WeightedTargetLoadBalancingPolicyConfig.Target: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_WeightedTargetLoadBalancingPolicyConfig.protoMessageName + ".Target"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "weight"),
-    2: .standard(proto: "child_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}weight\0\u{3}child_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2536,12 +2473,7 @@ extension Grpc_ServiceConfig_WeightedTargetLoadBalancingPolicyConfig.Target: Swi
 
 extension Grpc_ServiceConfig_RlsLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RlsLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "route_lookup_config"),
-    2: .standard(proto: "route_lookup_channel_service_config"),
-    3: .standard(proto: "child_policy"),
-    4: .standard(proto: "child_policy_config_target_field_name"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}route_lookup_config\0\u{3}route_lookup_channel_service_config\0\u{3}child_policy\0\u{3}child_policy_config_target_field_name\0")
 
   fileprivate class _StorageClass {
     var _routeLookupConfig: Grpc_Lookup_V1_RouteLookupConfig? = nil
@@ -2632,9 +2564,7 @@ extension Grpc_ServiceConfig_RlsLoadBalancingPolicyConfig: SwiftProtobuf.Message
 
 extension Grpc_ServiceConfig_XdsClusterManagerLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsClusterManagerLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "children"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}children\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2664,9 +2594,7 @@ extension Grpc_ServiceConfig_XdsClusterManagerLoadBalancingPolicyConfig: SwiftPr
 
 extension Grpc_ServiceConfig_XdsClusterManagerLoadBalancingPolicyConfig.Child: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_XdsClusterManagerLoadBalancingPolicyConfig.protoMessageName + ".Child"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "child_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}child_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2696,10 +2624,7 @@ extension Grpc_ServiceConfig_XdsClusterManagerLoadBalancingPolicyConfig.Child: S
 
 extension Grpc_ServiceConfig_CdsConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".CdsConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "cluster"),
-    2: .standard(proto: "is_dynamic"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}cluster\0\u{3}is_dynamic\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2734,16 +2659,7 @@ extension Grpc_ServiceConfig_CdsConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
 
 extension Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsClusterImplLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "cluster"),
-    6: .standard(proto: "child_policy"),
-    2: .standard(proto: "eds_service_name"),
-    3: .standard(proto: "lrs_load_reporting_server_name"),
-    7: .standard(proto: "lrs_load_reporting_server"),
-    4: .standard(proto: "max_concurrent_requests"),
-    5: .standard(proto: "drop_categories"),
-    8: .standard(proto: "telemetry_labels"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}cluster\0\u{3}eds_service_name\0\u{3}lrs_load_reporting_server_name\0\u{3}max_concurrent_requests\0\u{3}drop_categories\0\u{3}child_policy\0\u{3}lrs_load_reporting_server\0\u{3}telemetry_labels\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2812,10 +2728,7 @@ extension Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig: SwiftProto
 
 extension Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig.DropCategory: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig.protoMessageName + ".DropCategory"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "category"),
-    2: .standard(proto: "requests_per_million"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}category\0\u{3}requests_per_million\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2850,10 +2763,7 @@ extension Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig.DropCategor
 
 extension Grpc_ServiceConfig_RingHashLoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RingHashLoadBalancingConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "min_ring_size"),
-    2: .standard(proto: "max_ring_size"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}min_ring_size\0\u{3}max_ring_size\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2888,9 +2798,7 @@ extension Grpc_ServiceConfig_RingHashLoadBalancingConfig: SwiftProtobuf.Message,
 
 extension Grpc_ServiceConfig_XdsWrrLocalityLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsWrrLocalityLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "child_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}child_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2920,9 +2828,7 @@ extension Grpc_ServiceConfig_XdsWrrLocalityLoadBalancingPolicyConfig: SwiftProto
 
 extension Grpc_ServiceConfig_LeastRequestLocalityLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".LeastRequestLocalityLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "choice_count"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}choice_count\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2952,11 +2858,7 @@ extension Grpc_ServiceConfig_LeastRequestLocalityLoadBalancingPolicyConfig: Swif
 
 extension Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".OverrideHostLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    3: .standard(proto: "cluster_name"),
-    2: .standard(proto: "child_policy"),
-    1: .standard(proto: "override_host_status"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}override_host_status\0\u{3}child_policy\0\u{3}cluster_name\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2995,37 +2897,12 @@ extension Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig: SwiftProtobu
 }
 
 extension Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig.HealthStatus: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "HEALTHY"),
-    3: .same(proto: "DRAINING"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}HEALTHY\0\u{2}\u{2}DRAINING\0")
 }
 
 extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".LoadBalancingConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    4: .same(proto: "pick_first"),
-    1: .same(proto: "round_robin"),
-    20: .same(proto: "weighted_round_robin"),
-    3: .same(proto: "grpclb"),
-    9: .same(proto: "priority_experimental"),
-    10: .same(proto: "weighted_target_experimental"),
-    15: .unique(proto: "outlier_detection", json: "outlier_detection_experimental"),
-    19: .unique(proto: "rls", json: "rls_experimental"),
-    14: .same(proto: "xds_cluster_manager_experimental"),
-    6: .same(proto: "cds_experimental"),
-    12: .same(proto: "xds_cluster_impl_experimental"),
-    18: .same(proto: "override_host_experimental"),
-    16: .same(proto: "xds_wrr_locality_experimental"),
-    13: .same(proto: "ring_hash_experimental"),
-    17: .same(proto: "least_request_experimental"),
-    11: .same(proto: "xds_cluster_resolver_experimental"),
-    8: .same(proto: "lrs_experimental"),
-    7: .same(proto: "eds_experimental"),
-    2: .same(proto: "xds"),
-    5: .same(proto: "xds_experimental"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}round_robin\0\u{1}xds\0\u{1}grpclb\0\u{1}pick_first\0\u{1}xds_experimental\0\u{1}cds_experimental\0\u{1}eds_experimental\0\u{1}lrs_experimental\0\u{1}priority_experimental\0\u{1}weighted_target_experimental\0\u{1}xds_cluster_resolver_experimental\0\u{1}xds_cluster_impl_experimental\0\u{1}ring_hash_experimental\0\u{1}xds_cluster_manager_experimental\0\u{5}outlier_detection\0outlier_detection_experimental\0\u{1}xds_wrr_locality_experimental\0\u{1}least_request_experimental\0\u{1}override_host_experimental\0\u{5}rls\0rls_experimental\0\u{1}weighted_round_robin\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3398,13 +3275,7 @@ extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Message, SwiftPr
 
 extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".ServiceConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "load_balancing_policy"),
-    4: .standard(proto: "load_balancing_config"),
-    2: .standard(proto: "method_config"),
-    3: .standard(proto: "retry_throttling"),
-    5: .standard(proto: "health_check_config"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}load_balancing_policy\0\u{3}method_config\0\u{3}retry_throttling\0\u{3}load_balancing_config\0\u{3}health_check_config\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3457,18 +3328,12 @@ extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, SwiftProtobuf
 }
 
 extension Grpc_ServiceConfig_ServiceConfig.LoadBalancingPolicy: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNSPECIFIED"),
-    1: .same(proto: "ROUND_ROBIN"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNSPECIFIED\0\u{1}ROUND_ROBIN\0")
 }
 
 extension Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_ServiceConfig.protoMessageName + ".RetryThrottlingPolicy"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "max_tokens"),
-    2: .standard(proto: "token_ratio"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}max_tokens\0\u{3}token_ratio\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3503,9 +3368,7 @@ extension Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy: SwiftProtobuf.
 
 extension Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_ServiceConfig.protoMessageName + ".HealthCheckConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "service_name"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}service_name\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3539,11 +3402,7 @@ extension Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig: SwiftProtobuf.Mess
 
 extension Grpc_ServiceConfig_XdsServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsServer"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "server_uri"),
-    2: .same(proto: "channel_creds"),
-    3: .same(proto: "server_features"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}server_uri\0\u{1}channel_creds\0\u{1}server_features\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3583,10 +3442,7 @@ extension Grpc_ServiceConfig_XdsServer: SwiftProtobuf.Message, SwiftProtobuf._Me
 
 extension Grpc_ServiceConfig_XdsServer.ChannelCredentials: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_XdsServer.protoMessageName + ".ChannelCredentials"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "type"),
-    2: .same(proto: "config"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}type\0\u{1}config\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3625,10 +3481,7 @@ extension Grpc_ServiceConfig_XdsServer.ChannelCredentials: SwiftProtobuf.Message
 
 extension Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsClusterResolverLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "discovery_mechanisms"),
-    2: .standard(proto: "xds_lb_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}discovery_mechanisms\0\u{3}xds_lb_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3663,18 +3516,7 @@ extension Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: SwiftP
 
 extension Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig.DiscoveryMechanism: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig.protoMessageName + ".DiscoveryMechanism"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "cluster"),
-    2: .standard(proto: "lrs_load_reporting_server_name"),
-    7: .standard(proto: "lrs_load_reporting_server"),
-    3: .standard(proto: "max_concurrent_requests"),
-    4: .same(proto: "type"),
-    5: .standard(proto: "eds_service_name"),
-    6: .standard(proto: "dns_hostname"),
-    8: .standard(proto: "outlier_detection"),
-    9: .standard(proto: "override_host_status"),
-    10: .standard(proto: "telemetry_labels"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}cluster\0\u{3}lrs_load_reporting_server_name\0\u{3}max_concurrent_requests\0\u{1}type\0\u{3}eds_service_name\0\u{3}dns_hostname\0\u{3}lrs_load_reporting_server\0\u{3}outlier_detection\0\u{3}override_host_status\0\u{3}telemetry_labels\0")
 
   fileprivate class _StorageClass {
     var _cluster: String = String()
@@ -3806,22 +3648,12 @@ extension Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig.Discove
 }
 
 extension Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig.DiscoveryMechanism.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "EDS"),
-    2: .same(proto: "LOGICAL_DNS"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}EDS\0\u{1}LOGICAL_DNS\0")
 }
 
 extension Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".LrsLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "cluster_name"),
-    2: .standard(proto: "eds_service_name"),
-    3: .standard(proto: "lrs_load_reporting_server_name"),
-    4: .same(proto: "locality"),
-    5: .standard(proto: "child_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}cluster_name\0\u{3}eds_service_name\0\u{3}lrs_load_reporting_server_name\0\u{1}locality\0\u{3}child_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3875,11 +3707,7 @@ extension Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig: SwiftProtobuf.Message
 
 extension Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.Locality: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.protoMessageName + ".Locality"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "region"),
-    2: .same(proto: "zone"),
-    3: .same(proto: "subzone"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}region\0\u{1}zone\0\u{1}subzone\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3919,13 +3747,7 @@ extension Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.Locality: SwiftProtobu
 
 extension Grpc_ServiceConfig_EdsLoadBalancingPolicyConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".EdsLoadBalancingPolicyConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "cluster"),
-    2: .standard(proto: "eds_service_name"),
-    3: .standard(proto: "lrs_load_reporting_server_name"),
-    4: .standard(proto: "locality_picking_policy"),
-    5: .standard(proto: "endpoint_picking_policy"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}cluster\0\u{3}eds_service_name\0\u{3}lrs_load_reporting_server_name\0\u{3}locality_picking_policy\0\u{3}endpoint_picking_policy\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3979,13 +3801,7 @@ extension Grpc_ServiceConfig_EdsLoadBalancingPolicyConfig: SwiftProtobuf.Message
 
 extension Grpc_ServiceConfig_XdsConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".XdsConfig"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "balancer_name"),
-    2: .standard(proto: "child_policy"),
-    3: .standard(proto: "fallback_policy"),
-    4: .standard(proto: "eds_service_name"),
-    5: .standard(proto: "lrs_load_reporting_server_name"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}balancer_name\0\u{3}child_policy\0\u{3}fallback_policy\0\u{3}eds_service_name\0\u{3}lrs_load_reporting_server_name\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
