@@ -27,10 +27,11 @@ struct ServerRPCExecutorTestHarness {
       ) async throws -> StreamingServerResponse<Output>
 
     init(
-      _ fn: @escaping @Sendable (
-        _ request: StreamingServerRequest<Input>,
-        _ context: ServerContext
-      ) async throws -> StreamingServerResponse<Output>
+      _ fn:
+        @escaping @Sendable (
+          _ request: StreamingServerRequest<Input>,
+          _ context: ServerContext
+        ) async throws -> StreamingServerResponse<Output>
     ) {
       self.fn = fn
     }
@@ -57,16 +58,19 @@ struct ServerRPCExecutorTestHarness {
     bytes: Bytes.Type = Bytes.self,
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
-    handler: @escaping @Sendable (
-      StreamingServerRequest<Input>,
-      ServerContext
-    ) async throws -> StreamingServerResponse<Output>,
-    producer: @escaping @Sendable (
-      RPCWriter<RPCRequestPart<Bytes>>.Closable
-    ) async throws -> Void,
-    consumer: @escaping @Sendable (
-      RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>
-    ) async throws -> Void
+    handler:
+      @escaping @Sendable (
+        StreamingServerRequest<Input>,
+        ServerContext
+      ) async throws -> StreamingServerResponse<Output>,
+    producer:
+      @escaping @Sendable (
+        RPCWriter<RPCRequestPart<Bytes>>.Closable
+      ) async throws -> Void,
+    consumer:
+      @escaping @Sendable (
+        RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>
+      ) async throws -> Void
   ) async throws {
     try await self.execute(
       deserializer: deserializer,
@@ -81,12 +85,14 @@ struct ServerRPCExecutorTestHarness {
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
     handler: ServerHandler<Input, Output>,
-    producer: @escaping @Sendable (
-      RPCWriter<RPCRequestPart<Bytes>>.Closable
-    ) async throws -> Void,
-    consumer: @escaping @Sendable (
-      RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>
-    ) async throws -> Void
+    producer:
+      @escaping @Sendable (
+        RPCWriter<RPCRequestPart<Bytes>>.Closable
+      ) async throws -> Void,
+    consumer:
+      @escaping @Sendable (
+        RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>
+      ) async throws -> Void
   ) async throws {
     let input = GRPCAsyncThrowingStream.makeStream(of: RPCRequestPart<Bytes>.self)
     let output = GRPCAsyncThrowingStream.makeStream(of: RPCResponsePart<Bytes>.self)
@@ -132,12 +138,14 @@ struct ServerRPCExecutorTestHarness {
 
   func execute(
     handler: ServerHandler<[UInt8], [UInt8]> = .echo,
-    producer: @escaping @Sendable (
-      RPCWriter<RPCRequestPart<[UInt8]>>.Closable
-    ) async throws -> Void,
-    consumer: @escaping @Sendable (
-      RPCAsyncSequence<RPCResponsePart<[UInt8]>, any Error>
-    ) async throws -> Void
+    producer:
+      @escaping @Sendable (
+        RPCWriter<RPCRequestPart<[UInt8]>>.Closable
+      ) async throws -> Void,
+    consumer:
+      @escaping @Sendable (
+        RPCAsyncSequence<RPCResponsePart<[UInt8]>, any Error>
+      ) async throws -> Void
   ) async throws {
     try await self.execute(
       deserializer: IdentityDeserializer(),

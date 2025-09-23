@@ -70,10 +70,11 @@ struct NoServerTransport: ServerTransport {
   typealias Bytes = [UInt8]
 
   func listen(
-    streamHandler: @escaping @Sendable (
-      GRPCCore.RPCStream<Inbound, Outbound>,
-      GRPCCore.ServerContext
-    ) async -> Void
+    streamHandler:
+      @escaping @Sendable (
+        GRPCCore.RPCStream<Inbound, Outbound>,
+        GRPCCore.ServerContext
+      ) async -> Void
   ) async throws {
   }
 

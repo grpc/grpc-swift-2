@@ -37,10 +37,11 @@ struct ServerRPCExecutor: Sendable {
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
     interceptors: [any ServerInterceptor],
-    handler: @Sendable @escaping (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    handler:
+      @Sendable @escaping (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async {
     // Wait for the first request part from the transport.
     let firstPart = await Self._waitForFirstRequestPart(inbound: stream.inbound)
@@ -75,10 +76,11 @@ struct ServerRPCExecutor: Sendable {
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
     interceptors: [any ServerInterceptor],
-    handler: @escaping @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    handler:
+      @escaping @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async {
     if let timeout = metadata.timeout {
       await Self._processRPCWithTimeout(
@@ -116,10 +118,11 @@ struct ServerRPCExecutor: Sendable {
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
     interceptors: [any ServerInterceptor],
-    handler: @escaping @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    handler:
+      @escaping @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async {
     await withTaskGroup(of: Void.self) { group in
       group.addTask {
@@ -156,10 +159,11 @@ struct ServerRPCExecutor: Sendable {
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
     interceptors: [any ServerInterceptor],
-    handler: @escaping @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    handler:
+      @escaping @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async {
     let messages = UncheckedAsyncIteratorSequence(inbound.wrappedValue).map { part in
       switch part {
@@ -294,10 +298,11 @@ extension ServerRPCExecutor {
     request: StreamingServerRequest<Input>,
     context: ServerContext,
     interceptors: [any ServerInterceptor],
-    finally: @escaping @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    finally:
+      @escaping @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async throws -> StreamingServerResponse<Output> {
     return try await self._intercept(
       request: request,
@@ -312,10 +317,11 @@ extension ServerRPCExecutor {
     request: StreamingServerRequest<Input>,
     context: ServerContext,
     iterator: Array<any ServerInterceptor>.Iterator,
-    finally: @escaping @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    finally:
+      @escaping @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async throws -> StreamingServerResponse<Output> {
     var iterator = iterator
 

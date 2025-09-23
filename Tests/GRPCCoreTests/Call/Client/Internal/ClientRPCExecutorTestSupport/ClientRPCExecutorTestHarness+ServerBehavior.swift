@@ -30,12 +30,13 @@ extension ClientRPCExecutorTestHarness {
       ) async throws -> Void
 
     init(
-      _ handler: @escaping @Sendable (
-        RPCStream<
-          RPCAsyncSequence<RPCRequestPart<[UInt8]>, any Error>,
-          RPCWriter<RPCResponsePart<[UInt8]>>.Closable
-        >
-      ) async throws -> Void
+      _ handler:
+        @escaping @Sendable (
+          RPCStream<
+            RPCAsyncSequence<RPCRequestPart<[UInt8]>, any Error>,
+            RPCWriter<RPCResponsePart<[UInt8]>>.Closable
+          >
+        ) async throws -> Void
     ) {
       self.handler = handler
     }

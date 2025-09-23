@@ -83,10 +83,11 @@ struct RejectAllServerInterceptor: ServerInterceptor {
   func intercept<Input: Sendable, Output: Sendable>(
     request: StreamingServerRequest<Input>,
     context: ServerContext,
-    next: @Sendable (
-      StreamingServerRequest<Input>,
-      ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    next:
+      @Sendable (
+        StreamingServerRequest<Input>,
+        ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async throws -> StreamingServerResponse<Output> {
     switch self.mode {
     case .throw(let error):
@@ -139,10 +140,11 @@ struct RequestCountingServerInterceptor: ServerInterceptor {
   func intercept<Input: Sendable, Output: Sendable>(
     request: StreamingServerRequest<Input>,
     context: ServerContext,
-    next: @Sendable (
-      StreamingServerRequest<Input>,
-      ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    next:
+      @Sendable (
+        StreamingServerRequest<Input>,
+        ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async throws -> StreamingServerResponse<Output> {
     self.counter.increment()
     return try await next(request, context)

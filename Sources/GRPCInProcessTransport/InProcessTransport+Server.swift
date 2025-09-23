@@ -103,10 +103,11 @@ extension InProcessTransport {
     }
 
     public func listen(
-      streamHandler: @escaping @Sendable (
-        _ stream: RPCStream<Inbound, Outbound>,
-        _ context: ServerContext
-      ) async -> Void
+      streamHandler:
+        @escaping @Sendable (
+          _ stream: RPCStream<Inbound, Outbound>,
+          _ context: ServerContext
+        ) async -> Void
     ) async throws {
       await withDiscardingTaskGroup { group in
         for await stream in self.newStreams {

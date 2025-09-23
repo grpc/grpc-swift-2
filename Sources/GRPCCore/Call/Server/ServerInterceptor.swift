@@ -74,9 +74,10 @@ public protocol ServerInterceptor: Sendable {
   func intercept<Input: Sendable, Output: Sendable>(
     request: StreamingServerRequest<Input>,
     context: ServerContext,
-    next: @Sendable (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    next:
+      @Sendable (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) async throws -> StreamingServerResponse<Output>
 }
