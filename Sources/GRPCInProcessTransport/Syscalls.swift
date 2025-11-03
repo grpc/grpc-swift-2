@@ -22,6 +22,8 @@ private import Android  // should be @usableFromInline
 private import Glibc  // should be @usableFromInline
 #elseif canImport(Musl)
 private import Musl  // should be @usableFromInline
+#elseif canImport(ucrt)
+private import ucrt  // should be @usableFromInline
 #else
 #error("Unsupported OS")
 #endif
@@ -40,6 +42,11 @@ enum System {
     #elseif canImport(Musl)
     let pid = Musl.getpid()
     return Int(pid)
+    #elseif canImport(ucrt)
+    let pid = ucrt._getpid()
+    return Int(pid)
+    #else
+    return 0
     #endif
   }
 }

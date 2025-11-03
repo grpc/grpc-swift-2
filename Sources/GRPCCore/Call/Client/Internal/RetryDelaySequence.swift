@@ -21,6 +21,8 @@ public import Android  // should be @usableFromInline
 public import Glibc  // should be @usableFromInline
 #elseif canImport(Musl)
 public import Musl  // should be @usableFromInline
+#elseif canImport(ucrt)
+public import ucrt  // should be @usableFromInline
 #else
 #error("Unsupported OS")
 #endif
