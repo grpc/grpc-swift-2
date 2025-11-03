@@ -1,5 +1,8 @@
 name: Soundness
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
 
