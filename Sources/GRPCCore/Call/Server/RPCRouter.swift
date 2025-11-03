@@ -54,10 +54,11 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
       method: MethodDescriptor,
       deserializer: some MessageDeserializer<Input>,
       serializer: some MessageSerializer<Output>,
-      handler: @Sendable @escaping (
-        _ request: StreamingServerRequest<Input>,
-        _ context: ServerContext
-      ) async throws -> StreamingServerResponse<Output>
+      handler:
+        @Sendable @escaping (
+          _ request: StreamingServerRequest<Input>,
+          _ context: ServerContext
+        ) async throws -> StreamingServerResponse<Output>
     ) {
       self._fn = { stream, context, interceptors in
         await ServerRPCExecutor.execute(
@@ -125,10 +126,11 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
     forMethod descriptor: MethodDescriptor,
     deserializer: some MessageDeserializer<Input>,
     serializer: some MessageSerializer<Output>,
-    handler: @Sendable @escaping (
-      _ request: StreamingServerRequest<Input>,
-      _ context: ServerContext
-    ) async throws -> StreamingServerResponse<Output>
+    handler:
+      @Sendable @escaping (
+        _ request: StreamingServerRequest<Input>,
+        _ context: ServerContext
+      ) async throws -> StreamingServerResponse<Output>
   ) {
     let handler = RPCHandler(
       method: descriptor,
