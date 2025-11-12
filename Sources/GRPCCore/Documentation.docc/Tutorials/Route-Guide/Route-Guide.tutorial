@@ -405,7 +405,7 @@
         Like for the server we'll add a method to run the client RPCs. Open `RouteGuide.swift`
         again and add a call to `runClient`.
 
-        @Code(name: "Sources/RouteGuide+Client.swift", file: "route-guide-sec06-step01-call-run-client.swift")
+        @Code(name: "Sources/RouteGuide.swift", file: "route-guide-sec06-step01-call-run-client.swift")
       }
 
       @Step {
