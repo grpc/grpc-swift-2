@@ -22,8 +22,8 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
     context: ServerContext
   ) async throws -> Routeguide_Feature {
     let feature = self.findFeature(
-      latitude: request.message.latitude,
-      longitude: request.message.longitude
+      latitude: request.latitude,
+      longitude: request.longitude
     )
   }
 
