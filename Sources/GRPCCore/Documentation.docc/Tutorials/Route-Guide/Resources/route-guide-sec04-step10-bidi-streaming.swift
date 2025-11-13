@@ -6,10 +6,40 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
   /// Known features.
   private let features: [Routeguide_Feature]
 
+  /// Notes recorded by clients.
+  private let receivedNotes: Notes
+
+  /// A thread-safe store for notes sent by clients.
+  private final class Notes: Sendable {
+    private let notes: Mutex<[Routeguide_RouteNote]>
+
+    init() {
+      self.notes = Mutex([])
+    }
+
+    /// Records a note and returns all other notes recorded at the same location.
+    ///
+    /// - Parameter receivedNote: A note to record.
+    /// - Returns: Other notes recorded at the same location.
+    func recordNote(_ receivedNote: Routeguide_RouteNote) -> [Routeguide_RouteNote] {
+      return self.notes.withLock { notes in
+        var notesFromSameLocation: [Routeguide_RouteNote] = []
+        for note in notes {
+          if note.location == receivedNote.location {
+            notesFromSameLocation.append(note)
+          }
+        }
+        notes.append(receivedNote)
+        return notesFromSameLocation
+      }
+    }
+  }
+
   /// Creates a new route guide service.
   /// - Parameter features: Known features.
   init(features: [Routeguide_Feature]) {
     self.features = features
+    self.receivedNotes = Notes()
   }
 
   /// Returns the first feature found at the given location, if one exists.
