@@ -291,7 +291,7 @@
         After the *client* has finished sending points we populate a `Routeguide_RouteSummary` which
         we return in the response.
 
-        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step08-client-streaming.swift")
+        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step07-client-streaming.swift")
       }
 
       @Step {
@@ -300,7 +300,7 @@
         also need to modify the state of our service to store notes sent by the client. We'll do
         this with a helper class to store the notes.
 
-        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step09-bidi-streaming.swift")
+        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step08-bidi-streaming.swift")
       }
 
       @Step {
@@ -308,7 +308,7 @@
         note and get all other notes recorded in the same location. We then write each of those
         notes back to the client.
 
-        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step10-bidi-streaming.swift")
+        @Code(name: "Sources/RouteGuideService.swift", file: "route-guide-sec04-step09-bidi-streaming.swift")
       }
     }
   }
