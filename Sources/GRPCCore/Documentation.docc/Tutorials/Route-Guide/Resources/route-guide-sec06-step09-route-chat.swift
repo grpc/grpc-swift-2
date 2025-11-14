@@ -17,7 +17,7 @@ extension RouteGuide {
     }
   }
 
-  private func getFeature(using routeGuide: Routeguide_RouteGuide.ClientProtocol) async throws {
+  private func getFeature(using routeGuide: Routeguide_RouteGuide.Client<some ClientTransport>) async throws {
     print("→ Calling 'GetFeature'")
 
     let point = Routeguide_Point.with {
@@ -29,7 +29,7 @@ extension RouteGuide {
     print("Got feature '\(feature.name)'")
   }
 
-  private func listFeatures(using routeGuide: Routeguide_RouteGuide.ClientProtocol) async throws {
+  private func listFeatures(using routeGuide: Routeguide_RouteGuide.Client<some ClientTransport>) async throws {
     print("→ Calling 'ListFeatures'")
 
     let boundingRectangle = Routeguide_Rectangle.with {
@@ -52,7 +52,7 @@ extension RouteGuide {
     }
   }
 
-  private func recordRoute(using routeGuide: Routeguide_RouteGuide.ClientProtocol) async throws {
+  private func recordRoute(using routeGuide: Routeguide_RouteGuide.Client<some ClientTransport>) async throws {
     print("→ Calling 'RecordRoute'")
 
     let features = try self.loadFeatures()
@@ -74,7 +74,7 @@ extension RouteGuide {
     )
   }
 
-  private func routeChat(using routeGuide: Routeguide_RouteGuide.ClientProtocol) async throws {
+  private func routeChat(using routeGuide: Routeguide_RouteGuide.Client<some ClientTransport>) async throws {
     print("→ Calling 'RouteChat'")
 
     try await routeGuide.routeChat { writer in

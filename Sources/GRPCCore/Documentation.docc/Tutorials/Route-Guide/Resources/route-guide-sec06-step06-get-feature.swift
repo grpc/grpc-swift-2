@@ -14,7 +14,7 @@ extension RouteGuide {
     }
   }
 
-  private func getFeature(using routeGuide: Routeguide_RouteGuide.ClientProtocol) async throws {
+  private func getFeature(using routeGuide: Routeguide_RouteGuide.Client<some ClientTransport>) async throws {
     print("→ Calling 'GetFeature'")
 
     let point = Routeguide_Point.with {
