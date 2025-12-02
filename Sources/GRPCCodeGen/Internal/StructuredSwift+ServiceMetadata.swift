@@ -188,7 +188,7 @@ extension VariableDescription {
 @available(gRPCSwift 2.0, *)
 extension EnumDescription {
   /// ```
-  /// enum <Method> {
+  /// enum <Method>: Sendable {
   ///   typealias Input = <InputType>
   ///   typealias Output = <OutputType>
   ///   static let descriptor = GRPCCore.MethodDescriptor(
@@ -209,6 +209,7 @@ extension EnumDescription {
     return EnumDescription(
       accessModifier: accessModifier,
       name: name,
+      conformances: ["Sendable"],
       members: [
         .commentable(
           .doc("Request type for \"\(literalMethod)\"."),
@@ -235,7 +236,7 @@ extension EnumDescription {
 
   /// ```
   /// enum Method {
-  ///   enum <Method> {
+  ///   enum <Method>: Sendable {
   ///     typealias Input = <MethodInput>
   ///     typealias Output = <MethodOutput>
   ///     static let descriptor = GRPCCore.MethodDescriptor(
@@ -256,7 +257,11 @@ extension EnumDescription {
     methods: [MethodDescriptor],
     namer: Namer = Namer()
   ) -> EnumDescription {
-    var description = EnumDescription(accessModifier: accessModifier, name: "Method")
+    var description = EnumDescription(
+      accessModifier: accessModifier,
+      name: "Method",
+      conformances: ["Sendable"]
+    )
 
     // Add a namespace for each method.
     let methodNamespaces: [Declaration] = methods.map { method in
@@ -294,9 +299,9 @@ extension EnumDescription {
   }
 
   /// ```
-  /// enum <Name> {
+  /// enum <Name>: Sendable {
   ///   static let descriptor = GRPCCore.ServiceDescriptor.<namespacedServicePropertyName>
-  ///   enum Method {
+  ///   enum Method: Sendable {
   ///     ...
   ///   }
   /// }
@@ -308,7 +313,11 @@ extension EnumDescription {
     methods: [MethodDescriptor],
     namer: Namer = Namer()
   ) -> EnumDescription {
-    var description = EnumDescription(accessModifier: accessModifier, name: name)
+    var description = EnumDescription(
+      accessModifier: accessModifier,
+      name: name,
+      conformances: ["Sendable"]
+    )
 
     // static let descriptor = GRPCCore.ServiceDescriptor(fullyQualifiedService: "...")
     let descriptor = VariableDescription.serviceDescriptor(
@@ -344,7 +353,7 @@ extension EnumDescription {
 @available(gRPCSwift 2.0, *)
 extension [CodeBlock] {
   /// ```
-  /// enum <Service> {
+  /// enum <Service>: Sendable {
   ///   ...
   /// }
   ///

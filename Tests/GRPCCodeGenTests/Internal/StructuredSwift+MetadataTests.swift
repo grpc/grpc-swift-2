@@ -114,7 +114,7 @@ extension StructuredSwiftTests {
       #expect(render(.variable(decl)) == expected)
     }
 
-    @Test("enum <Method> { ... }", arguments: AccessModifier.allCases)
+    @Test("enum <Method>: Sendable { ... }", arguments: AccessModifier.allCases)
     @available(gRPCSwift 2.0, *)
     func methodNamespaceEnum(access: AccessModifier) {
       let decl: EnumDescription = .methodNamespace(
@@ -127,7 +127,7 @@ extension StructuredSwiftTests {
       )
 
       let expected = """
-        \(access) enum Foo {
+        \(access) enum Foo: Sendable {
           /// Request type for "Foo".
           \(access) typealias Input = FooInput
           /// Response type for "Foo".
@@ -142,7 +142,7 @@ extension StructuredSwiftTests {
       #expect(render(.enum(decl)) == expected)
     }
 
-    @Test("enum Method { ... }", arguments: AccessModifier.allCases)
+    @Test("enum Method: Sendable { ... }", arguments: AccessModifier.allCases)
     @available(gRPCSwift 2.0, *)
     func methodsNamespaceEnum(access: AccessModifier) {
       let decl: EnumDescription = .methodsNamespace(
@@ -161,9 +161,9 @@ extension StructuredSwiftTests {
       )
 
       let expected = """
-        \(access) enum Method {
+        \(access) enum Method: Sendable {
           /// Namespace for "Foo" metadata.
-          \(access) enum Foo {
+          \(access) enum Foo: Sendable {
             /// Request type for "Foo".
             \(access) typealias Input = FooInput
             /// Response type for "Foo".
@@ -183,7 +183,7 @@ extension StructuredSwiftTests {
       #expect(render(.enum(decl)) == expected)
     }
 
-    @Test("enum Method { ... } (no methods)", arguments: AccessModifier.allCases)
+    @Test("enum Method: Sendable { ... } (no methods)", arguments: AccessModifier.allCases)
     @available(gRPCSwift 2.0, *)
     func methodsNamespaceEnumNoMethods(access: AccessModifier) {
       let decl: EnumDescription = .methodsNamespace(
@@ -193,7 +193,7 @@ extension StructuredSwiftTests {
       )
 
       let expected = """
-        \(access) enum Method {
+        \(access) enum Method: Sendable {
           /// Descriptors for all methods in the "bar.Bar" service.
           \(access) static let descriptors: [GRPCCore.MethodDescriptor] = []
         }
@@ -201,7 +201,7 @@ extension StructuredSwiftTests {
       #expect(render(.enum(decl)) == expected)
     }
 
-    @Test("enum <Service> { ... }", arguments: AccessModifier.allCases)
+    @Test("enum <Service>: Sendable { ... }", arguments: AccessModifier.allCases)
     @available(gRPCSwift 2.0, *)
     func serviceNamespaceEnum(access: AccessModifier) {
       let decl: EnumDescription = .serviceNamespace(
@@ -221,13 +221,13 @@ extension StructuredSwiftTests {
       )
 
       let expected = """
-        \(access) enum Foo {
+        \(access) enum Foo: Sendable {
           /// Service descriptor for the "Foo" service.
           \(access) static let descriptor = GRPCCore.ServiceDescriptor(fullyQualifiedService: "Foo")
           /// Namespace for method metadata.
-          \(access) enum Method {
+          \(access) enum Method: Sendable {
             /// Namespace for "Bar" metadata.
-            \(access) enum Bar {
+            \(access) enum Bar: Sendable {
               /// Request type for "Bar".
               \(access) typealias Input = BarInput
               /// Response type for "Bar".
@@ -248,7 +248,7 @@ extension StructuredSwiftTests {
       #expect(render(.enum(decl)) == expected)
     }
 
-    @Test("enum <Service> { ... } (no methods)", arguments: AccessModifier.allCases)
+    @Test("enum <Service>: Sendable { ... } (no methods)", arguments: AccessModifier.allCases)
     @available(gRPCSwift 2.0, *)
     func serviceNamespaceEnumNoMethods(access: AccessModifier) {
       let decl: EnumDescription = .serviceNamespace(
@@ -259,11 +259,11 @@ extension StructuredSwiftTests {
       )
 
       let expected = """
-        \(access) enum Foo {
+        \(access) enum Foo: Sendable {
           /// Service descriptor for the "Foo" service.
           \(access) static let descriptor = GRPCCore.ServiceDescriptor(fullyQualifiedService: "Foo")
           /// Namespace for method metadata.
-          \(access) enum Method {
+          \(access) enum Method: Sendable {
             /// Descriptors for all methods in the "Foo" service.
             \(access) static let descriptors: [GRPCCore.MethodDescriptor] = []
           }

@@ -44,13 +44,13 @@ struct TypealiasTranslatorSnippetBasedTests {
     let expectedSwift = """
       /// Namespace containing generated types for the "namespaceA.ServiceA" service.
       @available(macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-      public enum NamespaceA_ServiceA {
+      public enum NamespaceA_ServiceA: Sendable {
           /// Service descriptor for the "namespaceA.ServiceA" service.
           public static let descriptor = GRPCCore.ServiceDescriptor(fullyQualifiedService: "namespaceA.ServiceA")
           /// Namespace for method metadata.
-          public enum Method {
+          public enum Method: Sendable {
               /// Namespace for "MethodA" metadata.
-              public enum MethodA {
+              public enum MethodA: Sendable {
                   /// Request type for "MethodA".
                   public typealias Input = NamespaceA_ServiceARequest
                   /// Response type for "MethodA".
