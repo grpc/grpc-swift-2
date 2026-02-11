@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import Foundation
+
 /// An error representing the outcome of an RPC.
 ///
 /// See also ``Status``.
@@ -125,6 +127,13 @@ extension RPCError: CustomStringConvertible {
     } else {
       return "\(self.code): \"\(self.message)\""
     }
+  }
+}
+
+@available(gRPCSwift 2.0, *)
+extension RPCError: LocalizedError {
+  public var errorDescription: String? {
+    return self.description
   }
 }
 
