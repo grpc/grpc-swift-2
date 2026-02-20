@@ -67,11 +67,11 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
   /// cannot be caught by the value here, since the service config is
   /// obtained by the gRPC client via name resolution.
   var waitForReady: SwiftProtobuf.Google_Protobuf_BoolValue {
-    get {return _waitForReady ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
+    get {_waitForReady ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
     set {_waitForReady = newValue}
   }
   /// Returns true if `waitForReady` has been explicitly set.
-  var hasWaitForReady: Bool {return self._waitForReady != nil}
+  var hasWaitForReady: Bool {self._waitForReady != nil}
   /// Clears the value of `waitForReady`. Subsequent reads from it will return its default value.
   mutating func clearWaitForReady() {self._waitForReady = nil}
 
@@ -85,11 +85,11 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
   /// one is not set, then the other will be used.  If neither is set, then the
   /// request has no deadline.
   var timeout: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _timeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_timeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_timeout = newValue}
   }
   /// Returns true if `timeout` has been explicitly set.
-  var hasTimeout: Bool {return self._timeout != nil}
+  var hasTimeout: Bool {self._timeout != nil}
   /// Clears the value of `timeout`. Subsequent reads from it will return its default value.
   mutating func clearTimeout() {self._timeout = nil}
 
@@ -109,11 +109,11 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
   /// Note that 0 is a valid value, meaning that the request message
   /// must be empty.
   var maxRequestMessageBytes: SwiftProtobuf.Google_Protobuf_UInt32Value {
-    get {return _maxRequestMessageBytes ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+    get {_maxRequestMessageBytes ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
     set {_maxRequestMessageBytes = newValue}
   }
   /// Returns true if `maxRequestMessageBytes` has been explicitly set.
-  var hasMaxRequestMessageBytes: Bool {return self._maxRequestMessageBytes != nil}
+  var hasMaxRequestMessageBytes: Bool {self._maxRequestMessageBytes != nil}
   /// Clears the value of `maxRequestMessageBytes`. Subsequent reads from it will return its default value.
   mutating func clearMaxRequestMessageBytes() {self._maxRequestMessageBytes = nil}
 
@@ -133,11 +133,11 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
   /// Note that 0 is a valid value, meaning that the response message
   /// must be empty.
   var maxResponseMessageBytes: SwiftProtobuf.Google_Protobuf_UInt32Value {
-    get {return _maxResponseMessageBytes ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+    get {_maxResponseMessageBytes ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
     set {_maxResponseMessageBytes = newValue}
   }
   /// Returns true if `maxResponseMessageBytes` has been explicitly set.
-  var hasMaxResponseMessageBytes: Bool {return self._maxResponseMessageBytes != nil}
+  var hasMaxResponseMessageBytes: Bool {self._maxResponseMessageBytes != nil}
   /// Clears the value of `maxResponseMessageBytes`. Subsequent reads from it will return its default value.
   mutating func clearMaxResponseMessageBytes() {self._maxResponseMessageBytes = nil}
 
@@ -231,21 +231,21 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
     ///   min(initial_backoff*backoff_multiplier**(n-1), max_backoff)).
     /// Required. Must be greater than zero.
     var initialBackoff: SwiftProtobuf.Google_Protobuf_Duration {
-      get {return _initialBackoff ?? SwiftProtobuf.Google_Protobuf_Duration()}
+      get {_initialBackoff ?? SwiftProtobuf.Google_Protobuf_Duration()}
       set {_initialBackoff = newValue}
     }
     /// Returns true if `initialBackoff` has been explicitly set.
-    var hasInitialBackoff: Bool {return self._initialBackoff != nil}
+    var hasInitialBackoff: Bool {self._initialBackoff != nil}
     /// Clears the value of `initialBackoff`. Subsequent reads from it will return its default value.
     mutating func clearInitialBackoff() {self._initialBackoff = nil}
 
     /// Required. Must be greater than zero.
     var maxBackoff: SwiftProtobuf.Google_Protobuf_Duration {
-      get {return _maxBackoff ?? SwiftProtobuf.Google_Protobuf_Duration()}
+      get {_maxBackoff ?? SwiftProtobuf.Google_Protobuf_Duration()}
       set {_maxBackoff = newValue}
     }
     /// Returns true if `maxBackoff` has been explicitly set.
-    var hasMaxBackoff: Bool {return self._maxBackoff != nil}
+    var hasMaxBackoff: Bool {self._maxBackoff != nil}
     /// Clears the value of `maxBackoff`. Subsequent reads from it will return its default value.
     mutating func clearMaxBackoff() {self._maxBackoff = nil}
 
@@ -285,11 +285,11 @@ struct Grpc_ServiceConfig_MethodConfig: Sendable {
     /// hedged RPCs will be sent at intervals of every hedging_delay. Set this
     /// to 0 to immediately send all max_requests RPCs.
     var hedgingDelay: SwiftProtobuf.Google_Protobuf_Duration {
-      get {return _hedgingDelay ?? SwiftProtobuf.Google_Protobuf_Duration()}
+      get {_hedgingDelay ?? SwiftProtobuf.Google_Protobuf_Duration()}
       set {_hedgingDelay = newValue}
     }
     /// Returns true if `hedgingDelay` has been explicitly set.
-    var hasHedgingDelay: Bool {return self._hedgingDelay != nil}
+    var hasHedgingDelay: Bool {self._hedgingDelay != nil}
     /// Clears the value of `hedgingDelay`. Subsequent reads from it will return its default value.
     mutating func clearHedgingDelay() {self._hedgingDelay = nil}
 
@@ -352,11 +352,11 @@ struct Grpc_ServiceConfig_WeightedRoundRobinLbConfig: Sendable {
   /// Whether to enable out-of-band utilization reporting collection from
   /// the endpoints.  By default, per-request utilization reporting is used.
   var enableOobLoadReport: SwiftProtobuf.Google_Protobuf_BoolValue {
-    get {return _enableOobLoadReport ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
+    get {_enableOobLoadReport ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
     set {_enableOobLoadReport = newValue}
   }
   /// Returns true if `enableOobLoadReport` has been explicitly set.
-  var hasEnableOobLoadReport: Bool {return self._enableOobLoadReport != nil}
+  var hasEnableOobLoadReport: Bool {self._enableOobLoadReport != nil}
   /// Clears the value of `enableOobLoadReport`. Subsequent reads from it will return its default value.
   mutating func clearEnableOobLoadReport() {self._enableOobLoadReport = nil}
 
@@ -364,11 +364,11 @@ struct Grpc_ServiceConfig_WeightedRoundRobinLbConfig: Sendable {
   /// server may not provide reports as frequently as the client requests.
   /// Used only when enable_oob_load_report is true.  Default is 10 seconds.
   var oobReportingPeriod: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _oobReportingPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_oobReportingPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_oobReportingPeriod = newValue}
   }
   /// Returns true if `oobReportingPeriod` has been explicitly set.
-  var hasOobReportingPeriod: Bool {return self._oobReportingPeriod != nil}
+  var hasOobReportingPeriod: Bool {self._oobReportingPeriod != nil}
   /// Clears the value of `oobReportingPeriod`. Subsequent reads from it will return its default value.
   mutating func clearOobReportingPeriod() {self._oobReportingPeriod = nil}
 
@@ -379,11 +379,11 @@ struct Grpc_ServiceConfig_WeightedRoundRobinLbConfig: Sendable {
   /// after weight_expiration_period has caused us to stop using the most
   /// recent load metrics.  Default is 10 seconds.
   var blackoutPeriod: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _blackoutPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_blackoutPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_blackoutPeriod = newValue}
   }
   /// Returns true if `blackoutPeriod` has been explicitly set.
-  var hasBlackoutPeriod: Bool {return self._blackoutPeriod != nil}
+  var hasBlackoutPeriod: Bool {self._blackoutPeriod != nil}
   /// Clears the value of `blackoutPeriod`. Subsequent reads from it will return its default value.
   mutating func clearBlackoutPeriod() {self._blackoutPeriod = nil}
 
@@ -393,22 +393,22 @@ struct Grpc_ServiceConfig_WeightedRoundRobinLbConfig: Sendable {
   /// value, if we later start seeing fresh reports again, the
   /// blackout_period applies.  Defaults to 3 minutes.
   var weightExpirationPeriod: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _weightExpirationPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_weightExpirationPeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_weightExpirationPeriod = newValue}
   }
   /// Returns true if `weightExpirationPeriod` has been explicitly set.
-  var hasWeightExpirationPeriod: Bool {return self._weightExpirationPeriod != nil}
+  var hasWeightExpirationPeriod: Bool {self._weightExpirationPeriod != nil}
   /// Clears the value of `weightExpirationPeriod`. Subsequent reads from it will return its default value.
   mutating func clearWeightExpirationPeriod() {self._weightExpirationPeriod = nil}
 
   /// How often endpoint weights are recalculated. Values less than 100ms are
   /// capped at 100ms. Default is 1 second.
   var weightUpdatePeriod: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _weightUpdatePeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_weightUpdatePeriod ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_weightUpdatePeriod = newValue}
   }
   /// Returns true if `weightUpdatePeriod` has been explicitly set.
-  var hasWeightUpdatePeriod: Bool {return self._weightUpdatePeriod != nil}
+  var hasWeightUpdatePeriod: Bool {self._weightUpdatePeriod != nil}
   /// Clears the value of `weightUpdatePeriod`. Subsequent reads from it will return its default value.
   mutating func clearWeightUpdatePeriod() {self._weightUpdatePeriod = nil}
 
@@ -416,11 +416,11 @@ struct Grpc_ServiceConfig_WeightedRoundRobinLbConfig: Sendable {
   /// calculated as eps/qps. Configuration is rejected if this value is negative.
   /// Default is 1.0.
   var errorUtilizationPenalty: SwiftProtobuf.Google_Protobuf_FloatValue {
-    get {return _errorUtilizationPenalty ?? SwiftProtobuf.Google_Protobuf_FloatValue()}
+    get {_errorUtilizationPenalty ?? SwiftProtobuf.Google_Protobuf_FloatValue()}
     set {_errorUtilizationPenalty = newValue}
   }
   /// Returns true if `errorUtilizationPenalty` has been explicitly set.
-  var hasErrorUtilizationPenalty: Bool {return self._errorUtilizationPenalty != nil}
+  var hasErrorUtilizationPenalty: Bool {self._errorUtilizationPenalty != nil}
   /// Clears the value of `errorUtilizationPenalty`. Subsequent reads from it will return its default value.
   mutating func clearErrorUtilizationPenalty() {self._errorUtilizationPenalty = nil}
 
@@ -446,11 +446,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
   /// both new ejections as well as addresses being returned to service. Defaults
   /// to 10000ms or 10s.
   var interval: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _interval ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_interval ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_interval = newValue}
   }
   /// Returns true if `interval` has been explicitly set.
-  var hasInterval: Bool {return self._interval != nil}
+  var hasInterval: Bool {self._interval != nil}
   /// Clears the value of `interval`. Subsequent reads from it will return its default value.
   mutating func clearInterval() {self._interval = nil}
 
@@ -458,53 +458,53 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
   /// base time multiplied by the number of times the address has been ejected.
   /// Defaults to 30000ms or 30s.
   var baseEjectionTime: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _baseEjectionTime ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_baseEjectionTime ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_baseEjectionTime = newValue}
   }
   /// Returns true if `baseEjectionTime` has been explicitly set.
-  var hasBaseEjectionTime: Bool {return self._baseEjectionTime != nil}
+  var hasBaseEjectionTime: Bool {self._baseEjectionTime != nil}
   /// Clears the value of `baseEjectionTime`. Subsequent reads from it will return its default value.
   mutating func clearBaseEjectionTime() {self._baseEjectionTime = nil}
 
   /// The maximum time that an address is ejected for. If not specified, the default value (300000ms or 300s) or
   /// the base_ejection_time value is applied, whatever is larger.
   var maxEjectionTime: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _maxEjectionTime ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_maxEjectionTime ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_maxEjectionTime = newValue}
   }
   /// Returns true if `maxEjectionTime` has been explicitly set.
-  var hasMaxEjectionTime: Bool {return self._maxEjectionTime != nil}
+  var hasMaxEjectionTime: Bool {self._maxEjectionTime != nil}
   /// Clears the value of `maxEjectionTime`. Subsequent reads from it will return its default value.
   mutating func clearMaxEjectionTime() {self._maxEjectionTime = nil}
 
   /// The maximum % of an address list that can be ejected due to outlier
   /// detection. Defaults to 10% but will eject at least one address regardless of the value.
   var maxEjectionPercent: SwiftProtobuf.Google_Protobuf_UInt32Value {
-    get {return _maxEjectionPercent ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+    get {_maxEjectionPercent ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
     set {_maxEjectionPercent = newValue}
   }
   /// Returns true if `maxEjectionPercent` has been explicitly set.
-  var hasMaxEjectionPercent: Bool {return self._maxEjectionPercent != nil}
+  var hasMaxEjectionPercent: Bool {self._maxEjectionPercent != nil}
   /// Clears the value of `maxEjectionPercent`. Subsequent reads from it will return its default value.
   mutating func clearMaxEjectionPercent() {self._maxEjectionPercent = nil}
 
   /// If set, success rate ejections will be performed
   var successRateEjection: Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.SuccessRateEjection {
-    get {return _successRateEjection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.SuccessRateEjection()}
+    get {_successRateEjection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.SuccessRateEjection()}
     set {_successRateEjection = newValue}
   }
   /// Returns true if `successRateEjection` has been explicitly set.
-  var hasSuccessRateEjection: Bool {return self._successRateEjection != nil}
+  var hasSuccessRateEjection: Bool {self._successRateEjection != nil}
   /// Clears the value of `successRateEjection`. Subsequent reads from it will return its default value.
   mutating func clearSuccessRateEjection() {self._successRateEjection = nil}
 
   /// If set, failure rate ejections will be performed
   var failurePercentageEjection: Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.FailurePercentageEjection {
-    get {return _failurePercentageEjection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.FailurePercentageEjection()}
+    get {_failurePercentageEjection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig.FailurePercentageEjection()}
     set {_failurePercentageEjection = newValue}
   }
   /// Returns true if `failurePercentageEjection` has been explicitly set.
-  var hasFailurePercentageEjection: Bool {return self._failurePercentageEjection != nil}
+  var hasFailurePercentageEjection: Bool {self._failurePercentageEjection != nil}
   /// Clears the value of `failurePercentageEjection`. Subsequent reads from it will return its default value.
   mutating func clearFailurePercentageEjection() {self._failurePercentageEjection = nil}
 
@@ -529,11 +529,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// double. That is, if the desired factor is 1.9, the runtime value should
     /// be 1900. Defaults to 1900.
     var stdevFactor: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _stdevFactor ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_stdevFactor ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_stdevFactor = newValue}
     }
     /// Returns true if `stdevFactor` has been explicitly set.
-    var hasStdevFactor: Bool {return self._stdevFactor != nil}
+    var hasStdevFactor: Bool {self._stdevFactor != nil}
     /// Clears the value of `stdevFactor`. Subsequent reads from it will return its default value.
     mutating func clearStdevFactor() {self._stdevFactor = nil}
 
@@ -541,11 +541,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// is detected through success rate statistics. This setting can be used to
     /// disable ejection or to ramp it up slowly. Defaults to 100.
     var enforcementPercentage: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _enforcementPercentage ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_enforcementPercentage ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_enforcementPercentage = newValue}
     }
     /// Returns true if `enforcementPercentage` has been explicitly set.
-    var hasEnforcementPercentage: Bool {return self._enforcementPercentage != nil}
+    var hasEnforcementPercentage: Bool {self._enforcementPercentage != nil}
     /// Clears the value of `enforcementPercentage`. Subsequent reads from it will return its default value.
     mutating func clearEnforcementPercentage() {self._enforcementPercentage = nil}
 
@@ -554,11 +554,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// setting, outlier detection via success rate statistics is not performed
     /// for any addresses. Defaults to 5.
     var minimumHosts: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _minimumHosts ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_minimumHosts ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_minimumHosts = newValue}
     }
     /// Returns true if `minimumHosts` has been explicitly set.
-    var hasMinimumHosts: Bool {return self._minimumHosts != nil}
+    var hasMinimumHosts: Bool {self._minimumHosts != nil}
     /// Clears the value of `minimumHosts`. Subsequent reads from it will return its default value.
     mutating func clearMinimumHosts() {self._minimumHosts = nil}
 
@@ -568,11 +568,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// setting, outlier detection via success rate statistics is not performed
     /// for that address. Defaults to 100.
     var requestVolume: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _requestVolume ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_requestVolume ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_requestVolume = newValue}
     }
     /// Returns true if `requestVolume` has been explicitly set.
-    var hasRequestVolume: Bool {return self._requestVolume != nil}
+    var hasRequestVolume: Bool {self._requestVolume != nil}
     /// Clears the value of `requestVolume`. Subsequent reads from it will return its default value.
     mutating func clearRequestVolume() {self._requestVolume = nil}
 
@@ -598,11 +598,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// the failure percentage of a given address is greater than or equal to this value, it will be
     /// ejected. Defaults to 85.
     var threshold: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _threshold ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_threshold ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_threshold = newValue}
     }
     /// Returns true if `threshold` has been explicitly set.
-    var hasThreshold: Bool {return self._threshold != nil}
+    var hasThreshold: Bool {self._threshold != nil}
     /// Clears the value of `threshold`. Subsequent reads from it will return its default value.
     mutating func clearThreshold() {self._threshold = nil}
 
@@ -610,11 +610,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// failure percentage statistics. This setting can be used to disable ejection or to ramp it up
     /// slowly. Defaults to 100.
     var enforcementPercentage: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _enforcementPercentage ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_enforcementPercentage ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_enforcementPercentage = newValue}
     }
     /// Returns true if `enforcementPercentage` has been explicitly set.
-    var hasEnforcementPercentage: Bool {return self._enforcementPercentage != nil}
+    var hasEnforcementPercentage: Bool {self._enforcementPercentage != nil}
     /// Clears the value of `enforcementPercentage`. Subsequent reads from it will return its default value.
     mutating func clearEnforcementPercentage() {self._enforcementPercentage = nil}
 
@@ -622,11 +622,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// If the total number of addresses is less than this value, failure percentage-based
     /// ejection will not be performed. Defaults to 5.
     var minimumHosts: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _minimumHosts ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_minimumHosts ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_minimumHosts = newValue}
     }
     /// Returns true if `minimumHosts` has been explicitly set.
-    var hasMinimumHosts: Bool {return self._minimumHosts != nil}
+    var hasMinimumHosts: Bool {self._minimumHosts != nil}
     /// Clears the value of `minimumHosts`. Subsequent reads from it will return its default value.
     mutating func clearMinimumHosts() {self._minimumHosts = nil}
 
@@ -635,11 +635,11 @@ struct Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig: Sendable {
     /// volume is lower than this setting, failure percentage-based ejection will not be performed for
     /// this host. Defaults to 50.
     var requestVolume: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _requestVolume ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_requestVolume ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_requestVolume = newValue}
     }
     /// Returns true if `requestVolume` has been explicitly set.
-    var hasRequestVolume: Bool {return self._requestVolume != nil}
+    var hasRequestVolume: Bool {self._requestVolume != nil}
     /// Clears the value of `requestVolume`. Subsequent reads from it will return its default value.
     mutating func clearRequestVolume() {self._requestVolume = nil}
 
@@ -684,11 +684,11 @@ struct Grpc_ServiceConfig_GrpcLbConfig: Sendable {
   /// Optional. The timeout in seconds for receiving the server list from the LB
   /// server. Defaults to 10s.
   var initialFallbackTimeout: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _initialFallbackTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_initialFallbackTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_initialFallbackTimeout = newValue}
   }
   /// Returns true if `initialFallbackTimeout` has been explicitly set.
-  var hasInitialFallbackTimeout: Bool {return self._initialFallbackTimeout != nil}
+  var hasInitialFallbackTimeout: Bool {self._initialFallbackTimeout != nil}
   /// Clears the value of `initialFallbackTimeout`. Subsequent reads from it will return its default value.
   mutating func clearInitialFallbackTimeout() {self._initialFallbackTimeout = nil}
 
@@ -769,32 +769,32 @@ struct Grpc_ServiceConfig_RlsLoadBalancingPolicyConfig: @unchecked Sendable {
   // methods supported on all messages.
 
   var routeLookupConfig: Grpc_Lookup_V1_RouteLookupConfig {
-    get {return _storage._routeLookupConfig ?? Grpc_Lookup_V1_RouteLookupConfig()}
+    get {_storage._routeLookupConfig ?? Grpc_Lookup_V1_RouteLookupConfig()}
     set {_uniqueStorage()._routeLookupConfig = newValue}
   }
   /// Returns true if `routeLookupConfig` has been explicitly set.
-  var hasRouteLookupConfig: Bool {return _storage._routeLookupConfig != nil}
+  var hasRouteLookupConfig: Bool {_storage._routeLookupConfig != nil}
   /// Clears the value of `routeLookupConfig`. Subsequent reads from it will return its default value.
   mutating func clearRouteLookupConfig() {_uniqueStorage()._routeLookupConfig = nil}
 
   /// Service config to use for the RLS channel.
   var routeLookupChannelServiceConfig: Grpc_ServiceConfig_ServiceConfig {
-    get {return _storage._routeLookupChannelServiceConfig ?? Grpc_ServiceConfig_ServiceConfig()}
+    get {_storage._routeLookupChannelServiceConfig ?? Grpc_ServiceConfig_ServiceConfig()}
     set {_uniqueStorage()._routeLookupChannelServiceConfig = newValue}
   }
   /// Returns true if `routeLookupChannelServiceConfig` has been explicitly set.
-  var hasRouteLookupChannelServiceConfig: Bool {return _storage._routeLookupChannelServiceConfig != nil}
+  var hasRouteLookupChannelServiceConfig: Bool {_storage._routeLookupChannelServiceConfig != nil}
   /// Clears the value of `routeLookupChannelServiceConfig`. Subsequent reads from it will return its default value.
   mutating func clearRouteLookupChannelServiceConfig() {_uniqueStorage()._routeLookupChannelServiceConfig = nil}
 
   var childPolicy: [Grpc_ServiceConfig_LoadBalancingConfig] {
-    get {return _storage._childPolicy}
+    get {_storage._childPolicy}
     set {_uniqueStorage()._childPolicy = newValue}
   }
 
   /// Field name to add to child policy config to contain the target name.
   var childPolicyConfigTargetFieldName: String {
-    get {return _storage._childPolicyConfigTargetFieldName}
+    get {_storage._childPolicyConfigTargetFieldName}
     set {_uniqueStorage()._childPolicyConfigTargetFieldName = newValue}
   }
 
@@ -874,11 +874,11 @@ struct Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig: Sendable {
   ///
   /// NOTE: This field was marked as deprecated in the .proto file.
   var lrsLoadReportingServerName: SwiftProtobuf.Google_Protobuf_StringValue {
-    get {return _lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
+    get {_lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
     set {_lrsLoadReportingServerName = newValue}
   }
   /// Returns true if `lrsLoadReportingServerName` has been explicitly set.
-  var hasLrsLoadReportingServerName: Bool {return self._lrsLoadReportingServerName != nil}
+  var hasLrsLoadReportingServerName: Bool {self._lrsLoadReportingServerName != nil}
   /// Clears the value of `lrsLoadReportingServerName`. Subsequent reads from it will return its default value.
   mutating func clearLrsLoadReportingServerName() {self._lrsLoadReportingServerName = nil}
 
@@ -888,11 +888,11 @@ struct Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig: Sendable {
   ///
   /// NOTE: This field was marked as deprecated in the .proto file.
   var lrsLoadReportingServer: Grpc_ServiceConfig_XdsServer {
-    get {return _lrsLoadReportingServer ?? Grpc_ServiceConfig_XdsServer()}
+    get {_lrsLoadReportingServer ?? Grpc_ServiceConfig_XdsServer()}
     set {_lrsLoadReportingServer = newValue}
   }
   /// Returns true if `lrsLoadReportingServer` has been explicitly set.
-  var hasLrsLoadReportingServer: Bool {return self._lrsLoadReportingServer != nil}
+  var hasLrsLoadReportingServer: Bool {self._lrsLoadReportingServer != nil}
   /// Clears the value of `lrsLoadReportingServer`. Subsequent reads from it will return its default value.
   mutating func clearLrsLoadReportingServer() {self._lrsLoadReportingServer = nil}
 
@@ -901,11 +901,11 @@ struct Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig: Sendable {
   ///
   /// NOTE: This field was marked as deprecated in the .proto file.
   var maxConcurrentRequests: SwiftProtobuf.Google_Protobuf_UInt32Value {
-    get {return _maxConcurrentRequests ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+    get {_maxConcurrentRequests ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
     set {_maxConcurrentRequests = newValue}
   }
   /// Returns true if `maxConcurrentRequests` has been explicitly set.
-  var hasMaxConcurrentRequests: Bool {return self._maxConcurrentRequests != nil}
+  var hasMaxConcurrentRequests: Bool {self._maxConcurrentRequests != nil}
   /// Clears the value of `maxConcurrentRequests`. Subsequent reads from it will return its default value.
   mutating func clearMaxConcurrentRequests() {self._maxConcurrentRequests = nil}
 
@@ -1296,20 +1296,20 @@ struct Grpc_ServiceConfig_ServiceConfig: Sendable {
   var methodConfig: [Grpc_ServiceConfig_MethodConfig] = []
 
   var retryThrottling: Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy {
-    get {return _retryThrottling ?? Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy()}
+    get {_retryThrottling ?? Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy()}
     set {_retryThrottling = newValue}
   }
   /// Returns true if `retryThrottling` has been explicitly set.
-  var hasRetryThrottling: Bool {return self._retryThrottling != nil}
+  var hasRetryThrottling: Bool {self._retryThrottling != nil}
   /// Clears the value of `retryThrottling`. Subsequent reads from it will return its default value.
   mutating func clearRetryThrottling() {self._retryThrottling = nil}
 
   var healthCheckConfig: Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig {
-    get {return _healthCheckConfig ?? Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig()}
+    get {_healthCheckConfig ?? Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig()}
     set {_healthCheckConfig = newValue}
   }
   /// Returns true if `healthCheckConfig` has been explicitly set.
-  var hasHealthCheckConfig: Bool {return self._healthCheckConfig != nil}
+  var hasHealthCheckConfig: Bool {self._healthCheckConfig != nil}
   /// Clears the value of `healthCheckConfig`. Subsequent reads from it will return its default value.
   mutating func clearHealthCheckConfig() {self._healthCheckConfig = nil}
 
@@ -1410,11 +1410,11 @@ struct Grpc_ServiceConfig_ServiceConfig: Sendable {
 
     /// Service name to use in the health-checking request.
     var serviceName: SwiftProtobuf.Google_Protobuf_StringValue {
-      get {return _serviceName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
+      get {_serviceName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
       set {_serviceName = newValue}
     }
     /// Returns true if `serviceName` has been explicitly set.
-    var hasServiceName: Bool {return self._serviceName != nil}
+    var hasServiceName: Bool {self._serviceName != nil}
     /// Clears the value of `serviceName`. Subsequent reads from it will return its default value.
     mutating func clearServiceName() {self._serviceName = nil}
 
@@ -1459,11 +1459,11 @@ struct Grpc_ServiceConfig_XdsServer: Sendable {
 
     /// Optional JSON config.
     var config: SwiftProtobuf.Google_Protobuf_Struct {
-      get {return _config ?? SwiftProtobuf.Google_Protobuf_Struct()}
+      get {_config ?? SwiftProtobuf.Google_Protobuf_Struct()}
       set {_config = newValue}
     }
     /// Returns true if `config` has been explicitly set.
-    var hasConfig: Bool {return self._config != nil}
+    var hasConfig: Bool {self._config != nil}
     /// Clears the value of `config`. Subsequent reads from it will return its default value.
     mutating func clearConfig() {self._config = nil}
 
@@ -1508,7 +1508,7 @@ struct Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: Sendable 
 
     /// Cluster name.
     var cluster: String {
-      get {return _storage._cluster}
+      get {_storage._cluster}
       set {_uniqueStorage()._cluster = newValue}
     }
 
@@ -1520,11 +1520,11 @@ struct Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: Sendable 
     ///
     /// NOTE: This field was marked as deprecated in the .proto file.
     var lrsLoadReportingServerName: SwiftProtobuf.Google_Protobuf_StringValue {
-      get {return _storage._lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
+      get {_storage._lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
       set {_uniqueStorage()._lrsLoadReportingServerName = newValue}
     }
     /// Returns true if `lrsLoadReportingServerName` has been explicitly set.
-    var hasLrsLoadReportingServerName: Bool {return _storage._lrsLoadReportingServerName != nil}
+    var hasLrsLoadReportingServerName: Bool {_storage._lrsLoadReportingServerName != nil}
     /// Clears the value of `lrsLoadReportingServerName`. Subsequent reads from it will return its default value.
     mutating func clearLrsLoadReportingServerName() {_uniqueStorage()._lrsLoadReportingServerName = nil}
 
@@ -1532,27 +1532,27 @@ struct Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: Sendable 
     /// If not present, load reporting will be disabled.
     /// Supercedes lrs_load_reporting_server_name field.
     var lrsLoadReportingServer: Grpc_ServiceConfig_XdsServer {
-      get {return _storage._lrsLoadReportingServer ?? Grpc_ServiceConfig_XdsServer()}
+      get {_storage._lrsLoadReportingServer ?? Grpc_ServiceConfig_XdsServer()}
       set {_uniqueStorage()._lrsLoadReportingServer = newValue}
     }
     /// Returns true if `lrsLoadReportingServer` has been explicitly set.
-    var hasLrsLoadReportingServer: Bool {return _storage._lrsLoadReportingServer != nil}
+    var hasLrsLoadReportingServer: Bool {_storage._lrsLoadReportingServer != nil}
     /// Clears the value of `lrsLoadReportingServer`. Subsequent reads from it will return its default value.
     mutating func clearLrsLoadReportingServer() {_uniqueStorage()._lrsLoadReportingServer = nil}
 
     /// Maximum number of outstanding requests can be made to the upstream
     /// cluster.  Default is 1024.
     var maxConcurrentRequests: SwiftProtobuf.Google_Protobuf_UInt32Value {
-      get {return _storage._maxConcurrentRequests ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      get {_storage._maxConcurrentRequests ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
       set {_uniqueStorage()._maxConcurrentRequests = newValue}
     }
     /// Returns true if `maxConcurrentRequests` has been explicitly set.
-    var hasMaxConcurrentRequests: Bool {return _storage._maxConcurrentRequests != nil}
+    var hasMaxConcurrentRequests: Bool {_storage._maxConcurrentRequests != nil}
     /// Clears the value of `maxConcurrentRequests`. Subsequent reads from it will return its default value.
     mutating func clearMaxConcurrentRequests() {_uniqueStorage()._maxConcurrentRequests = nil}
 
     var type: Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig.DiscoveryMechanism.TypeEnum {
-      get {return _storage._type}
+      get {_storage._type}
       set {_uniqueStorage()._type = newValue}
     }
 
@@ -1560,37 +1560,37 @@ struct Grpc_ServiceConfig_XdsClusterResolverLoadBalancingPolicyConfig: Sendable 
     /// EDS service name, as returned in CDS.
     /// May be unset if not specified in CDS.
     var edsServiceName: String {
-      get {return _storage._edsServiceName}
+      get {_storage._edsServiceName}
       set {_uniqueStorage()._edsServiceName = newValue}
     }
 
     /// For type LOGICAL_DNS only.
     /// DNS name to resolve in "host:port" form.
     var dnsHostname: String {
-      get {return _storage._dnsHostname}
+      get {_storage._dnsHostname}
       set {_uniqueStorage()._dnsHostname = newValue}
     }
 
     /// The configuration for outlier_detection child policies
     /// Within this message, the child_policy field will be ignored
     var outlierDetection: Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig {
-      get {return _storage._outlierDetection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig()}
+      get {_storage._outlierDetection ?? Grpc_ServiceConfig_OutlierDetectionLoadBalancingConfig()}
       set {_uniqueStorage()._outlierDetection = newValue}
     }
     /// Returns true if `outlierDetection` has been explicitly set.
-    var hasOutlierDetection: Bool {return _storage._outlierDetection != nil}
+    var hasOutlierDetection: Bool {_storage._outlierDetection != nil}
     /// Clears the value of `outlierDetection`. Subsequent reads from it will return its default value.
     mutating func clearOutlierDetection() {_uniqueStorage()._outlierDetection = nil}
 
     /// The configuration for xds_override_host child policy
     var overrideHostStatus: [Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig.HealthStatus] {
-      get {return _storage._overrideHostStatus}
+      get {_storage._overrideHostStatus}
       set {_uniqueStorage()._overrideHostStatus = newValue}
     }
 
     /// Telemetry labels associated with this cluster
     var telemetryLabels: Dictionary<String,String> {
-      get {return _storage._telemetryLabels}
+      get {_storage._telemetryLabels}
       set {_uniqueStorage()._telemetryLabels = newValue}
     }
 
@@ -1662,11 +1662,11 @@ struct Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig: Sendable {
   var lrsLoadReportingServerName: String = String()
 
   var locality: Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.Locality {
-    get {return _locality ?? Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.Locality()}
+    get {_locality ?? Grpc_ServiceConfig_LrsLoadBalancingPolicyConfig.Locality()}
     set {_locality = newValue}
   }
   /// Returns true if `locality` has been explicitly set.
-  var hasLocality: Bool {return self._locality != nil}
+  var hasLocality: Bool {self._locality != nil}
   /// Clears the value of `locality`. Subsequent reads from it will return its default value.
   mutating func clearLocality() {self._locality = nil}
 
@@ -1716,11 +1716,11 @@ struct Grpc_ServiceConfig_EdsLoadBalancingPolicyConfig: Sendable {
   /// If set to empty string, load reporting will be sent to the same
   /// server as we are getting xds data from.
   var lrsLoadReportingServerName: SwiftProtobuf.Google_Protobuf_StringValue {
-    get {return _lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
+    get {_lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
     set {_lrsLoadReportingServerName = newValue}
   }
   /// Returns true if `lrsLoadReportingServerName` has been explicitly set.
-  var hasLrsLoadReportingServerName: Bool {return self._lrsLoadReportingServerName != nil}
+  var hasLrsLoadReportingServerName: Bool {self._lrsLoadReportingServerName != nil}
   /// Clears the value of `lrsLoadReportingServerName`. Subsequent reads from it will return its default value.
   mutating func clearLrsLoadReportingServerName() {self._lrsLoadReportingServerName = nil}
 
@@ -1778,11 +1778,11 @@ struct Grpc_ServiceConfig_XdsConfig: Sendable {
   /// If set to the empty string, load reporting will be sent to the same
   /// server that we obtained CDS data from.
   var lrsLoadReportingServerName: SwiftProtobuf.Google_Protobuf_StringValue {
-    get {return _lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
+    get {_lrsLoadReportingServerName ?? SwiftProtobuf.Google_Protobuf_StringValue()}
     set {_lrsLoadReportingServerName = newValue}
   }
   /// Returns true if `lrsLoadReportingServerName` has been explicitly set.
-  var hasLrsLoadReportingServerName: Bool {return self._lrsLoadReportingServerName != nil}
+  var hasLrsLoadReportingServerName: Bool {self._lrsLoadReportingServerName != nil}
   /// Clears the value of `lrsLoadReportingServerName`. Subsequent reads from it will return its default value.
   mutating func clearLrsLoadReportingServerName() {self._lrsLoadReportingServerName = nil}
 
