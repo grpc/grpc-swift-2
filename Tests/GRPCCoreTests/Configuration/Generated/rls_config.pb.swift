@@ -71,11 +71,11 @@ struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
   var names: [Grpc_Lookup_V1_GrpcKeyBuilder.Name] = []
 
   var extraKeys: Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys {
-    get {return _extraKeys ?? Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys()}
+    get {_extraKeys ?? Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys()}
     set {_extraKeys = newValue}
   }
   /// Returns true if `extraKeys` has been explicitly set.
-  var hasExtraKeys: Bool {return self._extraKeys != nil}
+  var hasExtraKeys: Bool {self._extraKeys != nil}
   /// Clears the value of `extraKeys`. Subsequent reads from it will return its default value.
   mutating func clearExtraKeys() {self._extraKeys = nil}
 
@@ -254,11 +254,11 @@ struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
   /// Configure a timeout value for lookup service requests.
   /// Defaults to 10 seconds if not specified.
   var lookupServiceTimeout: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _lookupServiceTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_lookupServiceTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_lookupServiceTimeout = newValue}
   }
   /// Returns true if `lookupServiceTimeout` has been explicitly set.
-  var hasLookupServiceTimeout: Bool {return self._lookupServiceTimeout != nil}
+  var hasLookupServiceTimeout: Bool {self._lookupServiceTimeout != nil}
   /// Clears the value of `lookupServiceTimeout`. Subsequent reads from it will return its default value.
   mutating func clearLookupServiceTimeout() {self._lookupServiceTimeout = nil}
 
@@ -266,11 +266,11 @@ struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
   /// If omitted or zero, the longest valid cache time is used.
   /// This value is clamped to 5 minutes to avoid unflushable bad responses.
   var maxAge: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _maxAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_maxAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_maxAge = newValue}
   }
   /// Returns true if `maxAge` has been explicitly set.
-  var hasMaxAge: Bool {return self._maxAge != nil}
+  var hasMaxAge: Bool {self._maxAge != nil}
   /// Clears the value of `maxAge`. Subsequent reads from it will return its default value.
   mutating func clearMaxAge() {self._maxAge = nil}
 
@@ -280,11 +280,11 @@ struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
   /// typical RTT to the Route Lookup Service to fully mask the RTT latency.
   /// If omitted, keys are only re-requested after they have expired.
   var staleAge: SwiftProtobuf.Google_Protobuf_Duration {
-    get {return _staleAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    get {_staleAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_staleAge = newValue}
   }
   /// Returns true if `staleAge` has been explicitly set.
-  var hasStaleAge: Bool {return self._staleAge != nil}
+  var hasStaleAge: Bool {self._staleAge != nil}
   /// Clears the value of `staleAge`. Subsequent reads from it will return its default value.
   mutating func clearStaleAge() {self._staleAge = nil}
 
@@ -324,11 +324,11 @@ struct Grpc_Lookup_V1_RouteLookupClusterSpecifier: Sendable {
 
   /// The RLS config for this cluster specifier plugin instance.
   var routeLookupConfig: Grpc_Lookup_V1_RouteLookupConfig {
-    get {return _routeLookupConfig ?? Grpc_Lookup_V1_RouteLookupConfig()}
+    get {_routeLookupConfig ?? Grpc_Lookup_V1_RouteLookupConfig()}
     set {_routeLookupConfig = newValue}
   }
   /// Returns true if `routeLookupConfig` has been explicitly set.
-  var hasRouteLookupConfig: Bool {return self._routeLookupConfig != nil}
+  var hasRouteLookupConfig: Bool {self._routeLookupConfig != nil}
   /// Clears the value of `routeLookupConfig`. Subsequent reads from it will return its default value.
   mutating func clearRouteLookupConfig() {self._routeLookupConfig = nil}
 
