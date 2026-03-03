@@ -58,7 +58,8 @@ struct TypealiasTranslatorSnippetBasedTests {
                   /// Descriptor for "MethodA".
                   public static let descriptor = GRPCCore.MethodDescriptor(
                       service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "namespaceA.ServiceA"),
-                      method: "MethodA"
+                      method: "MethodA",
+                      type: .unary
                   )
               }
               /// Descriptors for all methods in the "namespaceA.ServiceA" service.
