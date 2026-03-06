@@ -122,7 +122,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
 
   /// Returns all descriptors known to the router in an undefined order.
   public var methods: [MethodDescriptor] {
-    Array(self.handlers.keys.map { $0.descriptor })
+    self.handlers.keys.map { $0.descriptor }
   }
 
   /// Returns the number of methods registered with the router.
