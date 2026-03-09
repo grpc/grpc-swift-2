@@ -15,23 +15,28 @@
  */
 
 import GRPCCore
-import XCTest
+import Testing
 
-@available(gRPCSwift 2.0, *)
-final class RPCRouterTests: XCTestCase {
-  func testEmptyRouter() async throws {
+struct RPCRouterTests {
+  @Test
+  @available(gRPCSwift 2.0, *)
+  func emptyRouter() async throws {
     var router = RPCRouter<NoServerTransport>()
-    XCTAssertEqual(router.count, 0)
-    XCTAssertEqual(router.methods, [])
-    XCTAssertFalse(
-      router.hasHandler(forMethod: MethodDescriptor(fullyQualifiedService: "foo", method: "bar"))
+    #expect(router.count == 0)
+    #expect(router.methods.isEmpty)
+    #expect(
+      !router.hasHandler(forMethod: MethodDescriptor(fullyQualifiedService: "foo", method: "bar"))
     )
-    XCTAssertFalse(
-      router.removeHandler(forMethod: MethodDescriptor(fullyQualifiedService: "foo", method: "bar"))
+
+    let wasRemoved = router.removeHandler(
+      forMethod: MethodDescriptor(fullyQualifiedService: "foo", method: "bar")
     )
+    #expect(!wasRemoved)
   }
 
-  func testRegisterMethod() async throws {
+  @Test
+  @available(gRPCSwift 2.0, *)
+  func registerMethod() async throws {
     var router = RPCRouter<NoServerTransport>()
     let method = MethodDescriptor(fullyQualifiedService: "foo", method: "bar")
     router.registerHandler(
@@ -42,12 +47,35 @@ final class RPCRouterTests: XCTestCase {
       throw RPCError(code: .failedPrecondition, message: "Shouldn't be called")
     }
 
-    XCTAssertEqual(router.count, 1)
-    XCTAssertEqual(router.methods, [method])
-    XCTAssertTrue(router.hasHandler(forMethod: method))
+    #expect(router.count == 1)
+    #expect(router.methods == [method])
+    #expect(router.hasHandler(forMethod: method))
   }
 
-  func testRemoveMethod() async throws {
+  @Test
+  @available(gRPCSwift 2.0, *)
+  func hasHandlerIgnoreRPCType() async throws {
+    var router = RPCRouter<NoServerTransport>()
+    var method = MethodDescriptor(fullyQualifiedService: "foo", method: "bar", type: .unary)
+    router.registerHandler(
+      forMethod: method,
+      deserializer: IdentityDeserializer(),
+      serializer: IdentitySerializer()
+    ) { _, _ in
+      throw RPCError(code: .failedPrecondition, message: "Shouldn't be called")
+    }
+
+    #expect(router.count == 1)
+    #expect(router.methods == [method])
+
+    #expect(router.hasHandler(forMethod: method))
+    method.type = nil
+    #expect(router.hasHandler(forMethod: method))
+  }
+
+  @Test
+  @available(gRPCSwift 2.0, *)
+  func removeMethod() async throws {
     var router = RPCRouter<NoServerTransport>()
     let method = MethodDescriptor(fullyQualifiedService: "foo", method: "bar")
     router.registerHandler(
@@ -58,10 +86,11 @@ final class RPCRouterTests: XCTestCase {
       throw RPCError(code: .failedPrecondition, message: "Shouldn't be called")
     }
 
-    XCTAssertTrue(router.removeHandler(forMethod: method))
-    XCTAssertFalse(router.hasHandler(forMethod: method))
-    XCTAssertEqual(router.count, 0)
-    XCTAssertEqual(router.methods, [])
+    let wasRemoved = router.removeHandler(forMethod: method)
+    #expect(wasRemoved)
+    #expect(!router.hasHandler(forMethod: method))
+    #expect(router.count == 0)
+    #expect(router.methods.isEmpty)
   }
 }
 

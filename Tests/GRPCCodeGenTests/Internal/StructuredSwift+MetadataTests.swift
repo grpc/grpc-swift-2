@@ -37,22 +37,39 @@ extension StructuredSwiftTests {
       #expect(render(.typealias(decl)) == expected)
     }
 
+    struct RPCType: CaseIterable {
+      var name: String
+      var isInputStreaming: Bool
+      var isOutputStreaming: Bool
+
+      static let allCases: [Self] = [
+        RPCType(name: "unary", isInputStreaming: false, isOutputStreaming: false),
+        RPCType(name: "clientStreaming", isInputStreaming: true, isOutputStreaming: false),
+        RPCType(name: "serverStreaming", isInputStreaming: false, isOutputStreaming: true),
+        RPCType(name: "bidirectionalStreaming", isInputStreaming: true, isOutputStreaming: true),
+      ]
+    }
+
     @Test(
       "static let descriptor = GRPCCore.MethodDescriptor(...)",
-      arguments: AccessModifier.allCases
+      arguments: AccessModifier.allCases,
+      RPCType.allCases
     )
     @available(gRPCSwift 2.0, *)
-    func staticMethodDescriptorProperty(access: AccessModifier) {
+    func staticMethodDescriptorProperty(access: AccessModifier, rpcType: RPCType) {
       let decl: VariableDescription = .methodDescriptor(
         accessModifier: access,
         literalFullyQualifiedService: "foo.Foo",
-        literalMethodName: "Bar"
+        literalMethodName: "Bar",
+        isInputStreaming: rpcType.isInputStreaming,
+        isOutputStreaming: rpcType.isOutputStreaming
       )
 
       let expected = """
         \(access) static let descriptor = GRPCCore.MethodDescriptor(
           service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "foo.Foo"),
-          method: "Bar"
+          method: "Bar",
+          type: .\(rpcType.name)
         )
         """
       #expect(render(.variable(decl)) == expected)
@@ -123,7 +140,9 @@ extension StructuredSwiftTests {
         literalMethod: "Foo",
         literalFullyQualifiedService: "bar.Bar",
         inputType: "FooInput",
-        outputType: "FooOutput"
+        outputType: "FooOutput",
+        isInputStreaming: false,
+        isOutputStreaming: false
       )
 
       let expected = """
@@ -135,7 +154,8 @@ extension StructuredSwiftTests {
           /// Descriptor for "Foo".
           \(access) static let descriptor = GRPCCore.MethodDescriptor(
             service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "bar.Bar"),
-            method: "Foo"
+            method: "Foo",
+            type: .unary
           )
         }
         """
@@ -171,7 +191,8 @@ extension StructuredSwiftTests {
             /// Descriptor for "Foo".
             \(access) static let descriptor = GRPCCore.MethodDescriptor(
               service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "bar.Bar"),
-              method: "Foo"
+              method: "Foo",
+              type: .unary
             )
           }
           /// Descriptors for all methods in the "bar.Bar" service.
@@ -235,7 +256,8 @@ extension StructuredSwiftTests {
               /// Descriptor for "Bar".
               \(access) static let descriptor = GRPCCore.MethodDescriptor(
                 service: GRPCCore.ServiceDescriptor(fullyQualifiedService: "Foo"),
-                method: "Bar"
+                method: "Bar",
+                type: .unary
               )
             }
             /// Descriptors for all methods in the "Foo" service.

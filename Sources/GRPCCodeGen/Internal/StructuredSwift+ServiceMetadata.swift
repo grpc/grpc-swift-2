@@ -56,15 +56,31 @@ extension VariableDescription {
   /// ```
   /// static let descriptor = GRPCCore.MethodDescriptor(
   ///   service: GRPCCore.ServiceDescriptor(fullyQualifiedServiceName: "<literalFullyQualifiedService>"),
-  ///   method: "<literalMethodName>"
+  ///   method: "<literalMethodName>",
+  ///   type: .<rpcType>
   /// )
   /// ```
   package static func methodDescriptor(
     accessModifier: AccessModifier? = nil,
     literalFullyQualifiedService: String,
     literalMethodName: String,
+    isInputStreaming: Bool,
+    isOutputStreaming: Bool,
     namer: Namer = Namer()
   ) -> Self {
+    let rpcType: String
+
+    switch (isInputStreaming, isOutputStreaming) {
+    case (true, true):
+      rpcType = "bidirectionalStreaming"
+    case (true, false):
+      rpcType = "clientStreaming"
+    case (false, true):
+      rpcType = "serverStreaming"
+    case (false, false):
+      rpcType = "unary"
+    }
+
     return VariableDescription(
       accessModifier: accessModifier,
       isStatic: true,
@@ -86,6 +102,10 @@ extension VariableDescription {
             FunctionArgumentDescription(
               label: "method",
               expression: .literal(literalMethodName)
+            ),
+            FunctionArgumentDescription(
+              label: "type",
+              expression: .dot(rpcType)
             ),
           ]
         )
@@ -204,6 +224,8 @@ extension EnumDescription {
     literalFullyQualifiedService: String,
     inputType: String,
     outputType: String,
+    isInputStreaming: Bool,
+    isOutputStreaming: Bool,
     namer: Namer = Namer()
   ) -> Self {
     return EnumDescription(
@@ -226,6 +248,8 @@ extension EnumDescription {
               accessModifier: accessModifier,
               literalFullyQualifiedService: literalFullyQualifiedService,
               literalMethodName: literalMethod,
+              isInputStreaming: isInputStreaming,
+              isOutputStreaming: isOutputStreaming,
               namer: namer
             )
           )
@@ -275,6 +299,8 @@ extension EnumDescription {
             literalFullyQualifiedService: literalFullyQualifiedService,
             inputType: method.inputType,
             outputType: method.outputType,
+            isInputStreaming: method.isInputStreaming,
+            isOutputStreaming: method.isOutputStreaming,
             namer: namer
           )
         )

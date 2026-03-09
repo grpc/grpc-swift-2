@@ -85,9 +85,35 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
     }
   }
 
+  /// Transports will typically propagate just the service and method name but the generated code
+  /// registers handlers with the router and will have a more richly populated descriptor. Use
+  /// just the service and method name for keying.
+  @usableFromInline
+  struct HandlerKey: Hashable, Sendable {
+    @usableFromInline
+    var descriptor: MethodDescriptor
+
+    @inlinable
+    init(_ descriptor: MethodDescriptor) {
+      self.descriptor = descriptor
+    }
+
+    @inlinable
+    func hash(into hasher: inout Hasher) {
+      hasher.combine(self.descriptor.service)
+      hasher.combine(self.descriptor.method)
+    }
+
+    @inlinable
+    static func == (lhs: HandlerKey, rhs: HandlerKey) -> Bool {
+      lhs.descriptor.service == rhs.descriptor.service
+        && lhs.descriptor.method == rhs.descriptor.method
+    }
+  }
+
   @usableFromInline
   private(set) var handlers:
-    [MethodDescriptor: (handler: RPCHandler, interceptors: [any ServerInterceptor])]
+    [HandlerKey: (handler: RPCHandler, interceptors: [any ServerInterceptor])]
 
   /// Creates a new router with no methods registered.
   public init() {
@@ -96,7 +122,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
 
   /// Returns all descriptors known to the router in an undefined order.
   public var methods: [MethodDescriptor] {
-    Array(self.handlers.keys)
+    self.handlers.keys.map { $0.descriptor }
   }
 
   /// Returns the number of methods registered with the router.
@@ -109,7 +135,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
   /// - Parameter descriptor: A descriptor of the method.
   /// - Returns: Whether a handler exists for the method.
   public func hasHandler(forMethod descriptor: MethodDescriptor) -> Bool {
-    return self.handlers.keys.contains(descriptor)
+    return self.handlers.keys.contains(HandlerKey(descriptor))
   }
 
   /// Registers a handler with the router.
@@ -138,7 +164,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
       serializer: serializer,
       handler: handler
     )
-    self.handlers[descriptor] = (handler, [])
+    self.handlers[HandlerKey(descriptor)] = (handler, [])
   }
 
   /// Removes any handler registered for the specified method.
@@ -147,7 +173,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
   /// - Returns: Whether a handler was removed.
   @discardableResult
   public mutating func removeHandler(forMethod descriptor: MethodDescriptor) -> Bool {
-    return self.handlers.removeValue(forKey: descriptor) != nil
+    return self.handlers.removeValue(forKey: HandlerKey(descriptor)) != nil
   }
 
   /// Registers applicable interceptors to all currently-registered handlers.
@@ -162,10 +188,10 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
   public mutating func registerInterceptors(
     pipeline: [ConditionalInterceptor<any ServerInterceptor>]
   ) {
-    for descriptor in self.handlers.keys {
-      let applicableOperations = pipeline.filter { $0.applies(to: descriptor) }
+    for key in self.handlers.keys {
+      let applicableOperations = pipeline.filter { $0.applies(to: key.descriptor) }
       if !applicableOperations.isEmpty {
-        self.handlers[descriptor]?.interceptors = applicableOperations.map { $0.interceptor }
+        self.handlers[key]?.interceptors = applicableOperations.map { $0.interceptor }
       }
     }
   }
@@ -180,7 +206,7 @@ extension RPCRouter {
     >,
     context: ServerContext
   ) async {
-    if let (handler, interceptors) = self.handlers[stream.descriptor] {
+    if let (handler, interceptors) = self.handlers[HandlerKey(stream.descriptor)] {
       await handler.handle(stream: stream, context: context, interceptors: interceptors)
     } else {
       // If this throws then the stream must be closed which we can't do anything about, so ignore
