@@ -216,6 +216,11 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
       self.state.withLock { $0.stopped() }
     }
 
+    // Provide the transport with any context.
+    var serverContext = GRPCServerContext()
+    serverContext.methods = self.router.methods
+    self.transport.configure(context: serverContext)
+
     do {
       try await transport.listen { stream, context in
         await self.router.handle(stream: stream, context: context)

@@ -30,6 +30,14 @@ public protocol ServerTransport<Bytes>: Sendable {
   typealias Inbound = RPCAsyncSequence<RPCRequestPart<Bytes>, any Error>
   typealias Outbound = RPCWriter<RPCResponsePart<Bytes>>.Closable
 
+  /// Provides the transport with information about the server before it starts listening.
+  ///
+  /// The server calls this method exactly once, before calling ``listen(streamHandler:)``.
+  /// Transports can use the provided context to set up any state that depends on the registered
+  /// methods.
+  @available(gRPCSwift 2.3, *)
+  func configure(context: GRPCServerContext)
+
   /// Starts the transport.
   ///
   /// Implementations will typically bind to a listening port when this function is called
@@ -53,4 +61,23 @@ public protocol ServerTransport<Bytes>: Sendable {
   /// Existing streams are permitted to run to completion. However, the transport may also enforce
   /// a grace period, after which remaining streams are cancelled.
   func beginGracefulShutdown()
+}
+
+@available(gRPCSwift 2.3, *)
+extension ServerTransport {
+  public func configure(context: GRPCServerContext) {
+    // Default implementation to avoid API breakage.
+  }
+}
+
+/// Information about the gRPC server passed to it before it starts.
+@available(gRPCSwift 2.3, *)
+public struct GRPCServerContext: Sendable {
+  /// Descriptors for all methods registered with the server.
+  public var methods: [MethodDescriptor]
+
+  /// Creates a new context.
+  public init() {
+    self.methods = []
+  }
 }
