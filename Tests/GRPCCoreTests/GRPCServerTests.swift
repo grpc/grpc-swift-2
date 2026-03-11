@@ -16,6 +16,7 @@
 
 import GRPCCore
 import GRPCInProcessTransport
+import Synchronization
 import Testing
 import XCTest
 
@@ -552,6 +553,49 @@ struct ServerTests {
       #expect(onlyBinaryEchoCollectCounter.value == 1)
       #expect(bothBinaryEchoMethodsCounter.value == 2)
     }
+  }
+
+  @Test("Server context propagated to transport")
+  @available(gRPCSwift 2.3, *)
+  func serverContext() async throws {
+    final class ContextRecordingTransport: ServerTransport {
+      typealias Bytes = [UInt8]
+      private let _context: Mutex<GRPCServerContext?>
+
+      var context: GRPCServerContext? {
+        self._context.withLock { $0 }
+      }
+
+      init() {
+        self._context = Mutex(nil)
+      }
+
+      func configure(context: GRPCServerContext) {
+        self._context.withLock { $0 = context }
+      }
+
+      func listen(
+        streamHandler: @escaping (RPCStream<Inbound, Outbound>, ServerContext) async -> Void
+      ) async throws {
+        // no-op
+      }
+
+      func beginGracefulShutdown() {
+        // no-op
+      }
+    }
+
+    // Start a server with a no-op transport which captures the context from configure.
+    let transport = ContextRecordingTransport()
+    let server = GRPCServer(transport: transport, services: [BinaryEcho()])
+    try await server.serve()
+
+    let context = try #require(transport.context)
+    #expect(context.methods.count == 4)
+    #expect(context.methods.contains(BinaryEcho.Methods.get))
+    #expect(context.methods.contains(BinaryEcho.Methods.collect))
+    #expect(context.methods.contains(BinaryEcho.Methods.expand))
+    #expect(context.methods.contains(BinaryEcho.Methods.update))
   }
 
   @available(gRPCSwift 2.0, *)
