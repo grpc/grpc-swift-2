@@ -12,7 +12,7 @@ on:
 jobs:
   unit-tests:
     name: Unit tests
-    uses: apple/swift-nio/.github/workflows/unit_tests.yml@main
+    uses: apple/swift-nio/.github/workflows/unit_tests.yml@pass_inputs_through_env_vars
     with:
       linux_5_9_enabled: false
       linux_5_10_enabled: false
@@ -24,7 +24,7 @@ jobs:
 
   benchmarks:
     name: Benchmarks
-    uses: apple/swift-nio/.github/workflows/benchmarks.yml@main
+    uses: apple/swift-nio/.github/workflows/benchmarks.yml@pass_inputs_through_env_vars
     with:
       benchmark_package_path: "IntegrationTests/Benchmarks"
       linux_5_9_enabled: false
@@ -32,10 +32,10 @@ jobs:
 
   static-sdk:
     name: Static SDK
-    uses: apple/swift-nio/.github/workflows/static_sdk.yml@main
+    uses: apple/swift-nio/.github/workflows/static_sdk.yml@pass_inputs_through_env_vars
 
   release-builds:
     name: Release builds
-    uses: apple/swift-nio/.github/workflows/release_builds.yml@main
+    uses: apple/swift-nio/.github/workflows/release_builds.yml@pass_inputs_through_env_vars
     with:
       linux_5_10_enabled: false
