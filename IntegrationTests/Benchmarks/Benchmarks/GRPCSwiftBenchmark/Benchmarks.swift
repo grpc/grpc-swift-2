@@ -16,7 +16,7 @@
 import Benchmark
 import GRPCCore
 
-let benchmarks = {
+let benchmarks: @Sendable () -> () = {
   Benchmark.defaultConfiguration = .init(
     metrics: [
       .mallocCountTotal,
