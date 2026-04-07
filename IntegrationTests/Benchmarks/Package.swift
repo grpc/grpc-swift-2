@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version:6.1
 /*
  * Copyright 2023, gRPC Authors All rights reserved.
  *
@@ -19,7 +19,7 @@ import PackageDescription
 let package = Package(
   name: "benchmarks",
   platforms: [
-    .macOS(.v13)
+    .macOS(.v15)
   ],
   dependencies: [
     .package(path: "../../"),
