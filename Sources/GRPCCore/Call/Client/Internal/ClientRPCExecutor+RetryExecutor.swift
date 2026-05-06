@@ -173,8 +173,17 @@ extension ClientRPCExecutor.RetryExecutor {
 
                 break loop  // from the while loop so another attempt can be started.
 
-              case .timedOut(.success), .outboundFinished(.failure):
-                // Timeout task fired successfully or failed to process the outbound stream. Cancel and
+              case .timedOut(.success):
+                // Timeout task fired successfully, cancel and return deadline exceeded.
+                group.cancelAll()
+                return Optional.some(
+                  .failure(
+                    RPCError(code: .deadlineExceeded, message: "RPC timed out before completing")
+                  )
+                )
+
+              case .outboundFinished(.failure):
+                // Failed to process the outbound stream. Cancel and
                 // wait for a usable response (which is likely to be an error).
                 group.cancelAll()
 

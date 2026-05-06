@@ -122,6 +122,9 @@ extension ClientRPCExecutor.HedgingExecutor {
           switch result {
           case .success:
             group.cancelAll()
+            return Result<R, any Error>.failure(
+              RPCError(code: .deadlineExceeded, message: "RPC timed out before completing")
+            )
           case .failure:
             ()  // Cancelled, ignore and keep looping.
           }

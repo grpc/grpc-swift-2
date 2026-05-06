@@ -158,7 +158,8 @@ extension ClientRPCExecutorTests {
         XCTFail("Response not expected to be handled")
       }
     } errorHandler: { error in
-      XCTAssert(error is CancellationError)
+      let rpcError = error as? RPCError
+      XCTAssertEqual(rpcError?.code, .deadlineExceeded)
     }
   }
 
@@ -179,7 +180,8 @@ extension ClientRPCExecutorTests {
         XCTFail("Response not expected to be handled")
       }
     } errorHandler: { error in
-      XCTAssert(error is CancellationError)
+      let rpcError = error as? RPCError
+      XCTAssertEqual(rpcError?.code, .deadlineExceeded)
     }
   }
 
@@ -203,7 +205,8 @@ extension ClientRPCExecutorTests {
         XCTFail("Response not expected to be handled")
       }
     } errorHandler: { error in
-      XCTAssert(error is CancellationError)
+      let rpcError = error as? RPCError
+      XCTAssertEqual(rpcError?.code, .deadlineExceeded)
     }
   }
 

@@ -69,7 +69,7 @@ extension ClientRPCExecutor.OneShotExecutor {
       var request = request
       request.metadata.timeout = ContinuousClock.now.duration(to: deadline)
       let immutableRequest = request
-      result = await withDeadline(deadline) {
+      result = try await withDeadline(deadline) {
         await self._execute(
           request: immutableRequest,
           method: method,
@@ -137,8 +137,8 @@ extension ClientRPCExecutor.OneShotExecutor {
 func withDeadline<Result: Sendable>(
   _ deadline: ContinuousClock.Instant,
   execute: @Sendable @escaping () async -> Result
-) async -> Result {
-  return await withTaskGroup(of: _DeadlineChildTaskResult<Result>.self) { group in
+) async throws -> Result {
+  return try await withThrowingTaskGroup(of: _DeadlineChildTaskResult<Result>.self) { group in
     group.addTask {
       do {
         try await Task.sleep(until: deadline, tolerance: .zero)
@@ -153,11 +153,12 @@ func withDeadline<Result: Sendable>(
       return .taskCompleted(result)
     }
 
-    while let next = await group.next() {
+    while let next = try await group.next() {
       switch next {
       case .deadlinePassed:
-        // Timeout expired; cancel the work.
+        // Timeout expired, cancel and return deadline exceeded.
         group.cancelAll()
+        throw RPCError(code: .deadlineExceeded, message: "RPC timed out before completing")
 
       case .timeoutCancelled:
         ()  // Wait for more tasks to finish.
