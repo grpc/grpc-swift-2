@@ -177,7 +177,7 @@ extension ClientRPCExecutor.RetryExecutor {
                 // Timeout task fired successfully, cancel and return deadline exceeded.
                 group.cancelAll()
                 return .failure(
-                    RPCError(code: .deadlineExceeded, message: "RPC timed out before completing")
+                  RPCError(code: .deadlineExceeded, message: "RPC timed out before completing")
                 )
 
               case .outboundFinished(.failure):
