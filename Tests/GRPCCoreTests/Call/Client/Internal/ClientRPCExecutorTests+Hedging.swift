@@ -184,6 +184,27 @@ extension ClientRPCExecutorTests {
       XCTAssertEqual(harness.serverStreamsAccepted, 1)
     }
   }
+
+  func testHedgingWithDeadlineExceeded() async throws {
+    let harness = ClientRPCExecutorTestHarness(
+      server: .sleepFor(duration: .milliseconds(200), then: .echo)
+    )
+
+    var options = CallOptions.hedge(nonFatalCodes: [.unavailable])
+    options.timeout = .milliseconds(50)
+
+    await XCTAssertThrowsErrorAsync {
+      try await harness.bidirectional(
+        request: StreamingClientRequest {
+          try await $0.write([0])
+        },
+        options: options
+      ) { _ in }
+    } errorHandler: { error in
+      let rpcError = error as? RPCError
+      XCTAssertEqual(rpcError?.code, .deadlineExceeded)
+    }
+  }
 }
 
 @available(gRPCSwift 2.0, *)

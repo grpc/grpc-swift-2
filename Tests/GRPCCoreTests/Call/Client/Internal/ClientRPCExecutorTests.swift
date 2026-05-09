@@ -332,4 +332,23 @@ final class ClientRPCExecutorTests: XCTestCase {
       }
     }
   }
+
+  func testUnaryDeadlineExceeded() async throws {
+    let harness = ClientRPCExecutorTestHarness(
+      server: .sleepFor(duration: .milliseconds(200), then: .echo)
+    )
+
+    var options = CallOptions.defaults
+    options.timeout = .milliseconds(50)
+
+    await XCTAssertThrowsErrorAsync {
+      try await harness.unary(
+        request: ClientRequest(message: [1, 2, 3]),
+        options: options
+      ) { _ in }
+    } errorHandler: { error in
+      let rpcError = error as? RPCError
+      XCTAssertEqual(rpcError?.code, .deadlineExceeded)
+    }
+  }
 }
