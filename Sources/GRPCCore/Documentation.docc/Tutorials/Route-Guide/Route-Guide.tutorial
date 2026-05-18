@@ -20,16 +20,10 @@
     Before we can write any code we need to create a new Swift Package and configure it
     to depend on gRPC Swift.
 
-    As a prerequisite you must have the Protocol Buffers compiler (`protoc`) installed. You can
-    find the instructions for doing this in the [gRPC Swift Protobuf
-    documentation](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/installing-protoc).
-    The remainder of this tutorial assumes you installed `protoc` and it's available in
-    your `$PATH`.
-
-    You may notice that the `swift` commands are all prefixed with `PROTOC_PATH=$(which protoc)`,
-    this is to let the build system know where `protoc` is located so that it can generate stubs
-    for you. You can read more about it in the  [gRPC Swift Protobuf
-    documentation](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs).
+    The build plugin used by this tutorial generates gRPC Swift stubs at build time using a
+    vendored copy of `protoc` provided by the `swift-protobuf` package, so you don't need to
+    install `protoc` separately. You can read more about the build plugin in the [gRPC Swift
+    Protobuf documentation](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs).
 
     @Steps {
       @Step {
@@ -204,10 +198,7 @@
 
     @Steps {
       @Step {
-        Build the project using `PROTOC_PATH=$(which protoc) swift build`.
-
-        If you are using Xcode or another IDE then you'll need to set the environment variable
-        appropriately.
+        Build the project using `swift build`.
       }
     }
   }
@@ -479,13 +470,13 @@
 
     @Steps {
       @Step {
-        In one terminal run `PROTOC_PATH=$(which protoc) swift run RouteGuide --server` to start the server.
+        In one terminal run `swift run RouteGuide --server` to start the server.
 
         @Code(name: "Console", file: "route-guide-sec07-step01-server.txt")
       }
 
       @Step {
-        In another terminal run `PROTOC_PATH=$(which protoc) swift run RouteGuide` to run the client program.
+        In another terminal run `swift run RouteGuide` to run the client program.
 
         @Code(name: "Console", file: "route-guide-sec07-step02-client.txt")
       }
