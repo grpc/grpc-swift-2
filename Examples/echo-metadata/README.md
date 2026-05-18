@@ -19,28 +19,19 @@ by the client. The request's metadata will be echoed both in the initial and the
 
 The tool uses the [SwiftNIO](https://github.com/grpc/grpc-swift-nio-transport) HTTP/2 transport.
 
-## Prerequisites
-
-You must have the Protocol Buffers compiler (`protoc`) installed. You can find
-the instructions for doing this in the [gRPC Swift Protobuf documentation][0].
-The `swift` commands below are all prefixed with `PROTOC_PATH=$(which protoc)`,
-this is to let the build system know where `protoc` is located so that it can
-generate stubs for you. You can read more about it in the [gRPC Swift Protobuf
-documentation][1].
-
 ## Usage
 
 Build and run the server using the CLI:
 
 ```console
-$ PROTOC_PATH=$(which protoc) swift run echo-metadata serve
+$ swift run echo-metadata serve
 Echo-Metadata listening on [ipv4]127.0.0.1:1234
 ```
 
 Use the CLI to run the client and make a `get` (unary) request:
 
 ```console
-$ PROTOC_PATH=$(which protoc) swift run echo-metadata get --message "hello"
+$ swift run echo-metadata get --message "hello"
 get → metadata: [("echo-message", "hello")]
 get → message: hello
 get ← initial metadata: [("echo-message", "hello")]
@@ -51,8 +42,5 @@ get ← trailing metadata: [("echo-message", "hello")]
 Get help with the CLI by running:
 
 ```console
-$ PROTOC_PATH=$(which protoc) swift run echo-metadata --help
+$ swift run echo-metadata --help
 ```
-
-[0]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/installing-protoc
-[1]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs
