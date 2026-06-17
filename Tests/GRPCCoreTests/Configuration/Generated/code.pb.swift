@@ -29,7 +29,7 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
@@ -41,7 +41,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 /// the most specific error code that applies.  For example, prefer
 /// `OUT_OF_RANGE` over `FAILED_PRECONDITION` if both codes apply.
 /// Similarly prefer `NOT_FOUND` or `ALREADY_EXISTS` over `FAILED_PRECONDITION`.
-enum Google_Rpc_Code: SwiftProtobuf.Enum, Swift.CaseIterable {
+nonisolated enum Google_Rpc_Code: SwiftProtobuf.Enum, Swift.CaseIterable {
   typealias RawValue = Int
 
   /// Not an error; returned on success.
@@ -274,6 +274,6 @@ enum Google_Rpc_Code: SwiftProtobuf.Enum, Swift.CaseIterable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-extension Google_Rpc_Code: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Google_Rpc_Code: SwiftProtobuf._ProtoNameProviding {
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0OK\0\u{1}CANCELLED\0\u{1}UNKNOWN\0\u{1}INVALID_ARGUMENT\0\u{1}DEADLINE_EXCEEDED\0\u{1}NOT_FOUND\0\u{1}ALREADY_EXISTS\0\u{1}PERMISSION_DENIED\0\u{1}RESOURCE_EXHAUSTED\0\u{1}FAILED_PRECONDITION\0\u{1}ABORTED\0\u{1}OUT_OF_RANGE\0\u{1}UNIMPLEMENTED\0\u{1}INTERNAL\0\u{1}UNAVAILABLE\0\u{1}DATA_LOSS\0\u{1}UNAUTHENTICATED\0")
 }

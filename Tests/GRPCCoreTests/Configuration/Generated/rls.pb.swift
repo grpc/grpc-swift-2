@@ -29,12 +29,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-struct Grpc_Lookup_V1_RouteLookupRequest: Sendable {
+nonisolated struct Grpc_Lookup_V1_RouteLookupRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -58,7 +58,7 @@ struct Grpc_Lookup_V1_RouteLookupRequest: Sendable {
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Possible reasons for making a request.
-  enum Reason: SwiftProtobuf.Enum, Swift.CaseIterable {
+  nonisolated enum Reason: SwiftProtobuf.Enum, Swift.CaseIterable {
     typealias RawValue = Int
 
     /// Unused
@@ -105,7 +105,7 @@ struct Grpc_Lookup_V1_RouteLookupRequest: Sendable {
   init() {}
 }
 
-struct Grpc_Lookup_V1_RouteLookupResponse: Sendable {
+nonisolated struct Grpc_Lookup_V1_RouteLookupResponse: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -130,9 +130,9 @@ struct Grpc_Lookup_V1_RouteLookupResponse: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "grpc.lookup.v1"
+fileprivate nonisolated let _protobuf_package = "grpc.lookup.v1"
 
-extension Grpc_Lookup_V1_RouteLookupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_RouteLookupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupRequest"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{4}\u{3}target_type\0\u{3}key_map\0\u{1}reason\0\u{3}stale_header_data\0\u{1}extensions\0\u{b}server\0\u{b}path\0\u{c}\u{1}\u{1}\u{c}\u{2}\u{1}")
 
@@ -182,11 +182,11 @@ extension Grpc_Lookup_V1_RouteLookupRequest: SwiftProtobuf.Message, SwiftProtobu
   }
 }
 
-extension Grpc_Lookup_V1_RouteLookupRequest.Reason: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_RouteLookupRequest.Reason: SwiftProtobuf._ProtoNameProviding {
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0REASON_UNKNOWN\0\u{1}REASON_MISS\0\u{1}REASON_STALE\0")
 }
 
-extension Grpc_Lookup_V1_RouteLookupResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_RouteLookupResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupResponse"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{4}\u{2}header_data\0\u{1}targets\0\u{1}extensions\0\u{b}target\0\u{c}\u{1}\u{1}")
 

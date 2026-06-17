@@ -29,7 +29,7 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
@@ -38,7 +38,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 /// name).  The name must match one of the names listed in the "name" field.  If
 /// the "required_match" field is true, one of the specified names must be
 /// present for the keybuilder to match.
-struct Grpc_Lookup_V1_NameMatcher: Sendable {
+nonisolated struct Grpc_Lookup_V1_NameMatcher: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -63,7 +63,7 @@ struct Grpc_Lookup_V1_NameMatcher: Sendable {
 }
 
 /// A GrpcKeyBuilder applies to a given gRPC service, name, and headers.
-struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
+nonisolated struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -96,7 +96,7 @@ struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
   /// fields are specified as fixed strings.  The service name is required and
   /// includes the proto package name.  The method name may be omitted, in
   /// which case any method on the given service is matched.
-  struct Name: Sendable {
+  nonisolated struct Name: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -116,7 +116,7 @@ struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
   /// If this submessage is specified, the normal host/path fields will be left
   /// unset in the RouteLookupRequest. We are deprecating host/path in the
   /// RouteLookupRequest, so services should migrate to the ExtraKeys approach.
-  struct ExtraKeys: Sendable {
+  nonisolated struct ExtraKeys: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -153,7 +153,7 @@ struct Grpc_Lookup_V1_GrpcKeyBuilder: Sendable {
 /// the id and the second segment as the object. If the host has a subdomain, the
 /// subdomain will be used as the id and the first segment as the object. If
 /// neither pattern matches, no keys will be extracted.
-struct Grpc_Lookup_V1_HttpKeyBuilder: Sendable {
+nonisolated struct Grpc_Lookup_V1_HttpKeyBuilder: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -229,7 +229,7 @@ struct Grpc_Lookup_V1_HttpKeyBuilder: Sendable {
   init() {}
 }
 
-struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
+nonisolated struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -317,7 +317,7 @@ struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
 
 /// RouteLookupClusterSpecifier is used in xDS to represent a cluster specifier
 /// plugin for RLS.
-struct Grpc_Lookup_V1_RouteLookupClusterSpecifier: Sendable {
+nonisolated struct Grpc_Lookup_V1_RouteLookupClusterSpecifier: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -341,9 +341,9 @@ struct Grpc_Lookup_V1_RouteLookupClusterSpecifier: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "grpc.lookup.v1"
+fileprivate nonisolated let _protobuf_package = "grpc.lookup.v1"
 
-extension Grpc_Lookup_V1_NameMatcher: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_NameMatcher: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".NameMatcher"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{1}names\0\u{3}required_match\0")
 
@@ -383,7 +383,7 @@ extension Grpc_Lookup_V1_NameMatcher: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Grpc_Lookup_V1_GrpcKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_GrpcKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".GrpcKeyBuilder"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}names\0\u{1}headers\0\u{3}extra_keys\0\u{3}constant_keys\0")
 
@@ -432,7 +432,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Grpc_Lookup_V1_GrpcKeyBuilder.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_GrpcKeyBuilder.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_Lookup_V1_GrpcKeyBuilder.protoMessageName + ".Name"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}service\0\u{1}method\0")
 
@@ -467,7 +467,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder.Name: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = Grpc_Lookup_V1_GrpcKeyBuilder.protoMessageName + ".ExtraKeys"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}host\0\u{1}service\0\u{1}method\0")
 
@@ -507,7 +507,7 @@ extension Grpc_Lookup_V1_GrpcKeyBuilder.ExtraKeys: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Grpc_Lookup_V1_HttpKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_HttpKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".HttpKeyBuilder"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}host_patterns\0\u{3}path_patterns\0\u{3}query_parameters\0\u{1}headers\0\u{3}constant_keys\0\u{1}method\0")
 
@@ -562,7 +562,7 @@ extension Grpc_Lookup_V1_HttpKeyBuilder: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Grpc_Lookup_V1_RouteLookupConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_RouteLookupConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupConfig"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}http_keybuilders\0\u{3}grpc_keybuilders\0\u{3}lookup_service\0\u{3}lookup_service_timeout\0\u{3}max_age\0\u{3}stale_age\0\u{3}cache_size_bytes\0\u{3}valid_targets\0\u{3}default_target\0\u{b}request_processing_strategy\0\u{c}\u{a}\u{1}")
 
@@ -636,7 +636,7 @@ extension Grpc_Lookup_V1_RouteLookupConfig: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Grpc_Lookup_V1_RouteLookupClusterSpecifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Grpc_Lookup_V1_RouteLookupClusterSpecifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RouteLookupClusterSpecifier"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}route_lookup_config\0")
 
