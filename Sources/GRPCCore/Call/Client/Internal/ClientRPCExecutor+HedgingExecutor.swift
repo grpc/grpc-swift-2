@@ -40,6 +40,8 @@ extension ClientRPCExecutor {
     let deserializer: Deserializer
     @usableFromInline
     let bufferSize: Int
+    @usableFromInline
+    let diagnostics: GRPCClientDiagnosticsRecorder?
 
     @inlinable
     init(
@@ -49,7 +51,8 @@ extension ClientRPCExecutor {
       interceptors: [any ClientInterceptor],
       serializer: Serializer,
       deserializer: Deserializer,
-      bufferSize: Int
+      bufferSize: Int,
+      diagnostics: GRPCClientDiagnosticsRecorder?
     ) {
       self.transport = transport
       self.policy = policy
@@ -58,6 +61,7 @@ extension ClientRPCExecutor {
       self.serializer = serializer
       self.deserializer = deserializer
       self.bufferSize = bufferSize
+      self.diagnostics = diagnostics
     }
   }
 }
@@ -323,8 +327,9 @@ extension ClientRPCExecutor.HedgingExecutor {
     picker: (stream: BroadcastAsyncSequence<Int>, continuation: BroadcastAsyncSequence<Int>.Source),
     responseHandler: @Sendable @escaping (StreamingClientResponse<Output>) async throws -> R
   ) async -> _HedgingAttemptTaskResult<R, Output>.AttemptResult {
+    let attemptDiagnostics = self.diagnostics?.beginAttempt(attempt)
     do {
-      return try await self.transport.withStream(
+      let result = try await self.transport.withStream(
         descriptor: method,
         options: options
       ) { stream, context -> _HedgingAttemptTaskResult<R, Output>.AttemptResult in
@@ -359,6 +364,7 @@ extension ClientRPCExecutor.HedgingExecutor {
                 serializer: self.serializer,
                 deserializer: self.deserializer,
                 interceptors: self.interceptors,
+                diagnostics: attemptDiagnostics,
                 stream: stream
               )
 
@@ -425,7 +431,10 @@ extension ClientRPCExecutor.HedgingExecutor {
           fatalError("Internal inconsistency")
         }
       }
+      attemptDiagnostics?.finishWithoutStatus()
+      return result
     } catch {
+      attemptDiagnostics?.finish(throwing: error)
       return .noStreamAvailable(error)
     }
   }

@@ -36,22 +36,32 @@ internal enum ClientStreamExecutor: Sendable {
     attempt: Int,
     serializer: some MessageSerializer<Input>,
     deserializer: some MessageDeserializer<Output>,
+    diagnostics: GRPCClientAttemptDiagnosticsRecorder?,
     stream: RPCStream<
       RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>,
       RPCWriter<RPCRequestPart<Bytes>>.Closable
     >
   ) async -> StreamingClientResponse<Output> {
     // Let the server know this is a retry.
-    var metadata = request.metadata
+    var request = request
     if attempt > 1 {
-      metadata.previousRPCAttempts = attempt &- 1
+      request.metadata.previousRPCAttempts = attempt &- 1
     }
+    diagnostics?.streamCreated(context)
 
     group.addTask {
-      await Self._processRequest(on: stream.outbound, request: request, serializer: serializer)
+      await Self._processRequest(
+        on: stream.outbound,
+        request: request,
+        serializer: serializer,
+        diagnostics: diagnostics
+      )
     }
 
-    let part = await Self._waitForFirstResponsePart(on: stream.inbound)
+    let part = await Self._waitForFirstResponsePart(
+      on: stream.inbound,
+      diagnostics: diagnostics
+    )
     // Wait for the first response to determine how to handle the response.
     switch part {
     case .metadata(var metadata, let iterator):
@@ -62,7 +72,8 @@ internal enum ClientStreamExecutor: Sendable {
 
       let bodyParts = RawBodyPartToMessageSequence(
         base: UncheckedAsyncIteratorSequence(iterator.wrappedValue),
-        deserializer: deserializer
+        deserializer: deserializer,
+        diagnostics: diagnostics
       )
 
       // Expected happy case: the server is processing the request.
@@ -90,11 +101,22 @@ internal enum ClientStreamExecutor: Sendable {
   static func _processRequest<Outbound, Bytes: GRPCContiguousBytes>(
     on stream: some ClosableRPCWriterProtocol<RPCRequestPart<Bytes>>,
     request: StreamingClientRequest<Outbound>,
-    serializer: some MessageSerializer<Outbound>
+    serializer: some MessageSerializer<Outbound>,
+    diagnostics: GRPCClientAttemptDiagnosticsRecorder?
   ) async {
     let result = await Result {
       try await stream.write(.metadata(request.metadata))
-      try await request.producer(.map(into: stream) { .message(try serializer.serialize($0)) })
+      if let diagnostics {
+        diagnostics.requestMetadata(request.metadata)
+        let writer = InstrumentedSerializingRPCWriter(
+          base: stream,
+          serializer: serializer,
+          diagnostics: diagnostics
+        )
+        try await request.producer(RPCWriter(wrapping: writer))
+      } else {
+        try await request.producer(.map(into: stream) { .message(try serializer.serialize($0)) })
+      }
     }.castOrConvertRPCError { other in
       RPCError(code: .unknown, message: "Write failed.", cause: other)
     }
@@ -102,8 +124,54 @@ internal enum ClientStreamExecutor: Sendable {
     switch result {
     case .success:
       await stream.finish()
+      diagnostics?.requestFinished()
     case .failure(let error):
       await stream.finish(throwing: error)
+      diagnostics?.recordFailure(error)
+    }
+  }
+
+  @usableFromInline
+  struct InstrumentedSerializingRPCWriter<
+    Base: RPCWriterProtocol<RPCRequestPart<Bytes>>,
+    Bytes: GRPCContiguousBytes,
+    Serializer: MessageSerializer
+  >: RPCWriterProtocol where Serializer.Message: Sendable {
+    @usableFromInline
+    typealias Element = Serializer.Message
+
+    @usableFromInline
+    let base: Base
+    @usableFromInline
+    let serializer: Serializer
+    @usableFromInline
+    let diagnostics: GRPCClientAttemptDiagnosticsRecorder
+
+    @inlinable
+    init(
+      base: Base,
+      serializer: Serializer,
+      diagnostics: GRPCClientAttemptDiagnosticsRecorder
+    ) {
+      self.base = base
+      self.serializer = serializer
+      self.diagnostics = diagnostics
+    }
+
+    @inlinable
+    func write(_ element: Element) async throws {
+      let bytes: Bytes = try self.serializer.serialize(element)
+      try await self.base.write(.message(bytes))
+      self.diagnostics.requestMessage(bytes)
+    }
+
+    @inlinable
+    func write(contentsOf elements: some Sequence<Element>) async throws {
+      let bytes = try elements.map { try self.serializer.serialize($0) as Bytes }
+      try await self.base.write(contentsOf: bytes.lazy.map { .message($0) })
+      for message in bytes {
+        self.diagnostics.requestMessage(message)
+      }
     }
   }
 
@@ -119,7 +187,8 @@ internal enum ClientStreamExecutor: Sendable {
 
   @inlinable  // would be private
   static func _waitForFirstResponsePart<Bytes: GRPCContiguousBytes>(
-    on stream: RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>
+    on stream: RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>,
+    diagnostics: GRPCClientAttemptDiagnosticsRecorder?
   ) async -> OnFirstResponsePart<Bytes> {
     var iterator = stream.makeAsyncIterator()
     let result = await Result<OnFirstResponsePart, any Error> {
@@ -164,8 +233,17 @@ internal enum ClientStreamExecutor: Sendable {
 
     switch result {
     case .success(let firstPart):
+      switch firstPart {
+      case .metadata(let metadata, _):
+        diagnostics?.responseMetadata(metadata)
+      case .status(let status, let metadata):
+        diagnostics?.responseStatus(status, trailingMetadata: metadata)
+      case .failed(let error):
+        diagnostics?.recordFailure(error)
+      }
       return firstPart
     case .failure(let error):
+      diagnostics?.recordFailure(error)
       return .failed(error)
     }
   }
@@ -185,16 +263,27 @@ internal enum ClientStreamExecutor: Sendable {
     let base: Base
     @usableFromInline
     let deserializer: Deserializer
+    @usableFromInline
+    let diagnostics: GRPCClientAttemptDiagnosticsRecorder?
 
     @inlinable
-    init(base: Base, deserializer: Deserializer) {
+    init(
+      base: Base,
+      deserializer: Deserializer,
+      diagnostics: GRPCClientAttemptDiagnosticsRecorder?
+    ) {
       self.base = base
       self.deserializer = deserializer
+      self.diagnostics = diagnostics
     }
 
     @inlinable
     func makeAsyncIterator() -> AsyncIterator {
-      AsyncIterator(base: self.base.makeAsyncIterator(), deserializer: self.deserializer)
+      AsyncIterator(
+        base: self.base.makeAsyncIterator(),
+        deserializer: self.deserializer,
+        diagnostics: self.diagnostics
+      )
     }
 
     @usableFromInline
@@ -206,18 +295,32 @@ internal enum ClientStreamExecutor: Sendable {
       var base: Base.AsyncIterator
       @usableFromInline
       let deserializer: Deserializer
+      @usableFromInline
+      let diagnostics: GRPCClientAttemptDiagnosticsRecorder?
 
       @inlinable
-      init(base: Base.AsyncIterator, deserializer: Deserializer) {
+      init(
+        base: Base.AsyncIterator,
+        deserializer: Deserializer,
+        diagnostics: GRPCClientAttemptDiagnosticsRecorder?
+      ) {
         self.base = base
         self.deserializer = deserializer
+        self.diagnostics = diagnostics
       }
 
       @inlinable
       mutating func next(
         isolation actor: isolated (any Actor)?
       ) async throws(any Error) -> StreamingClientResponse<Message>.Contents.BodyPart? {
-        guard let part = try await self.base.next(isolation: `actor`) else { return nil }
+        let part: RPCResponsePart<Bytes>?
+        do {
+          part = try await self.base.next(isolation: `actor`)
+        } catch {
+          self.diagnostics?.recordFailure(error)
+          throw error
+        }
+        guard let part else { return nil }
 
         switch part {
         case .metadata(let metadata):
@@ -228,13 +331,21 @@ internal enum ClientStreamExecutor: Sendable {
               transport specific bug. Metadata received: '\(metadata)'.
               """
           )
+          self.diagnostics?.recordFailure(error)
           throw error
 
         case .message(let bytes):
-          let message = try self.deserializer.deserialize(bytes)
-          return .message(message)
+          self.diagnostics?.responseMessage(bytes)
+          do {
+            let message = try self.deserializer.deserialize(bytes)
+            return .message(message)
+          } catch {
+            self.diagnostics?.recordFailure(error)
+            throw error
+          }
 
         case .status(let status, let metadata):
+          self.diagnostics?.responseStatus(status, trailingMetadata: metadata)
           if let error = RPCError(status: status, metadata: metadata) {
             throw error
           } else {

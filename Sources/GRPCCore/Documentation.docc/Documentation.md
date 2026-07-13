@@ -97,6 +97,14 @@ Resources for developers working on gRPC Swift:
 - ``ServerContext``
 - ``ConditionalInterceptor``
 
+### Client diagnostics
+
+- ``GRPCClientDiagnostics``
+- ``GRPCClientDiagnosticsObserver``
+- ``GRPCClientDiagnosticsRegistration``
+- ``GRPCClientDiagnosticsEvent``
+- ``GRPCClientDiagnosticsMessageContext``
+
 ### RPC descriptors
 
 - ``MethodDescriptor``

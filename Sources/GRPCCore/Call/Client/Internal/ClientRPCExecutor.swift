@@ -43,59 +43,72 @@ enum ClientRPCExecutor: Sendable {
     handler: @Sendable @escaping (StreamingClientResponse<Output>) async throws -> Result
   ) async throws -> Result {
     let deadline = options.timeout.map { ContinuousClock.now + $0 }
+    let diagnostics = GRPCClientDiagnostics._beginCall(descriptor: method)
 
-    switch options.executionPolicy?.wrapped {
-    case .none:
-      let oneShotExecutor = OneShotExecutor(
-        transport: transport,
-        deadline: deadline,
-        interceptors: interceptors,
-        serializer: serializer,
-        deserializer: deserializer
-      )
+    do {
+      let result: Result
+      switch options.executionPolicy?.wrapped {
+      case .none:
+        let oneShotExecutor = OneShotExecutor(
+          transport: transport,
+          deadline: deadline,
+          interceptors: interceptors,
+          serializer: serializer,
+          deserializer: deserializer,
+          diagnostics: diagnostics
+        )
 
-      return try await oneShotExecutor.execute(
-        request: request,
-        method: method,
-        options: options,
-        responseHandler: handler
-      )
+        result = try await oneShotExecutor.execute(
+          request: request,
+          method: method,
+          options: options,
+          responseHandler: handler
+        )
 
-    case .retry(let policy):
-      let retryExecutor = RetryExecutor(
-        transport: transport,
-        policy: policy,
-        deadline: deadline,
-        interceptors: interceptors,
-        serializer: serializer,
-        deserializer: deserializer,
-        bufferSize: 64  // TODO: the client should have some control over this.
-      )
+      case .retry(let policy):
+        let retryExecutor = RetryExecutor(
+          transport: transport,
+          policy: policy,
+          deadline: deadline,
+          interceptors: interceptors,
+          serializer: serializer,
+          deserializer: deserializer,
+          bufferSize: 64,  // TODO: the client should have some control over this.
+          diagnostics: diagnostics
+        )
 
-      return try await retryExecutor.execute(
-        request: request,
-        method: method,
-        options: options,
-        responseHandler: handler
-      )
+        result = try await retryExecutor.execute(
+          request: request,
+          method: method,
+          options: options,
+          responseHandler: handler
+        )
 
-    case .hedge(let policy):
-      let hedging = HedgingExecutor(
-        transport: transport,
-        policy: policy,
-        deadline: deadline,
-        interceptors: interceptors,
-        serializer: serializer,
-        deserializer: deserializer,
-        bufferSize: 64  // TODO: the client should have some control over this.
-      )
+      case .hedge(let policy):
+        let hedging = HedgingExecutor(
+          transport: transport,
+          policy: policy,
+          deadline: deadline,
+          interceptors: interceptors,
+          serializer: serializer,
+          deserializer: deserializer,
+          bufferSize: 64,  // TODO: the client should have some control over this.
+          diagnostics: diagnostics
+        )
 
-      return try await hedging.execute(
-        request: request,
-        method: method,
-        options: options,
-        responseHandler: handler
-      )
+        result = try await hedging.execute(
+          request: request,
+          method: method,
+          options: options,
+          responseHandler: handler
+        )
+      }
+
+      diagnostics?.finish()
+      return result
+    } catch {
+      diagnostics?.finish(throwing: error)
+      throw error
     }
   }
 }
@@ -123,6 +136,7 @@ extension ClientRPCExecutor {
     serializer: some MessageSerializer<Input>,
     deserializer: some MessageDeserializer<Output>,
     interceptors: [any ClientInterceptor],
+    diagnostics: GRPCClientAttemptDiagnosticsRecorder?,
     stream: RPCStream<
       RPCAsyncSequence<RPCResponsePart<Bytes>, any Error>,
       RPCWriter<RPCRequestPart<Bytes>>.Closable
@@ -137,6 +151,7 @@ extension ClientRPCExecutor {
         attempt: attempt,
         serializer: serializer,
         deserializer: deserializer,
+        diagnostics: diagnostics,
         stream: stream
       )
     } else {
@@ -153,6 +168,7 @@ extension ClientRPCExecutor {
           attempt: attempt,
           serializer: serializer,
           deserializer: deserializer,
+          diagnostics: diagnostics,
           stream: stream
         )
       }

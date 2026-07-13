@@ -38,6 +38,8 @@ extension ClientRPCExecutor {
     let deserializer: Deserializer
     @usableFromInline
     let bufferSize: Int
+    @usableFromInline
+    let diagnostics: GRPCClientDiagnosticsRecorder?
 
     @inlinable
     init(
@@ -47,7 +49,8 @@ extension ClientRPCExecutor {
       interceptors: [any ClientInterceptor],
       serializer: Serializer,
       deserializer: Deserializer,
-      bufferSize: Int
+      bufferSize: Int,
+      diagnostics: GRPCClientDiagnosticsRecorder?
     ) {
       self.transport = transport
       self.policy = policy
@@ -56,6 +59,7 @@ extension ClientRPCExecutor {
       self.serializer = serializer
       self.deserializer = deserializer
       self.bufferSize = bufferSize
+      self.diagnostics = diagnostics
     }
   }
 }
@@ -116,6 +120,7 @@ extension ClientRPCExecutor.RetryExecutor {
       var delayIterator = delaySequence.makeIterator()
 
       for attempt in 1 ... self.policy.maxAttempts {
+        let attemptDiagnostics = self.diagnostics?.beginAttempt(attempt)
         do {
           let attemptResult = try await self.transport.withStream(
             descriptor: method,
@@ -135,6 +140,7 @@ extension ClientRPCExecutor.RetryExecutor {
                 retryStream: retry.stream,
                 method: method,
                 attempt: attempt,
+                diagnostics: attemptDiagnostics,
                 responseHandler: responseHandler
               )
             }
@@ -194,10 +200,12 @@ extension ClientRPCExecutor.RetryExecutor {
             return nil
           }
 
+          attemptDiagnostics?.finishWithoutStatus()
           if let attemptResult {
             return attemptResult
           }
         } catch {
+          attemptDiagnostics?.finish(throwing: error)
           return .failure(error)
         }
       }
@@ -218,6 +226,7 @@ extension ClientRPCExecutor.RetryExecutor {
     retryStream: BroadcastAsyncSequence<Input>,
     method: MethodDescriptor,
     attempt: Int,
+    diagnostics: GRPCClientAttemptDiagnosticsRecorder?,
     responseHandler: @Sendable @escaping (StreamingClientResponse<Output>) async throws -> R
   ) async -> _RetryExecutorTask<R> {
     return await withTaskGroup(
@@ -236,6 +245,7 @@ extension ClientRPCExecutor.RetryExecutor {
         serializer: self.serializer,
         deserializer: self.deserializer,
         interceptors: self.interceptors,
+        diagnostics: diagnostics,
         stream: stream
       )
 
