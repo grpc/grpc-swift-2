@@ -24,12 +24,16 @@ private import Glibc  // should be @usableFromInline
 private import Musl  // should be @usableFromInline
 #elseif canImport(ucrt)
 private import ucrt  // should be @usableFromInline
+#elseif canImport(WASILibc)
+// No libc import needed: `pid()` returns `nil` on WASI (no process model).
 #else
 #error("Unsupported OS")
 #endif
 
 enum System {
-  static func pid() -> Int {
+  /// The current process identifier, or `nil` on platforms without a process
+  /// model (e.g. WASI preview 1).
+  static func pid() -> Int? {
     #if canImport(Darwin)
     let pid = Darwin.getpid()
     return Int(pid)
@@ -46,7 +50,7 @@ enum System {
     let pid = ucrt._getpid()
     return Int(pid)
     #else
-    return 0
+    return nil
     #endif
   }
 }

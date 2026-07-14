@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-internal import Dispatch
-
 /// A timeout for a gRPC call.
 ///
 /// It's a combination of an amount (expressed as an integer of at maximum 8 digits), and a unit, which is

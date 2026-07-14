@@ -23,6 +23,8 @@ public import Glibc  // should be @usableFromInline
 public import Musl  // should be @usableFromInline
 #elseif canImport(ucrt)
 public import ucrt  // should be @usableFromInline
+#elseif canImport(WASILibc)
+public import WASILibc  // should be @usableFromInline
 #else
 #error("Unsupported OS")
 #endif
