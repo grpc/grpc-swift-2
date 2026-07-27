@@ -69,6 +69,9 @@ public struct MethodConfig: Hashable, Sendable {
   ///
   /// If `false` the RPC will abort immediately if there is a transient failure connecting to
   /// the server. Otherwise gRPC will attempt to connect until the deadline is exceeded.
+  ///
+  /// If left unset, transports conventionally treat this the same as `false`, so RPCs fail fast
+  /// on a transient connection failure rather than queuing until the connection is ready.
   public var waitForReady: Bool?
 
   /// The default timeout for the RPC.
