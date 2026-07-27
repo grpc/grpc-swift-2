@@ -31,7 +31,7 @@ private import Synchronization
 /// ## Creating a client
 ///
 /// You can create and run a client using ``withGRPCClient(transport:interceptors:isolation:handleClient:)``
-/// or ``withGRPCClient(transport:interceptorPipeline:isolation:handleClient:)`` which create, configure and
+/// or ``withGRPCClient(transport:interceptorPipeline:isolation:handleClient:)`` which create, configure, and
 /// run the client providing scoped access to it via the `handleClient` closure. The client will
 /// begin gracefully shutting down when the closure returns.
 ///
@@ -44,7 +44,7 @@ private import Synchronization
 ///
 /// ## Creating a client manually
 ///
-/// If the `with`-style methods for creating clients isn't suitable for your application then you
+/// If the `with`-style methods for creating clients aren't suitable for your application then you
 /// can create and run a client manually. This requires you to call the ``runConnections()`` method in a task
 /// which instructs the client to start connecting to the server.
 ///
@@ -173,7 +173,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     }
   }
 
-  /// Creates a new client with the given transport, interceptors and configuration.
+  /// Creates a new client with the given transport, interceptors, and configuration.
   ///
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
@@ -192,7 +192,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     )
   }
 
-  /// Creates a new client with the given transport, interceptors and configuration.
+  /// Creates a new client with the given transport, interceptors, and configuration.
   ///
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
@@ -209,7 +209,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     self.stateMachine = Mutex(StateMachine(interceptorPipeline: interceptorPipeline))
   }
 
-  /// Start the client.
+  /// Starts the client.
   ///
   /// This returns once ``beginGracefulShutdown()`` has been called and all in-flight RPCs have finished executing.
   /// If you need to abruptly stop all work you should cancel the task executing this method.
@@ -235,7 +235,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     }
   }
 
-  /// Close the client.
+  /// Closes the client.
   ///
   /// The transport will be closed: this means that it will be given enough time to wait for
   /// in-flight RPCs to finish executing, but no new RPCs will be accepted. You can cancel the task
@@ -281,7 +281,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     }
   }
 
-  /// Start a client-streaming RPC.
+  /// Starts a client-streaming RPC.
   ///
   /// - Parameters:
   ///   - request: The request stream.
@@ -315,7 +315,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     }
   }
 
-  /// Start a server-streaming RPC.
+  /// Starts a server-streaming RPC.
   ///
   /// - Parameters:
   ///   - request: The unary request.
@@ -347,7 +347,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     )
   }
 
-  /// Start a bidirectional streaming RPC.
+  /// Starts a bidirectional streaming RPC.
   ///
   /// - Note: ``runConnections()`` must have been called and still executing, and ``beginGracefulShutdown()`` mustn't
   /// have been called.
