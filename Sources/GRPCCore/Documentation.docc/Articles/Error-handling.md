@@ -74,7 +74,23 @@ the API contract and each RPC should be documented accordingly.
 
 Clients should catch ``RPCError`` if they are interested in the failures from an
 RPC. This is a manifestation of the error sent by the server but in some cases
-it may be synthesized locally.
+it may be synthesized locally. For example, if a client-side timeout fires
+before the RPC completes, the client throws an ``RPCError`` with code
+``RPCError/Code-swift.struct/deadlineExceeded``. If the calling `Task` is
+cancelled, the client may instead throw an ``RPCError`` with code `unknown`
+wrapping the underlying `CancellationError` as its `cause` — check `cause` if
+you need to distinguish cancellation from other failures reported as `unknown`.
+
+Failures to serialize a request or deserialize a response also surface as an
+``RPCError``; the exact code and message depend on the serializer/deserializer
+in use. For example, the Protobuf codec provided by `grpc-swift-protobuf` uses
+``RPCError/Code-swift.struct/invalidArgument`` when a message can't be
+serialized or deserialized.
+
+If the transport receives a non-200 HTTP status without an accompanying gRPC
+status (for example because the RPC failed before reaching a gRPC-aware peer),
+the HTTP status is synthesized into a ``Status`` for you to catch as an
+``RPCError``.
 
 For clients using the rich error model, the ``RPCError`` can be caught and a
 detailed error can be extracted from it using `unpackGoogleRPCStatus()`.
