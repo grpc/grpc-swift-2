@@ -32,7 +32,7 @@ function checkout_v1 {
   log "Cloning grpc-swift to ${grpc_checkout_path}"
   git clone \
     --quiet \
-    https://github.com/grpc/grpc-swift-2.git \
+    https://github.com/grpc/grpc-swift.git \
     "${grpc_checkout_path}"
 
   # Get the latest version of 1.x.y.
