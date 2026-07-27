@@ -17,7 +17,9 @@
 /// A description of a service.
 @available(gRPCSwift 2.0, *)
 public struct ServiceDescriptor: Sendable, Hashable {
-  /// The name of the package the service belongs to. For example, "helloworld".
+  /// The name of the package the service belongs to.
+  ///
+  /// For example, "helloworld".
   /// An empty string means that the service does not belong to any package.
   public var package: String {
     if let index = self.fullyQualifiedService.utf8.lastIndex(of: UInt8(ascii: ".")) {
@@ -27,7 +29,9 @@ public struct ServiceDescriptor: Sendable, Hashable {
     }
   }
 
-  /// The name of the service. For example, "Greeter".
+  /// The name of the service.
+  ///
+  /// For example, "Greeter".
   public var service: String {
     if var index = self.fullyQualifiedService.utf8.lastIndex(of: UInt8(ascii: ".")) {
       self.fullyQualifiedService.utf8.formIndex(after: &index)
@@ -42,12 +46,14 @@ public struct ServiceDescriptor: Sendable, Hashable {
   /// - "service": if a package name is not specified. For example, "Greeter".
   public var fullyQualifiedService: String
 
-  /// Create a new descriptor from the fully qualified service name.
+  /// Creates a new descriptor from the fully qualified service name.
   /// - Parameter fullyQualifiedService: The fully qualified service name.
   public init(fullyQualifiedService: String) {
     self.fullyQualifiedService = fullyQualifiedService
   }
 
+  /// Creates a new descriptor from a package name and a service name.
+  ///
   /// - Parameters:
   ///   - package: The name of the package the service belongs to. For example, "helloworld".
   ///   An empty string means that the service does not belong to any package.
