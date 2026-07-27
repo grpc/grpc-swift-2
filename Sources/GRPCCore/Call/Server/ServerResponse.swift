@@ -187,6 +187,17 @@ public struct StreamingServerResponse<Message: Sendable>: Sendable {
     /// be returned to the client.
     ///
     /// gRPC will invoke this function at most once therefore it isn't required to be idempotent.
+    ///
+    /// Cancelling the client's call doesn't cancel this closure's `Task`. Task-local values bound
+    /// with `withValue(_:operation:)` while building this response aren't visible here either:
+    /// gRPC invokes this closure only after the handler that created the response has already
+    /// returned, by which point any task-local scope established inside the handler has already
+    /// ended.
+    ///
+    /// > Important: If you need this closure to stop producing messages when the RPC is
+    /// > cancelled, capture the ``ServerContext`` passed to your handler and check
+    /// > ``ServerContext/RPCCancellationHandle/isCancelled``, or use
+    /// > ``withRPCCancellationHandler(operation:onCancelRPC:)``.
     public var producer: @Sendable (RPCWriter<Message>) async throws -> Metadata
 
     /// Create a ``Contents``.
