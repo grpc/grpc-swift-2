@@ -15,8 +15,8 @@ a ``SourceFile`` containing the generated Swift source. For example, `protoc-gen
 in [`grpc-swift-protobuf`](https://github.com/grpc/grpc-swift-protobuf) parses `.proto` files
 and uses this module to generate the corresponding Swift source.
 
-``CodeGenerator/generate(_:)`` throws a ``CodeGenError`` if the request is invalid, for
-example if a service or method name isn't unique within its scope.
+``CodeGenerator/generate(_:)`` throws a ``CodeGenError`` if the request is invalid — for
+example, if a service or method name isn't unique within its scope.
 
 ## Topics
 
