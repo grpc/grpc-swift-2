@@ -22,6 +22,11 @@ extension ServerContext {
   internal static var rpcCancellation: RPCCancellationHandle?
 
   /// A handle for the cancellation status of the RPC.
+  ///
+  /// gRPC signals cancellation through this handle, not by cancelling your handler's `Task`. If
+  /// you don't check ``isCancelled`` or use ``withRPCCancellationHandler(operation:onCancelRPC:)``,
+  /// your handler keeps running after the RPC is cancelled. For a streaming response, this means
+  /// it keeps writing messages the client will never see.
   public struct RPCCancellationHandle: Sendable {
     internal let manager: ServerCancellationManager
 
