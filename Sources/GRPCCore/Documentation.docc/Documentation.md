@@ -9,9 +9,9 @@ A gRPC library for Swift written natively in Swift.
 gRPC Swift is distributed across multiple Swift packages. These are:
 
 - `grpc-swift` (this package) containing core gRPC abstractions and an in-process transport.
-  - GitHub repository: [`grpc/grpc-swift`](https://github.com/grpc/grpc-swift)
+  - GitHub repository: [`grpc/grpc-swift-2`](https://github.com/grpc/grpc-swift-2)
   - Documentation: hosted on the [Swift Package
-    Index](https://swiftpackageindex.com/grpc/grpc-swift/documentation)
+    Index](https://swiftpackageindex.com/grpc/grpc-swift-2/documentation)
 - `grpc-swift-nio-transport` contains high-performance HTTP/2 transports built on top
     of [SwiftNIO](https://github.com/apple/swift-nio).
   - GitHub repository: [`grpc/grpc-swift-nio-transport`](https://github.com/grpc/grpc-swift-nio-transport)

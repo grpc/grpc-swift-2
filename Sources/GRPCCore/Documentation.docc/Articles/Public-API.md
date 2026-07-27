@@ -12,7 +12,7 @@ and guidelines for users.
 
 For clarity, the project is comprised of the following Swift packages:
 
-- [grpc/grpc-swift][1],
+- [grpc/grpc-swift-2][1],
 - [grpc/grpc-swift-nio-transport][2],
 - [grpc/grpc-swift-protobuf][3], and
 - [grpc/grpc-swift-extras][4].
@@ -87,7 +87,7 @@ should follow as well:
    package in much the same way that gRPC Swift will prefix new symbols).
 
 [0]: https://semver.org
-[1]: https://github.com/grpc/grpc-swift
+[1]: https://github.com/grpc/grpc-swift-2
 [2]: https://github.com/grpc/grpc-swift-nio-transport
 [3]: https://github.com/grpc/grpc-swift-protobuf
 [4]: https://github.com/grpc/grpc-swift-extras

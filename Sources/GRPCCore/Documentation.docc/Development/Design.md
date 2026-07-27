@@ -444,5 +444,5 @@ extension ServiceName.ClientProtocol {
 ```
 
 To see this in use refer to the <doc:Hello-World> or <doc:Route-Guide> tutorials
-or the examples in the [grpc/grpc-swift](https://github.com/grpc/grpc-swift)
+or the examples in the [grpc/grpc-swift-2](https://github.com/grpc/grpc-swift-2)
 repository on GitHub.

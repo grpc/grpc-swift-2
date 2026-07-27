@@ -34,7 +34,7 @@ To make the migration easier a script is available to automate a number of
 steps. You should download it now using:
 
 ```sh
-curl https://raw.githubusercontent.com/grpc/grpc-swift/refs/heads/main/dev/v1-to-v2/v1_to_v2.sh -o v1_to_v2
+curl https://raw.githubusercontent.com/grpc/grpc-swift-2/refs/heads/main/dev/v1-to-v2/v1_to_v2.sh -o v1_to_v2
 ```
 
 You'll also need to make the `v1_to_v2` script executable:
@@ -298,7 +298,7 @@ available on the request object. For single responses you can set initial and
 trailing metadata when you create the response. For streaming responses you can
 set initial metadata in the initializer and return trailing metadata from the
 closure you provide to the initializer. This is demonstrated in the
-['echo-metadata'](https://github.com/grpc/grpc-swift/tree/main/Examples/echo-metadata)
+['echo-metadata'](https://github.com/grpc/grpc-swift-2/tree/main/Examples/echo-metadata)
 example.
 
 One important difference between this approach and the `SimpleServiceProtocol`
@@ -492,7 +492,7 @@ If there were any parts of this guide you felt were unclear or didn't cover enou
 of the migration then please file an issue on GitHub so that we can work on improving
 it.
 
-[0]: https://github.com/grpc/grpc-swift/tree/main
+[0]: https://github.com/grpc/grpc-swift-2/tree/main
 [1]: https://github.com/grpc/grpc-swift/tree/release/1.x
 [2]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation
 [3]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs
