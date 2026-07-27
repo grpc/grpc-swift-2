@@ -16,7 +16,7 @@
 
 /// A response for a single message received by a client.
 ///
-/// Single responses are used for unary and client-streaming RPCs. For streaming responses
+/// Single responses are used for unary and client-streaming RPCs. For streaming responses,
 /// see ``StreamingClientResponse``.
 ///
 /// A single response captures every part of the response stream and distinguishes successful
@@ -26,12 +26,12 @@
 ///
 /// The `failure` case indicates that the server chose not to process the RPC, or the processing
 /// of the RPC failed, or the client failed to execute the request. The failure case contains
-/// an ``RPCError`` describing why the RPC failed, including an error code, error message and any
+/// an ``RPCError`` describing why the RPC failed, including an error code, error message, and any
 /// metadata sent by the server.
 ///
 /// ### Using responses
 ///
-/// Each response has a ``accepted`` property which contains all RPC information. You can create
+/// Each response has an ``accepted`` property that contains all RPC information. You can create
 /// one by calling ``init(accepted:)`` or one of the two convenience initializers:
 /// - ``init(message:metadata:trailingMetadata:)`` to create a successful response, or
 /// - ``init(of:error:)`` to create a failed response.
@@ -73,18 +73,18 @@ public struct ClientResponse<Message: Sendable>: Sendable {
   public struct Contents: Sendable {
     /// Metadata received from the server at the beginning of the response.
     ///
-    /// The metadata may contain transport-specific information in addition to any application
-    /// level metadata provided by the service.
+    /// The metadata may contain transport-specific information in addition to any application-level
+    /// metadata provided by the service.
     public var metadata: Metadata
 
-    /// The response message received from the server, or an error of the RPC failed with a
+    /// The response message received from the server, or an error if the RPC failed with a
     /// non-ok status.
     public var message: Result<Message, RPCError>
 
     /// Metadata received from the server at the end of the response.
     ///
-    /// The metadata may contain transport-specific information in addition to any application
-    /// level metadata provided by the service.
+    /// The metadata may contain transport-specific information in addition to any application-level
+    /// metadata provided by the service.
     public var trailingMetadata: Metadata
 
     /// Creates a `Contents`.
@@ -136,27 +136,27 @@ public struct ClientResponse<Message: Sendable>: Sendable {
 /// A response for a stream of messages received by a client.
 ///
 /// Stream responses are used for server-streaming and bidirectional-streaming RPCs. For single
-/// responses see ``ClientResponse``.
+/// responses, see ``ClientResponse``.
 ///
 /// A stream response captures every part of the response stream over time and distinguishes
 /// accepted and rejected requests via the ``accepted`` property. An "accepted" request is one
-/// where the the server responds with initial metadata and attempts to process the request. A
+/// where the server responds with initial metadata and attempts to process the request. A
 /// "rejected" request is one where the server responds with a status as the first and only
 /// response part and doesn't process the request body.
 ///
-/// The value for the `success` case contains the initial metadata and a ``RPCAsyncSequence`` of
+/// The value for the `success` case contains the initial metadata and an ``RPCAsyncSequence`` of
 /// message parts (messages followed by a single status). If the sequence completes without
-/// throwing then the response implicitly has an ``Status/Code-swift.struct/ok`` status code.
+/// throwing, then the response implicitly has an ``Status/Code-swift.struct/ok`` status code.
 /// However, the response sequence may also throw an ``RPCError`` if the server fails to complete
 /// processing the request.
 ///
 /// The `failure` case indicates that the server chose not to process the RPC or the client failed
 /// to execute the request. The failure case contains an ``RPCError`` describing why the RPC
-/// failed, including an error code, error message and any metadata sent by the server.
+/// failed, including an error code, error message, and any metadata sent by the server.
 ///
 /// ### Using streaming responses
 ///
-/// Each response has a ``accepted`` property which contains RPC information. You can create
+/// Each response has an ``accepted`` property that contains RPC information. You can create
 /// one by calling ``init(accepted:)`` or one of the two convenience initializers:
 /// - ``init(of:metadata:bodyParts:)`` to create an accepted response, or
 /// - ``init(of:error:)`` to create a failed response.
@@ -164,7 +164,7 @@ public struct ClientResponse<Message: Sendable>: Sendable {
 /// You can interrogate a response by inspecting the ``accepted`` property directly or by using
 /// its convenience properties:
 /// - ``metadata`` extracts the initial metadata,
-/// - ``messages`` extracts the sequence of response message, or throws if the response failed.
+/// - ``messages`` extracts the sequence of response messages, or throws if the response failed.
 ///
 /// The following example demonstrates how you can use the API:
 ///
@@ -204,14 +204,14 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
   public struct Contents: Sendable {
     /// Metadata received from the server at the beginning of the response.
     ///
-    /// The metadata may contain transport-specific information in addition to any application
-    /// level metadata provided by the service.
+    /// The metadata may contain transport-specific information in addition to any application-level
+    /// metadata provided by the service.
     public var metadata: Metadata
 
     /// A sequence of stream parts received from the server ending with metadata if the RPC
     /// succeeded.
     ///
-    /// If the RPC fails then the sequence will throw an ``RPCError``.
+    /// If the RPC fails, then the sequence will throw an ``RPCError``.
     ///
     /// The sequence may only be iterated once.
     public var bodyParts: RPCAsyncSequence<BodyPart, any Error>
@@ -220,7 +220,9 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
     public enum BodyPart: Sendable {
       /// A response message.
       case message(Message)
-      /// Metadata. Must be the final value of the sequence unless the stream throws an error.
+      /// Metadata.
+      ///
+      /// Must be the final value of the sequence unless the stream throws an error.
       case trailingMetadata(Metadata)
     }
 
@@ -241,7 +243,7 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
   /// Whether the RPC was accepted or rejected.
   ///
   /// The `success` case indicates the RPC was accepted by the server for
-  /// processing, however, the RPC may still fail by throwing an error from its
+  /// processing; however, the RPC may still fail by throwing an error from its
   /// `messages` sequence. The `failure` case indicates that the RPC was
   /// rejected by the server.
   public var accepted: Result<Contents, RPCError>
@@ -295,7 +297,7 @@ extension ClientResponse {
 
   /// Returns metadata received from the server at the start of the response.
   ///
-  /// For rejected RPCs (in other words, where ``accepted`` is `failure`) the metadata is empty.
+  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the metadata is empty.
   public var metadata: Metadata {
     switch self.accepted {
     case let .success(contents):
@@ -355,7 +357,7 @@ extension StreamingClientResponse {
 
   /// Returns metadata received from the server at the start of the response.
   ///
-  /// For rejected RPCs (in other words, where ``accepted`` is `failure`) the metadata is empty.
+  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the metadata is empty.
   public var metadata: Metadata {
     switch self.accepted {
     case let .success(contents):
@@ -367,7 +369,7 @@ extension StreamingClientResponse {
 
   /// Returns the messages received from the server.
   ///
-  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws a ``RPCError``.
+  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws an ``RPCError``.
   public var messages: RPCAsyncSequence<Message, any Error> {
     switch self.accepted {
     case let .success(contents):
@@ -387,9 +389,9 @@ extension StreamingClientResponse {
     }
   }
 
-  /// Returns the body parts (i.e. `messages` and `trailingMetadata`) returned from the server.
+  /// Returns the body parts (that is, `messages` and `trailingMetadata`) returned from the server.
   ///
-  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws a ``RPCError``.
+  /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws an ``RPCError``.
   public var bodyParts: RPCAsyncSequence<Contents.BodyPart, any Error> {
     switch self.accepted {
     case let .success(contents):
