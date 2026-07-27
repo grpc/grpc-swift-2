@@ -24,8 +24,8 @@ private import Synchronization
 /// can handle the RPC.
 ///
 /// A ``GRPCServer`` listens with a specific transport implementation (for example, HTTP/2 or in-process),
-/// and routes requests from the transport to the service instance. You can also use "interceptors",
-/// to implement cross-cutting logic which apply to all accepted RPCs. Example uses of interceptors
+/// and routes requests from the transport to the service instance. You can also use "interceptors"
+/// to implement cross-cutting logic that applies to all accepted RPCs. Example uses of interceptors
 /// include request filtering, authentication, and logging. Once requests have been intercepted
 /// they are passed to a handler which in turn returns a response to send back to the client.
 ///
@@ -58,7 +58,7 @@ private import Synchronization
 ///
 /// ## Creating a client manually
 ///
-/// If the `with`-style methods for creating a server isn't suitable for your application then you
+/// If the `with`-style methods for creating a server aren't suitable for your application then you
 /// can create and run it manually. This requires you to call the ``serve()`` method in a task
 /// which instructs the server to start its transport and listen for new RPCs. A ``RuntimeError`` is
 /// thrown if the transport can't be started or encounters some other runtime error.
@@ -234,7 +234,7 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
     }
   }
 
-  /// Signal to the server that it should stop listening for new requests.
+  /// Signals to the server that it should stop listening for new requests.
   ///
   /// By calling this function you indicate to clients that they mustn't start new requests
   /// against this server. Once the server has processed all requests the ``serve()`` method returns.
