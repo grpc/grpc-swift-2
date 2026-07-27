@@ -54,13 +54,13 @@ extension RPCWriterProtocol {
 /// A type into which values can be written until it is finished.
 @available(gRPCSwift 2.0, *)
 public protocol ClosableRPCWriterProtocol<Element>: RPCWriterProtocol {
-  /// Indicate to the writer that no more writes are to be accepted.
+  /// Indicates to the writer that no more writes are to be accepted.
   ///
   /// All writes after ``finish()`` has been called should result in an error
   /// being thrown.
   func finish() async
 
-  /// Indicate to the writer that no more writes are to be accepted because an error occurred.
+  /// Indicates to the writer that no more writes are to be accepted because an error occurred.
   ///
   /// All writes after ``finish(throwing:)`` has been called should result in an error
   /// being thrown.
