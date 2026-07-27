@@ -24,7 +24,7 @@ The following snippet contains a Swift Package manifest to use gRPC Swift v2.x w
 the SwiftNIO based transport and SwiftProtobuf serialization:
 
 ```swift
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(
