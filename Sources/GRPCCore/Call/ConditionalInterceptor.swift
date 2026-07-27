@@ -17,7 +17,7 @@
 /// Describes the conditions under which an interceptor should be applied.
 ///
 /// You can configure interceptors to be applied to:
-/// - all RPCs and services;
+/// - all RPCs and services; or
 /// - requests directed only to specific services; or
 /// - requests directed only to specific methods (of a specific service); or
 /// - requests directed only to specific services or methods (of a specific service); or
@@ -93,7 +93,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
     ///   The predicate is evaluated the first time a given method is encountered, and that result
     ///   is reused for subsequent RPCs of the same method for the lifetime of the client.
     ///   As a consequence, the `predicate` closure should be **deterministic**.
-    ///   Do **not** base it on dynamic state (time, session, feature flags, etc.).
+    ///   Do **not** base it on dynamic state, such as time, session, or feature flags.
     ///   If you need per-call decisions, put that logic inside the interceptor itself.
     ///
     /// - Parameters:
@@ -133,7 +133,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
-  /// Create an operation, specifying which ``ClientInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation, specifying which ``ClientInterceptor`` to apply and to which ``Subject``.
   /// - Parameters:
   ///   - interceptor: The ``ClientInterceptor`` to register with the client.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.
@@ -147,7 +147,7 @@ extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ServerInterceptor {
-  /// Create an operation, specifying which ``ServerInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation, specifying which ``ServerInterceptor`` to apply and to which ``Subject``.
   /// - Parameters:
   ///   - interceptor: The ``ServerInterceptor`` to register with the server.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.
