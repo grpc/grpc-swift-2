@@ -21,11 +21,11 @@ private import Synchronization
 /// gRPC prevents servers from being overloaded by retries and hedging by using a token-based
 /// throttling mechanism at the transport level.
 ///
-/// Each client transport maintains a throttle for the server it is connected to and gRPC records
+/// Each client transport maintains a throttle for the server it is connected to, and gRPC records
 /// successful and failed RPC attempts. Successful attempts increment the number of tokens
 /// by ``tokenRatio`` and failed attempts decrement the available tokens by one. In the context
 /// of throttling, a failed attempt is one where the server terminates the RPC with a status code
-/// which is retryable or non fatal (as defined by ``RetryPolicy/retryableStatusCodes`` and
+/// that is retryable or non-fatal (as defined by ``RetryPolicy/retryableStatusCodes`` and
 /// ``HedgingPolicy/nonFatalStatusCodes``) or when the client receives a pushback response from
 /// the server.
 ///
@@ -49,11 +49,11 @@ public final class RetryThrottle: Sendable {
   /// Returns the throttling token ratio.
   ///
   /// The number of tokens held by the throttle is incremented by this value for each successful
-  /// response. In the context of throttling, a successful response is one which:
+  /// response. In the context of throttling, a successful response is one that:
   /// - receives metadata from the server, or
   /// - is terminated with a non-retryable or fatal status code.
   ///
-  /// If the response is a pushback response then it is not considered to be successful, even if
+  /// If the response is a pushback response, then it is not considered to be successful, even if
   /// either of the preceding conditions are met.
   public var tokenRatio: Double {
     Double(self.scaledTokenRatio) / 1000
@@ -66,7 +66,7 @@ public final class RetryThrottle: Sendable {
 
   /// The number of tokens the throttle currently has.
   ///
-  /// If this value is less than or equal to the retry threshold (defined as `maxTokens / 2`)
+  /// If this value is less than or equal to the retry threshold (defined as `maxTokens / 2`),
   /// then RPCs will not be retried and hedging will be disabled.
   public var tokens: Double {
     self.scaledTokensAvailable.withLock {
@@ -81,7 +81,7 @@ public final class RetryThrottle: Sendable {
     }
   }
 
-  /// Create a new throttle.
+  /// Creates a new throttle.
   ///
   /// - Parameters:
   ///   - maxTokens: The maximum number of tokens available. Must be in the range `1...1000`.
@@ -106,7 +106,7 @@ public final class RetryThrottle: Sendable {
     self.scaledTokensAvailable = Mutex(scaledTokens)
   }
 
-  /// Create a new throttle.
+  /// Creates a new throttle.
   ///
   /// - Parameter policy: The policy to use to configure the throttle.
   public convenience init(policy: ServiceConfig.RetryThrottling) {
