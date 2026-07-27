@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// Representation of the file to be created by the code generator, that contains the
+/// Representation of the file to be created by the code generator that contains the
 /// generated Swift source code.
 @available(gRPCSwift 2.0, *)
 public struct SourceFile: Sendable, Hashable {
