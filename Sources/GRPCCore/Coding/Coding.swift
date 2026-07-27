@@ -17,7 +17,7 @@
 /// Serializes a message into a sequence of bytes.
 ///
 /// Message serializers convert an input message to a sequence of bytes. Serializers are used to
-/// convert messages into a form which is suitable for sending over a network. The reverse
+/// convert messages into a form that is suitable for sending over a network. The reverse
 /// operation, deserialization, is performed by a ``MessageDeserializer``.
 ///
 /// Serializers are used frequently and implementations should take care to ensure that
@@ -37,7 +37,7 @@ public protocol MessageSerializer<Message>: Sendable {
 /// Deserializes a sequence of bytes into a message.
 ///
 /// Message deserializers convert a sequence of bytes into a message. Deserializers are used to
-/// convert bytes received from the network into an application specific message. The reverse
+/// convert bytes received from the network into an application-specific message. The reverse
 /// operation, serialization, is performed by a ``MessageSerializer``.
 ///
 /// Deserializers are used frequently and implementations should take care to ensure that
