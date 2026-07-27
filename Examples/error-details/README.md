@@ -6,7 +6,7 @@ This example demonstrates how to create and unpack detailed errors.
 
 A command line tool that demonstrates how a detailed error can be thrown by a
 service and unpacked and inspected by a client. The detailed error model is
-described in more detailed in the [gRPC Error
+described in more detail in the [gRPC Error
 Guide](https://grpc.io/docs/guides/error/) and is made available via the
 [grpc-swift-protobuf](https://github.com/grpc-swift-protobuf) package.
 
