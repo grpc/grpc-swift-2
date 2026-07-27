@@ -37,7 +37,7 @@ as tutorials.
   for gRPC Swift.
 - `GRPCInProcessTransport` contains an in-process implementation of the ``ClientTransport`` and
   ``ServerTransport`` protocols.
-- `GRPCodeGen` contains components for building a code generator.
+- `GRPCCodeGen` contains components for building a code generator.
 
 ## Topics
 
