@@ -28,7 +28,7 @@ extension InProcessTransport {
   /// RPC requests made from clients (as `RPCStream`s).
   /// To stop listening to new requests, call ``beginGracefulShutdown()``.
   ///
-  /// - SeeAlso: `ClientTransport`
+  /// - SeeAlso: `ServerTransport`
   public final class Server: ServerTransport, Sendable {
     /// The type of bytes this server sends and receives, represented as an array of bytes.
     public typealias Bytes = [UInt8]
@@ -148,7 +148,7 @@ extension InProcessTransport {
       }
     }
 
-    /// Stop listening to any new `RPCStream` publications.
+    /// Stops listening to any new `RPCStream` publications.
     ///
     /// - SeeAlso: `ServerTransport`
     public func beginGracefulShutdown() {
