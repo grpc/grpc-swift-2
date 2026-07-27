@@ -54,6 +54,9 @@ private import Synchronization
 /// more abruptly you can cancel the task running your client. If your application requires
 /// additional resources that need their lifecycles managed you should consider using [Swift Service
 /// Lifecycle](https://github.com/swift-server/swift-service-lifecycle).
+///
+/// Once the client has stopped it can't be restarted: calling ``runConnections()`` again throws a
+/// ``RuntimeError``. Create a new ``GRPCClient`` (and a new transport) if you need to reconnect.
 @available(gRPCSwift 2.0, *)
 public final class GRPCClient<Transport: ClientTransport>: Sendable {
   /// The transport which provides a bidirectional communication channel with the server.
