@@ -18,7 +18,14 @@ public import GRPCCore
 
 @available(gRPCSwift 2.0, *)
 public struct InProcessTransport: Sendable {
+  /// The server side of this transport pairing.
+  ///
+  /// Pass this to a `GRPCServer` to accept RPCs made via ``client``.
   public let server: Self.Server
+
+  /// The client side of this transport pairing.
+  ///
+  /// Pass this to a `GRPCClient` to make RPCs that ``server`` handles.
   public let client: Self.Client
 
   /// Initializes a new ``InProcessTransport`` pairing a ``Client`` and a ``Server``.

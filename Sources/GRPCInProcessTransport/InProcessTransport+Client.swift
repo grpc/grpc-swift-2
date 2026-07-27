@@ -37,6 +37,7 @@ extension InProcessTransport {
   ///
   /// - SeeAlso: `ClientTransport`
   public final class Client: ClientTransport {
+    /// The type of bytes this client sends and receives, represented as an array of bytes.
     public typealias Bytes = [UInt8]
 
     private enum State: Sendable {
@@ -101,6 +102,10 @@ extension InProcessTransport {
       case closed(ClosedState)
     }
 
+    /// The retry throttle configuration.
+    ///
+    /// This is derived from the `ServiceConfig` passed to the transport's initializer; it's
+    /// `nil` if the service config doesn't specify a retry-throttling policy.
     public let retryThrottle: RetryThrottle?
 
     private let methodConfig: MethodConfigs
