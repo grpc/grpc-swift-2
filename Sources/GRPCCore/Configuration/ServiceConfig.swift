@@ -20,7 +20,7 @@
 /// should behave (for example, the load balancing policy to use).
 ///
 /// The schema is described by [`grpc/service_config/service_config.proto`](https://github.com/grpc/grpc-proto/blob/0b30c8c05277ab78ec72e77c9cbf66a26684673d/grpc/service_config/service_config.proto)
-/// in the `grpc/grpc-proto` GitHub repository although gRPC uses it in its JSON form rather than
+/// in the `grpc/grpc-proto` GitHub repository, although gRPC uses it in its JSON form rather than
 /// the Protobuf form.
 @available(gRPCSwift 2.0, *)
 public struct ServiceConfig: Hashable, Sendable {
@@ -30,7 +30,7 @@ public struct ServiceConfig: Hashable, Sendable {
   /// Load balancing policies.
   ///
   /// The client iterates through the list in order and picks the first configuration it supports.
-  /// If no policies are supported then the configuration is considered to be invalid.
+  /// If no policies are supported, then the configuration is considered to be invalid.
   public var loadBalancingConfig: [LoadBalancingConfig]
 
   /// The policy for throttling retries.
@@ -38,7 +38,7 @@ public struct ServiceConfig: Hashable, Sendable {
   /// If ``RetryThrottling`` is provided, gRPC will automatically throttle retry attempts
   /// and hedged RPCs when the client's ratio of failures to successes exceeds a threshold.
   ///
-  /// For each server name, the gRPC client will maintain a `token_count` which is initially set
+  /// For each server name, the gRPC client will maintain a `token_count` that is initially set
   /// to ``RetryThrottling-swift.struct/maxTokens``. Every outgoing RPC (regardless of service or
   /// method invoked) will change `token_count` as follows:
   ///
@@ -54,7 +54,7 @@ public struct ServiceConfig: Hashable, Sendable {
   ///
   /// - Parameters:
   ///   - methodConfig: Per-method configuration.
-  ///   - loadBalancingConfig: Load balancing policies. Clients use the the first supported
+  ///   - loadBalancingConfig: Load balancing policies. Clients use the first supported
   ///       policy when iterating the list in order.
   ///   - retryThrottling: Policy for throttling retries.
   public init(
@@ -119,7 +119,7 @@ extension ServiceConfig {
       self.value = value
     }
 
-    /// Creates a pick-first load balancing policy.
+    /// Creates a pick-first load balancing policy with the given address-shuffling behavior.
     ///
     /// - Parameter shuffleAddressList: Whether resolved addresses should be shuffled before
     ///     attempting to connect to them.
@@ -127,7 +127,7 @@ extension ServiceConfig {
       Self(.pickFirst(PickFirst(shuffleAddressList: shuffleAddressList)))
     }
 
-    /// Creates a pick-first load balancing policy.
+    /// Creates a pick-first load balancing policy from an existing configuration value.
     ///
     /// - Parameter pickFirst: The pick-first load balancing policy.
     public static func pickFirst(_ pickFirst: PickFirst) -> Self {
@@ -233,15 +233,15 @@ extension ServiceConfig.LoadBalancingConfig: Codable {
 @available(gRPCSwift 2.0, *)
 extension ServiceConfig {
   public struct RetryThrottling: Hashable, Sendable, Codable {
-    /// The initial, and maximum number of tokens.
+    /// The initial and maximum number of tokens.
     ///
     /// - Precondition: Must be greater than zero.
     public var maxTokens: Int
 
     /// The amount of tokens to add on each successful RPC.
     ///
-    /// Typically this will be some number between 0 and 1, e.g., 0.1. Up to three decimal places
-    /// are supported.
+    /// Typically this will be some number between 0 and 1, for example, 0.1. Up to three decimal
+    /// places are supported.
     ///
     /// - Precondition: Must be greater than zero.
     public var tokenRatio: Double
@@ -249,7 +249,7 @@ extension ServiceConfig {
     /// Creates a new retry throttling policy.
     ///
     /// - Parameters:
-    ///   - maxTokens: The initial, and maximum number of tokens. Must be greater than zero.
+    ///   - maxTokens: The initial and maximum number of tokens. Must be greater than zero.
     ///   - tokenRatio: The amount of tokens to add on each successful RPC. Must be greater
     ///       than zero.
     public init(maxTokens: Int, tokenRatio: Double) throws {
