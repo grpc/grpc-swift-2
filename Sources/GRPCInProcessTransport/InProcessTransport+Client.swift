@@ -28,7 +28,7 @@ extension InProcessTransport {
   /// as a `ServiceConfig`.
   ///
   /// Once you have a client, you must keep a long-running task executing ``connect()``, which
-  /// will return only once all streams have been finished and ``beginGracefulShutdown()`` has been called on this client; or
+  /// will return only once all streams have been finished and ``beginGracefulShutdown()`` has been called on this client, or
   /// when the containing task is cancelled.
   ///
   /// To execute requests using this client, use ``withStream(descriptor:options:_:)``. If this function is
@@ -129,16 +129,16 @@ extension InProcessTransport {
       self.peer = peer
     }
 
-    /// Establish and maintain a connection to the remote destination.
+    /// Establishes and maintains a connection to the remote destination.
     ///
     /// Maintains a long-lived connection, or set of connections, to a remote destination.
     /// Connections may be added or removed over time as required by the implementation and the
     /// demand for streams by the client.
     ///
-    /// Implementations of this function will typically create a long-lived task group which
-    /// maintains connections. The function exits when all open streams have been closed and new connections
-    /// are no longer required by the caller who signals this by calling ``beginGracefulShutdown()``, or by cancelling the
-    /// task this function runs in.
+    /// Implementations of this function will typically create a long-lived task group that
+    /// maintains connections. The function exits either when all open streams have been closed
+    /// and new connections are no longer required by the caller — signaled by calling
+    /// ``beginGracefulShutdown()`` — or when the task this function runs in is cancelled.
     public func connect() async throws {
       let (stream, continuation) = AsyncStream<Void>.makeStream()
       try self.state.withLock { state in
@@ -195,12 +195,12 @@ extension InProcessTransport {
       }
     }
 
-    /// Signal to the transport that no new streams may be created.
+    /// Signals to the transport that no new streams may be created.
     ///
-    /// Existing streams may run to completion naturally but calling ``withStream(descriptor:options:_:)``
+    /// Existing streams may run to completion naturally, but calling ``withStream(descriptor:options:_:)``
     /// will result in an `RPCError` with code `RPCError/Code/failedPrecondition` being thrown.
     ///
-    /// If you want to forcefully cancel all active streams then cancel the task running ``connect()``.
+    /// If you want to forcefully cancel all active streams, then cancel the task running ``connect()``.
     public func beginGracefulShutdown() {
       let maybeContinuation: AsyncStream<Void>.Continuation? = self.state.withLock { state in
         switch state {
@@ -222,7 +222,7 @@ extension InProcessTransport {
       maybeContinuation?.finish()
     }
 
-    /// Opens a stream using the transport, and uses it as input into a user-provided closure.
+    /// Opens a stream using the transport, and uses it as input to a user-provided closure alongside the given context.
     ///
     /// - Important: The opened stream is closed after the closure is finished.
     ///
@@ -230,7 +230,7 @@ extension InProcessTransport {
     /// is closing or has been closed.
     ///
     ///   This implementation will queue any streams (and thus block this call) if this function is called before
-    ///   ``connect()``, until a connection is established - at which point all streams will be
+    ///   ``connect()``, until a connection is established — at which point all streams will be
     ///   created.
     ///
     /// - Parameters:
@@ -363,7 +363,7 @@ extension InProcessTransport {
 
     /// Returns the execution configuration for a given method.
     ///
-    /// - Parameter descriptor: The method to lookup configuration for.
+    /// - Parameter descriptor: The method to look up configuration for.
     /// - Returns: Execution configuration for the method, if it exists.
     public func config(
       forMethod descriptor: MethodDescriptor
