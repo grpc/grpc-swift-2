@@ -6,7 +6,7 @@ DerivedData/
 .swiftpm
 build
 /protoc-gen-swift
-/protoc-gen-grpc-swift
+/protoc-gen-grpc-swift-2
 third_party/**
 /Echo
 /EchoNIO

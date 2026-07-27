@@ -310,7 +310,7 @@
     @Steps {
       @Step {
         First we need to download a database of known features for the service. Copy
-        `route_guide_db.json` from the [gRPC Swift repository](https://github.com/grpc/grpc-swift/tree/main/Examples/route-guide)
+        `route_guide_db.json` from the [gRPC Swift repository](https://github.com/grpc/grpc-swift-2/tree/main/Examples/route-guide)
         and place it in the `Sources` directory.
       }
 

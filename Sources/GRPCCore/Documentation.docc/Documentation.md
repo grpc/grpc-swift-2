@@ -8,7 +8,7 @@ A gRPC library for Swift written natively in Swift.
 
 gRPC Swift spans multiple Swift packages:
 
-- `grpc-swift` (this package) containing core gRPC abstractions and an in-process transport.
+- `grpc-swift-2` (this package) containing core gRPC abstractions and an in-process transport.
   - GitHub repository: [`grpc/grpc-swift-2`](https://github.com/grpc/grpc-swift-2)
   - Documentation: hosted on the [Swift Package
     Index](https://swiftpackageindex.com/grpc/grpc-swift-2/documentation)

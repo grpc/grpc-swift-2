@@ -492,7 +492,5 @@ If there were any parts of this guide you felt were unclear or didn't cover enou
 of the migration, then please file an issue on GitHub so that we can work on improving
 it.
 
-[0]: https://github.com/grpc/grpc-swift-2/tree/main
-[1]: https://github.com/grpc/grpc-swift/tree/release/1.x
 [2]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation
 [3]: https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs

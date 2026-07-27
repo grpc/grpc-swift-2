@@ -108,7 +108,7 @@ let targets: [Target] = [
     swiftSettings: defaultSwiftSettings
   ),
 
-  // Code generator library for protoc-gen-grpc-swift
+  // Code generator library for protoc-gen-grpc-swift-2
   .target(
     name: "GRPCCodeGen",
     dependencies: [],
