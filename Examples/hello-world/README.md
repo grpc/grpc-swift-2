@@ -1,11 +1,11 @@
 # Hello World
 
-This example demonstrates the canonical "Hello World" in gRPC.
+This example demonstrates the canonical “Hello World” in gRPC.
 
 ## Overview
 
-A "hello-world" command line tool that uses generated stubs for the 'Greeter'
-service which allows you to start a server and to make requests against it.
+A `hello-world` command line tool that uses generated stubs for the `Greeter`
+service, which allows you to start a server and to make requests against it.
 
 The tool uses the [SwiftNIO](https://github.com/grpc/grpc-swift-nio-transport)
 HTTP/2 transport.
