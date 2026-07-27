@@ -16,21 +16,21 @@
 
 /// A response for a single message sent by a server.
 ///
-/// Single responses are used for unary and client-streaming RPCs. For streaming responses
+/// Single responses are used for unary and client-streaming RPCs. For streaming responses,
 /// see ``StreamingServerResponse``.
 ///
 /// A single response captures every part of the response stream and distinguishes successful
 /// and unsuccessful responses via the ``accepted`` property. The value for the `success` case
-/// contains the initial metadata, response message, and the trailing metadata and implicitly
-/// has an ``Status/Code-swift.struct/ok`` status code.
+/// contains the initial metadata, response message, and the trailing metadata. It also
+/// implicitly has an ``Status/Code-swift.struct/ok`` status code.
 ///
 /// The `failure` case indicates that the server chose not to process the RPC, or the processing
 /// of the RPC failed. The failure case contains an ``RPCError`` describing why the RPC failed,
-/// including an error code, error message and any metadata sent by the server.
+/// including an error code, error message, and any metadata sent by the server.
 ///
 /// ### Using responses
 ///
-/// Each response has an ``accepted`` property which contains all RPC information. You can create
+/// Each response has an ``accepted`` property, which contains all RPC information. You can create
 /// one by calling ``init(accepted:)`` or one of the two convenience initializers:
 /// - ``init(message:metadata:trailingMetadata:)`` to create a successful response, or
 /// - ``init(of:error:)`` to create a failed response.
@@ -74,9 +74,9 @@ public struct ServerResponse<Message: Sendable>: Sendable {
     ///
     /// Both gRPC Swift and its transport layer may insert additional metadata. Keys prefixed with
     /// "grpc-" are prohibited and may result in undefined behaviour. Transports may also insert
-    /// their own metadata, you should avoid using key names which may clash with transport
-    /// specific metadata. Note that transports may also impose limits in the amount of metadata
-    /// which may be sent.
+    /// their own metadata; you should avoid using key names that may clash with transport-specific
+    /// metadata. Note that transports may also impose limits on the amount of metadata
+    /// that may be sent.
     public var metadata: Metadata
 
     /// The message to send to the client.
@@ -86,15 +86,15 @@ public struct ServerResponse<Message: Sendable>: Sendable {
     ///
     /// Both gRPC Swift and its transport layer may insert additional metadata. Keys prefixed with
     /// "grpc-" are prohibited and may result in undefined behaviour. Transports may also insert
-    /// their own metadata, you should avoid using key names which may clash with transport
-    /// specific metadata. Note that transports may also impose limits in the amount of metadata
-    /// which may be sent.
+    /// their own metadata; you should avoid using key names that may clash with transport-specific
+    /// metadata. Note that transports may also impose limits on the amount of metadata
+    /// that may be sent.
     public var trailingMetadata: Metadata
 
-    /// Create a new single client request.
+    /// Creates a new single response.
     ///
     /// - Parameters:
-    ///   - message: The message to send to the server.
+    ///   - message: The message to send to the client.
     ///   - metadata: Metadata to send to the client at the start of the response. Defaults to
     ///       empty.
     ///   - trailingMetadata: Metadata to send to the client at the end of the response. Defaults
@@ -112,10 +112,10 @@ public struct ServerResponse<Message: Sendable>: Sendable {
 
   /// Whether the RPC was accepted or rejected.
   ///
-  /// The `success` indicates the server accepted the RPC for processing and the RPC completed
-  /// successfully and implies the RPC succeeded with the ``Status/Code-swift.struct/ok`` status
-  /// code. The `failure` case indicates that the service rejected the RPC without processing it
-  /// or could not process it successfully.
+  /// The `success` case indicates that the server accepted the RPC for processing and it
+  /// completed successfully, implying an ``Status/Code-swift.struct/ok`` status code. The
+  /// `failure` case indicates that the server either rejected the RPC without processing it, or
+  /// failed to process it successfully.
   public var accepted: Result<Contents, RPCError>
 
   /// Creates a response.
@@ -129,25 +129,25 @@ public struct ServerResponse<Message: Sendable>: Sendable {
 /// A response for a stream of messages sent by a server.
 ///
 /// Stream responses are used for server-streaming and bidirectional-streaming RPCs. For single
-/// responses see ``ServerResponse``.
+/// responses, see ``ServerResponse``.
 ///
 /// A stream response captures every part of the response stream and distinguishes whether the
 /// request was processed by the server via the ``accepted`` property. The value for the `success`
-/// case contains the initial metadata and a closure which is provided with a message write and
-/// returns trailing metadata. If the closure returns without error then the response implicitly
+/// case contains the initial metadata and a closure which is provided with a message writer and
+/// returns trailing metadata. If the closure returns without error, then the response implicitly
 /// has an ``Status/Code-swift.struct/ok`` status code. You can throw an error from the producer
-/// to indicate that the request couldn't be handled successfully.  If an ``RPCError`` is thrown
+/// to indicate that the request couldn't be handled successfully. If an ``RPCError`` is thrown,
 /// then the client will receive an equivalent error populated with the same code and message. If
-/// an error of any other type is thrown then the client will receive an error with the
+/// an error of any other type is thrown, then the client will receive an error with the
 /// ``Status/Code-swift.struct/unknown`` status code.
 ///
 /// The `failure` case indicates that the server chose not to process the RPC. The failure case
 /// contains an ``RPCError`` describing why the RPC failed, including an error code, error
-/// message and any metadata to send to the client.
+/// message, and any metadata to send to the client.
 ///
 /// ### Using streaming responses
 ///
-/// Each response has an ``accepted`` property which contains all RPC information. You can create
+/// Each response has an ``accepted`` property, which contains all RPC information. You can create
 /// one by calling ``init(accepted:)`` or one of the two convenience initializers:
 /// - ``init(of:metadata:producer:)`` to create a successful response, or
 /// - ``init(of:error:)`` to create a failed response.
@@ -171,7 +171,7 @@ public struct ServerResponse<Message: Sendable>: Sendable {
 /// ```
 @available(gRPCSwift 2.0, *)
 public struct StreamingServerResponse<Message: Sendable>: Sendable {
-  /// The contents of a response to a request which has been accepted for processing.
+  /// The contents of a response to a request that has been accepted for processing.
   public struct Contents: Sendable {
     /// Metadata to send to the client at the beginning of the response stream.
     public var metadata: Metadata
@@ -181,12 +181,12 @@ public struct StreamingServerResponse<Message: Sendable>: Sendable {
     ///
     /// Returning metadata indicates a successful response and gRPC will terminate the RPC with
     /// an ``Status/Code-swift.struct/ok`` status code. Throwing an error will terminate the RPC
-    /// with an appropriate status code. You can control the status code, message and metadata
+    /// with an appropriate status code. You can control the status code, message, and metadata
     /// returned to the client by throwing an ``RPCError``. If the error thrown is a type other
-    /// than ``RPCError`` then a status with code ``Status/Code-swift.struct/unknown`` will
+    /// than ``RPCError``, then a status with code ``Status/Code-swift.struct/unknown`` will
     /// be returned to the client.
     ///
-    /// gRPC will invoke this function at most once therefore it isn't required to be idempotent.
+    /// gRPC will invoke this function at most once; therefore, it isn't required to be idempotent.
     ///
     /// Cancelling the client's call doesn't cancel this closure's `Task`. Task-local values bound
     /// with `withValue(_:operation:)` while building this response aren't visible here either:
@@ -200,11 +200,11 @@ public struct StreamingServerResponse<Message: Sendable>: Sendable {
     /// > ``withRPCCancellationHandler(operation:onCancelRPC:)``.
     public var producer: @Sendable (RPCWriter<Message>) async throws -> Metadata
 
-    /// Create a ``Contents``.
+    /// Creates a ``Contents``.
     ///
     /// - Parameters:
     ///   - metadata: Metadata to send to the client at the start of the response.
-    ///   - producer: A function which produces values
+    ///   - producer: A function that produces values.
     public init(
       metadata: Metadata,
       producer: @escaping @Sendable (RPCWriter<Message>) async throws -> Metadata
@@ -216,7 +216,7 @@ public struct StreamingServerResponse<Message: Sendable>: Sendable {
 
   /// Whether the RPC was accepted or rejected.
   ///
-  /// The `success` case indicates that the service accepted the RPC for processing and will
+  /// The `success` case indicates that the server accepted the RPC for processing and will
   /// send initial metadata back to the client before producing response messages. The RPC may
   /// still result in failure by later throwing an error.
   ///
