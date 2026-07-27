@@ -29,17 +29,17 @@ public struct CompressionAlgorithm: Hashable, Sendable {
     self.value = algorithm
   }
 
-  /// No compression, sometimes referred to as 'identity' compression.
+  /// No compression, sometimes referred to as "identity" compression.
   public static var none: Self {
     Self(.none)
   }
 
-  /// The 'deflate' compression algorithm.
+  /// The "deflate" compression algorithm.
   public static var deflate: Self {
     Self(.deflate)
   }
 
-  /// The 'gzip' compression algorithm.
+  /// The "gzip" compression algorithm.
   public static var gzip: Self {
     Self(.gzip)
   }
@@ -58,17 +58,17 @@ public struct CompressionAlgorithmSet: OptionSet, Hashable, Sendable {
     self.rawValue = 1 << value.rawValue
   }
 
-  /// No compression, sometimes referred to as 'identity' compression.
+  /// No compression, sometimes referred to as "identity" compression.
   public static var none: Self {
     return Self(value: .none)
   }
 
-  /// The 'deflate' compression algorithm.
+  /// The "deflate" compression algorithm.
   public static var deflate: Self {
     return Self(value: .deflate)
   }
 
-  /// The 'gzip' compression algorithm.
+  /// The "gzip" compression algorithm.
   public static var gzip: Self {
     return Self(value: .gzip)
   }
