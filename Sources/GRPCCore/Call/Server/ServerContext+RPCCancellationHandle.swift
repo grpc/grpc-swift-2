@@ -22,10 +22,15 @@ extension ServerContext {
   internal static var rpcCancellation: RPCCancellationHandle?
 
   /// A handle for the cancellation status of the RPC.
+  ///
+  /// gRPC signals cancellation through this handle, not by cancelling your handler's `Task`. If
+  /// you don't check ``isCancelled`` or use ``withRPCCancellationHandler(operation:onCancelRPC:)``,
+  /// your handler keeps running after the RPC is cancelled. For a streaming response, this means
+  /// it keeps writing messages the client will never see.
   public struct RPCCancellationHandle: Sendable {
     internal let manager: ServerCancellationManager
 
-    /// Create a cancellation handle.
+    /// Creates a cancellation handle.
     ///
     /// To create an instance of this handle appropriately bound to a `Task`
     /// use ``withServerContextRPCCancellationHandle(_:)``.
@@ -50,7 +55,7 @@ extension ServerContext {
       }
     }
 
-    /// Signal that the RPC should be cancelled.
+    /// Signals that the RPC should be cancelled.
     ///
     /// This is idempotent: calling it more than once has no effect.
     public func cancel() {
@@ -59,13 +64,13 @@ extension ServerContext {
   }
 }
 
-/// Execute an operation with an RPC cancellation handler that's immediately invoked
-/// if the RPC is canceled.
+/// Executes an operation with an RPC cancellation handler that's immediately invoked
+/// if the RPC is cancelled.
 ///
 /// RPCs can be cancelled for a number of reasons including:
 /// 1. The RPC was taking too long to process and a timeout passed.
 /// 2. The remote peer closed the underlying stream, either because they were no longer
-///    interested in the result or due to a broken connection.
+///    interested in the result or because of a broken connection.
 /// 3. The server began shutting down.
 ///
 /// - Important: This only applies to RPCs on the server.
@@ -100,7 +105,7 @@ public func withRPCCancellationHandler<Result, Failure: Error>(
 /// - Important: This function is intended for use when implementing
 ///   a ``ServerTransport``.
 ///
-/// If you want to be notified about RPCs being cancelled
+/// If you want to be notified about RPCs being cancelled,
 /// use ``withRPCCancellationHandler(operation:onCancelRPC:)``.
 ///
 /// - Parameter operation: The operation to execute with the handle.

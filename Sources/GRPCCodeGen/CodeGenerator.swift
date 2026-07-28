@@ -22,7 +22,7 @@ public typealias SourceGenerator = CodeGenerator
 /// in a ``CodeGenerationRequest`` object.
 @available(gRPCSwift 2.0, *)
 public struct CodeGenerator: Sendable {
-  /// The options regarding the access level, indentation for the generated code
+  /// The options regarding the access level, indentation for the generated code,
   /// and whether to generate server and client code.
   public var config: Config
 
@@ -79,22 +79,22 @@ public struct CodeGenerator: Sendable {
         case `package`
       }
 
-      /// The generated code will have `internal` access level.
+      /// The generated code will have an `internal` access level.
       public static var `internal`: Self { Self(level: .`internal`) }
 
-      /// The generated code will have `public` access level.
+      /// The generated code will have a `public` access level.
       public static var `public`: Self { Self(level: .`public`) }
 
-      /// The generated code will have `package` access level.
+      /// The generated code will have a `package` access level.
       public static var `package`: Self { Self(level: .`package`) }
     }
 
     // The availability that generated code is annotated with.
     public struct AvailabilityAnnotations: Sendable, Hashable {
       public struct Platform: Sendable, Hashable {
-        /// The name of the OS, e.g. 'macOS'.
+        /// The name of the OS, for example, "macOS".
         public var os: String
-        /// The version of the OS, e.g. '15.0'.
+        /// The version of the OS, for example, "15.0".
         public var version: String
 
         public init(os: String, version: String) {
@@ -134,7 +134,7 @@ public struct CodeGenerator: Sendable {
     }
   }
 
-  /// Transforms a ``CodeGenerationRequest`` object  into a ``SourceFile`` object containing
+  /// Transforms a ``CodeGenerationRequest`` object into a ``SourceFile`` object containing
   /// the generated code.
   public func generate(
     _ request: CodeGenerationRequest

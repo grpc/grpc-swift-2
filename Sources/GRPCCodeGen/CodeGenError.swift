@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-/// A error thrown by the ``SourceGenerator`` to signal errors in the ``CodeGenerationRequest`` object.
+/// An error thrown by the ``SourceGenerator`` to signal errors in the ``CodeGenerationRequest`` object.
 @available(gRPCSwift 2.0, *)
 public struct CodeGenError: Error, Hashable, Sendable {
   /// The code indicating the domain of the error.
   public var code: Code
-  /// A message providing more details about the error which may include details specific to this
+  /// A message providing more details about the error, which may include details specific to this
   /// instance of the error.
   public var message: String
 
@@ -48,7 +48,7 @@ extension CodeGenError {
       self.value = value
     }
 
-    /// The same name is used for two services that are either in the same namespace or don't have a namespace.
+    /// The same name is used for two services that either are in the same namespace or don't have a namespace.
     public static var nonUniqueServiceName: Self {
       Self(.nonUniqueServiceName)
     }

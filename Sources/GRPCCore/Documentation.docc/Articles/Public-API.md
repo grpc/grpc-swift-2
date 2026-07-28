@@ -10,9 +10,9 @@ projects to declare their public API. This document describes what is and isn't
 part of the public API; commitments the maintainers make relating to the API,
 and guidelines for users.
 
-For clarity, the project is comprised of the following Swift packages:
+For clarity, the project comprises the following Swift packages:
 
-- [grpc/grpc-swift][1],
+- [grpc/grpc-swift-2][1],
 - [grpc/grpc-swift-nio-transport][2],
 - [grpc/grpc-swift-protobuf][3], and
 - [grpc/grpc-swift-extras][4].
@@ -29,8 +29,8 @@ public API. Examples of these include `GRPCCore` and `GRPCProtobuf`.
 
 ### Symbols
 
-All publicly exposed symbols (i.e. symbols which are declared as `public`)
-within public library targets or those which are re-exported from non-public
+All publicly exposed symbols (that is, symbols that are declared as `public`)
+within public library targets or those that are re-exported from non-public
 targets are part of the public API. Examples include `Metadata`,
 `ServiceConfig`, and `GRPCServer`.
 
@@ -42,35 +42,35 @@ targets are part of the public API. Examples include `Metadata`,
 
 ### Configuration and inputs
 
-Any configuration, input, and interfaces to executable products which have
+Any configuration, input, and interfaces to executable products that have
 inputs (such as command line arguments, or configuration files) are considered
 to be public API. Examples of these include the configuration file passed to the
 Swift Package Manager build plugin for generating stubs provided by
 [grpc-swift-protobuf][3].
 
 > Exceptions:
-> - Executable _targets_ which aren't exposed as executable _products_.
+> - Executable _targets_ that aren't exposed as executable _products_.
 
 ## Commitments made by the maintainers
 
 Without releasing a new major version, the gRPC Swift maintainers commit to not
-adding any new types to the global namespace without a "GRPC" prefix.
+adding any new types to the global namespace without a “GRPC” prefix.
 
 To illustrate this, the maintainers may:
 1. Add a new type to an existing module called `GRPCPanCakes` but will not add a
    new type called `PanCakes` to an existing module.
 2. Add a new top-level function to an existing module called `grpcRun()` but
-   won't add a new top-level function called `run()`.
+   will not add a new top-level function called `run()`.
 3. Add a new module called `GRPCFoo`. Any symbols added to the new module at the
-   point the module becomes API aren't required to have a "GRPC" prefix; symbols
+   point the module becomes API aren't required to have a “GRPC” prefix; symbols
    added after that point will be prefixed as required by (1) and (2).
 
-This allows the project to follow Semantic versioning without breaking adopter
+This allows the project to follow Semantic Versioning without breaking adopter
 code in minor and patch releases.
 
 ## Guidelines for users
 
-In order to not have your code broken by a gRPC Swift update you should only use
+In order to not have your code broken by a gRPC Swift update, you should only use
 the public API as described above. There are a number of other guidelines you
 should follow as well:
 
@@ -80,14 +80,14 @@ should follow as well:
    don't own, and you mustn't conform types you don't own to protocols provided
    by gRPC Swift.
 4. You _may_ extend types provided by gRPC Swift at `package`, `internal`,
-   `private` or `fileprivate` level.
+   `private`, or `fileprivate` level.
 5. You _may_ extend types provided by gRPC Swift at `public` access level if
    doing so means that a symbol clash is impossible (such as including a type
    you own in the signature, or prefixing the method with the namespace of your
    package in much the same way that gRPC Swift will prefix new symbols).
 
 [0]: https://semver.org
-[1]: https://github.com/grpc/grpc-swift
+[1]: https://github.com/grpc/grpc-swift-2
 [2]: https://github.com/grpc/grpc-swift-nio-transport
 [3]: https://github.com/grpc/grpc-swift-protobuf
 [4]: https://github.com/grpc/grpc-swift-extras

@@ -1,13 +1,13 @@
 # Route Guide
 
-This example demonstrates all four RPC types using a 'Route Guide' service and
+This example demonstrates all four RPC types using a “Route Guide” service and
 client.
 
 ## Overview
 
-A "route-guide" command line tool that uses generated stubs for a 'Route Guide'
-service allows you to start a server and to make requests against it for
-each of the four RPC types.
+A `route-guide` command line tool that uses generated stubs for a “Route Guide”
+service, which allows you to start a server and to make requests against it
+for each of the four RPC types.
 
 The tool uses the [SwiftNIO](https://github.com/grpc/grpc-swift-nio-transport)
 HTTP/2 transport.

@@ -20,7 +20,7 @@ extension RPCWriter {
     @usableFromInline
     let writer: any ClosableRPCWriterProtocol<Element>
 
-    /// Creates an ``RPCWriter`` by wrapping the `other` writer.
+    /// Creates an ``RPCWriter/Closable`` by wrapping the `other` writer.
     ///
     /// - Parameter other: The writer to wrap.
     @inlinable
@@ -50,7 +50,7 @@ extension RPCWriter {
       try await self.writer.write(contentsOf: elements)
     }
 
-    /// Indicate to the writer that no more writes are to be accepted.
+    /// Indicates to the writer that no more writes are to be accepted.
     ///
     /// All writes after ``finish()`` has been called should result in an error
     /// being thrown.
@@ -59,7 +59,7 @@ extension RPCWriter {
       await self.writer.finish()
     }
 
-    /// Indicate to the writer that no more writes are to be accepted because an error occurred.
+    /// Indicates to the writer that no more writes are to be accepted because an error occurred.
     ///
     /// All writes after ``finish(throwing:)`` has been called should result in an error
     /// being thrown.

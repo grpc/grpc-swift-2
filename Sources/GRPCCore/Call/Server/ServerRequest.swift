@@ -19,14 +19,14 @@
 public struct ServerRequest<Message: Sendable>: Sendable {
   /// Metadata received from the client at the start of the RPC.
   ///
-  /// The metadata contains gRPC and transport specific entries in addition to user-specified
+  /// The metadata contains gRPC and transport-specific entries in addition to user-specified
   /// metadata.
   public var metadata: Metadata
 
   /// The message received from the client.
   public var message: Message
 
-  /// Create a new single server request.
+  /// Creates a new single server request.
   ///
   /// - Parameters:
   ///   - metadata: Metadata received from the client.
@@ -42,7 +42,7 @@ public struct ServerRequest<Message: Sendable>: Sendable {
 public struct StreamingServerRequest<Message: Sendable>: Sendable {
   /// Metadata received from the client at the start of the RPC.
   ///
-  /// The metadata contains gRPC and transport specific entries in addition to user-specified
+  /// The metadata contains gRPC and transport-specific entries in addition to user-specified
   /// metadata.
   public var metadata: Metadata
 
@@ -51,7 +51,7 @@ public struct StreamingServerRequest<Message: Sendable>: Sendable {
   /// The sequence may be iterated at most once.
   public var messages: RPCAsyncSequence<Message, any Error>
 
-  /// Create a new streaming request.
+  /// Creates a new streaming request.
   ///
   /// - Parameters:
   ///   - metadata: Metadata received from the client.

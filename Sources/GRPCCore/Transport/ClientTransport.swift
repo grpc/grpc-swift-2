@@ -20,9 +20,9 @@
 /// RPC can be executed. A typical transport implementation will establish and maintain connections
 /// to a server (or servers) and manage these over time, potentially closing idle connections and
 /// creating new ones on demand. As such transports can be expensive to create and as such are
-/// intended to be used as long-lived objects which exist for the lifetime of your application.
+/// intended to be used as long-lived objects that exist for the lifetime of your application.
 ///
-/// gRPC provides an in-process transport in the `GRPCInProcessTransport` module and HTTP/2
+/// gRPC provides an in-process transport in the `GRPCInProcessTransport` module and an HTTP/2
 /// transport built on top of SwiftNIO in the https://github.com/grpc/grpc-swift-nio-transport
 /// package.
 @available(gRPCSwift 2.0, *)
@@ -40,29 +40,29 @@ public protocol ClientTransport<Bytes>: Sendable {
   /// performed.
   var retryThrottle: RetryThrottle? { get }
 
-  /// Establish and maintain a connection to the remote destination.
+  /// Establishes and maintains a connection to the remote destination.
   ///
   /// Maintains a long-lived connection, or set of connections, to a remote destination.
   /// Connections may be added or removed over time as required by the implementation and the
   /// demand for streams by the client.
   ///
-  /// Implementations of this function will typically create a long-lived task group which
-  /// maintains connections. The function exits when all open streams have been closed and new connections
-  /// are no longer required by the caller who signals this by calling ``beginGracefulShutdown()``, or by cancelling the
-  /// task this function runs in.
+  /// Implementations of this function will typically create a long-lived task group that
+  /// maintains connections. The function exits either when all open streams have been closed and
+  /// new connections are no longer required by the caller — signaled by calling
+  /// ``beginGracefulShutdown()`` — or when the task this function runs in is cancelled.
   func connect() async throws
 
-  /// Signal to the transport that no new streams may be created.
+  /// Signals to the transport that no new streams may be created.
   ///
-  /// Existing streams may run to completion naturally but calling
+  /// Existing streams may run to completion naturally, but calling
   /// ``ClientTransport/withStream(descriptor:options:_:)`` should result in an ``RPCError`` with
   /// code ``RPCError/Code/failedPrecondition`` being thrown.
   ///
-  /// If you want to forcefully cancel all active streams then cancel the task
+  /// If you want to forcefully cancel all active streams, then cancel the task
   /// running ``connect()``.
   func beginGracefulShutdown()
 
-  /// Opens a stream using the transport, and uses it as input into a user-provided closure alongisde the given context.
+  /// Opens a stream using the transport, and uses it as input to a user-provided closure alongside the given context.
   ///
   /// - Important: The opened stream is closed after the closure is finished.
   ///
@@ -84,7 +84,7 @@ public protocol ClientTransport<Bytes>: Sendable {
 
   /// Returns the configuration for a given method.
   ///
-  /// - Parameter descriptor: The method to lookup configuration for.
+  /// - Parameter descriptor: The method to look up configuration for.
   /// - Returns: Configuration for the method, if it exists.
   func config(forMethod descriptor: MethodDescriptor) -> MethodConfig?
 }

@@ -10,8 +10,22 @@ use cases.
 
 ## Topics
 
-### Transports
+### Transport pair
 
 - ``InProcessTransport``
+- ``InProcessTransport/init(serviceConfig:)``
+
+### Client transport
+
 - ``InProcessTransport/Client``
+- ``InProcessTransport/Client/connect()``
+- ``InProcessTransport/Client/withStream(descriptor:options:_:)``
+- ``InProcessTransport/Client/beginGracefulShutdown()``
+- ``InProcessTransport/Client/config(forMethod:)``
+- ``InProcessTransport/Client/retryThrottle``
+
+### Server transport
+
 - ``InProcessTransport/Server``
+- ``InProcessTransport/Server/listen(streamHandler:)``
+- ``InProcessTransport/Server/beginGracefulShutdown()``

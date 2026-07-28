@@ -23,24 +23,24 @@ public struct MethodConfig: Hashable, Sendable {
   public struct Name: Sendable, Hashable {
     /// The name of the service, including the namespace.
     ///
-    /// If the service is empty then `method` must also be empty and the configuration specifies
+    /// If the service is empty, then `method` must also be empty and the configuration specifies
     /// defaults for all methods.
     ///
-    /// - Precondition: If `service` is empty then `method` must also be empty.
+    /// - Precondition: If `service` is empty, then `method` must also be empty.
     public var service: String {
       didSet { try! self.validate() }
     }
 
     /// The name of the method.
     ///
-    /// If the method is empty then the configuration will be the default for all methods in the
+    /// If the method is empty, then the configuration will be the default for all methods in the
     /// specified service.
     public var method: String
 
-    /// Create a new name.
+    /// Creates a new name.
     ///
-    /// If the service is empty then `method` must also be empty and the configuration specifies
-    /// defaults for all methods. If only `method` is empty then the configuration applies to
+    /// If the service is empty, then `method` must also be empty and the configuration specifies
+    /// defaults for all methods. If only `method` is empty, then the configuration applies to
     /// all methods in the `service`.
     ///
     /// - Parameters:
@@ -68,30 +68,33 @@ public struct MethodConfig: Hashable, Sendable {
   /// Whether RPCs for this method should wait until the connection is ready.
   ///
   /// If `false` the RPC will abort immediately if there is a transient failure connecting to
-  /// the server. Otherwise gRPC will attempt to connect until the deadline is exceeded.
+  /// the server. Otherwise, gRPC will attempt to connect until the deadline is exceeded.
+  ///
+  /// If left unset, transports conventionally treat this the same as `false`, so RPCs fail fast
+  /// on a transient connection failure rather than queuing until the connection is ready.
   public var waitForReady: Bool?
 
   /// The default timeout for the RPC.
   ///
-  /// If no reply is received in the specified amount of time the request is aborted
+  /// If no reply is received in the specified amount of time, the request is aborted
   /// with an ``RPCError`` with code ``RPCError/Code/deadlineExceeded``.
   ///
   /// The actual deadline used will be the minimum of the value specified here
-  /// and the value set by the application by the client API. If either one isn't set
-  /// then the other value is used. If neither is set then the request has no deadline.
+  /// and the value set by the application by the client API. If either one isn't set,
+  /// then the other value is used. If neither is set, then the request has no deadline.
   ///
   /// The timeout applies to the overall execution of an RPC. If, for example, a retry
-  /// policy is set then the timeout begins when the first attempt is started and _isn't_ reset
+  /// policy is set, then the timeout begins when the first attempt is started and _isn't_ reset
   /// when subsequent attempts start.
   public var timeout: Duration?
 
   /// The maximum allowed payload size in bytes for an individual message.
   ///
-  /// If a client attempts to send an object larger than this value, it will not be sent and the
+  /// If a client attempts to send an object larger than this value, it will not be sent, and the
   /// client will see an error. Note that 0 is a valid value, meaning that the request message
   /// must be empty.
   ///
-  /// Note that if compression is used the uncompressed message size is validated.
+  /// Note that if compression is used, the uncompressed message size is validated.
   public var maxRequestMessageBytes: Int?
 
   /// The maximum allowed payload size in bytes for an individual response message.
@@ -100,7 +103,7 @@ public struct MethodConfig: Hashable, Sendable {
   /// be sent, and an error will be sent to the client instead. Note that 0 is a valid value,
   /// meaning that the response message must be empty.
   ///
-  /// Note that if compression is used the uncompressed message size is validated.
+  /// Note that if compression is used, the uncompressed message size is validated.
   public var maxResponseMessageBytes: Int?
 
   /// The policy determining how many times, and when, the RPC is executed.
@@ -119,7 +122,7 @@ public struct MethodConfig: Hashable, Sendable {
   /// reported to the client. Hedging is only suitable for idempotent RPCs.
   public var executionPolicy: RPCExecutionPolicy?
 
-  /// Create an execution configuration.
+  /// Creates an execution configuration.
   ///
   /// - Parameters:
   ///   - names: The names of methods this configuration applies to.
@@ -188,12 +191,12 @@ public struct RPCExecutionPolicy: Hashable, Sendable {
     }
   }
 
-  /// Create a new retry policy.``
+  /// Creates a new retry policy.
   public static func retry(_ policy: RetryPolicy) -> Self {
     Self(.retry(policy))
   }
 
-  /// Create a new hedging policy.``
+  /// Creates a new hedging policy.
   public static func hedge(_ policy: HedgingPolicy) -> Self {
     Self(.hedge(policy))
   }
@@ -201,12 +204,12 @@ public struct RPCExecutionPolicy: Hashable, Sendable {
 
 /// Policy for retrying an RPC.
 ///
-/// gRPC retries RPCs when the first response from the server is a status code which matches
+/// gRPC retries RPCs when the first response from the server is a status code that matches
 /// one of the configured retryable status codes. If the server begins processing the RPC and
-/// first responds with metadata and later responds with a retryable status code then the RPC
+/// first responds with metadata and later responds with a retryable status code, then the RPC
 /// won't be retried.
 ///
-/// Execution attempts are limited by ``maxAttempts`` which includes the original attempt. The
+/// Execution attempts are limited by ``maxAttempts``, which includes the original attempt. The
 /// maximum number of attempts is limited to five.
 ///
 /// Subsequent attempts are executed after some delay. The first _retry_, or second attempt, will
@@ -214,13 +217,13 @@ public struct RPCExecutionPolicy: Hashable, Sendable {
 /// the nth retry will happen after a randomly chosen delay between zero
 /// and `min(initialBackoff * backoffMultiplier^(n-1), maxBackoff)`.
 ///
-/// For more information see [gRFC A6 Client
+/// For more information, see [gRFC A6 Client
 /// Retries](https://github.com/grpc/proposal/blob/0e1807a6e30a1a915c0dcadc873bca92b9fa9720/A6-client-retries.md).
 @available(gRPCSwift 2.0, *)
 public struct RetryPolicy: Hashable, Sendable {
   /// The maximum number of RPC attempts, including the original attempt.
   ///
-  /// Must be greater than one, values greater than five are treated as five.
+  /// Must be greater than one. Values greater than five are treated as five.
   public var maxAttempts: Int {
     didSet { self.maxAttempts = try! validateMaxAttempts(self.maxAttempts) }
   }
@@ -241,21 +244,21 @@ public struct RetryPolicy: Hashable, Sendable {
     willSet { try! Self.validateMaxBackoff(newValue) }
   }
 
-  /// The multiplier to apply to backoff.
+  /// The multiplier to apply to the backoff.
   ///
   /// - Precondition: Must be greater than zero.
   public var backoffMultiplier: Double {
     willSet { try! Self.validateBackoffMultiplier(newValue) }
   }
 
-  /// The set of status codes which may be retried.
+  /// The set of status codes that may be retried.
   ///
   /// - Precondition: Must not be empty.
   public var retryableStatusCodes: Set<Status.Code> {
     willSet { try! Self.validateRetryableStatusCodes(newValue) }
   }
 
-  /// Create a new retry policy.
+  /// Creates a new retry policy.
   ///
   /// - Parameters:
   ///   - maxAttempts: The maximum number of attempts allowed for the RPC.
@@ -264,9 +267,10 @@ public struct RetryPolicy: Hashable, Sendable {
   ///   - maxBackoff: The maximum period of time to wait between attempts. Must be greater than
   ///       zero.
   ///   - backoffMultiplier: The exponential backoff multiplier. Must be greater than zero.
-  ///   - retryableStatusCodes: The set of status codes which may be retried. Must not be empty.
-  /// - Precondition: `maxAttempts`, `initialBackoff`, `maxBackoff` and `backoffMultiplier`
-  ///     must be greater than zero.
+  ///   - retryableStatusCodes: The set of status codes that may be retried. Must not be empty.
+  /// - Precondition: `maxAttempts` must be greater than one.
+  /// - Precondition: `initialBackoff`, `maxBackoff`, and `backoffMultiplier` must be greater
+  ///     than zero.
   /// - Precondition: `retryableStatusCodes` must not be empty.
   public init(
     maxAttempts: Int,
@@ -326,13 +330,13 @@ public struct RetryPolicy: Hashable, Sendable {
 
 /// Policy for hedging an RPC.
 ///
-/// Hedged RPCs may execute more than once on a server so only idempotent methods should
+/// Hedged RPCs may execute more than once on a server, so only idempotent methods should
 /// be hedged.
 ///
 /// gRPC executes the RPC at most ``maxAttempts`` times, staggering each attempt
 /// by ``hedgingDelay``.
 ///
-/// For more information see [gRFC A6 Client
+/// For more information, see [gRFC A6 Client
 /// Retries](https://github.com/grpc/proposal/blob/0e1807a6e30a1a915c0dcadc873bca92b9fa9720/A6-client-retries.md).
 @available(gRPCSwift 2.0, *)
 public struct HedgingPolicy: Hashable, Sendable {
@@ -346,26 +350,28 @@ public struct HedgingPolicy: Hashable, Sendable {
   }
 
   /// The first RPC will be sent immediately, but each subsequent RPC will be sent at intervals
-  /// of `hedgingDelay`. Set this to zero to immediately send all RPCs.
+  /// of `hedgingDelay`.
+  ///
+  /// Set this to zero to immediately send all RPCs.
   public var hedgingDelay: Duration {
     willSet { try! Self.validateHedgingDelay(newValue) }
   }
 
-  /// The set of status codes which indicate other hedged RPCs may still succeed.
+  /// The set of status codes that indicate other hedged RPCs may still succeed.
   ///
   /// If a non-fatal status code is returned by the server, hedged RPCs will continue.
   /// Otherwise, outstanding requests will be cancelled and the error returned to the
   /// application layer.
   public var nonFatalStatusCodes: Set<Status.Code>
 
-  /// Create a new hedging policy.
+  /// Creates a new hedging policy.
   ///
   /// - Parameters:
   ///   - maxAttempts: The maximum number of attempts allowed for the RPC.
   ///   - hedgingDelay: The delay between each hedged RPC.
-  ///   - nonFatalStatusCodes: The set of status codes which indicate other hedged RPCs may still
+  ///   - nonFatalStatusCodes: The set of status codes that indicate other hedged RPCs may still
   ///       succeed.
-  /// - Precondition: `maxAttempts` must be greater than zero.
+  /// - Precondition: `maxAttempts` must be greater than one.
   public init(
     maxAttempts: Int,
     hedgingDelay: Duration,

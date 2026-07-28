@@ -18,7 +18,7 @@
 @available(gRPCSwift 2.0, *)
 public struct ServerContext: Sendable {
 
-  /// Protocol used to help identify transport specific context fields
+  /// Protocol used to help identify transport-specific context fields.
   public protocol TransportSpecific: Sendable {}
 
   /// A description of the method being called.
@@ -26,43 +26,43 @@ public struct ServerContext: Sendable {
 
   /// A description of the remote peer.
   ///
-  /// The format of the description should follow the pattern "<transport>:<address>" where
-  /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
-  /// "in-process"). This is a guideline for how descriptions should be formatted; different
+  /// The format of the description should follow the pattern `<transport>:<address>` where
+  /// `<transport>` indicates the underlying network transport (such as `ipv4`, `unix`, or
+  /// `in-process`). This is a guideline for how descriptions should be formatted; different
   /// implementations may not follow this format so you shouldn't make assumptions based on it.
   ///
   /// Some examples include:
-  /// - "ipv4:127.0.0.1:31415",
-  /// - "ipv6:[::1]:443",
-  /// - "in-process:27182".
+  /// - `ipv4:127.0.0.1:31415`,
+  /// - `ipv6:[::1]:443`,
+  /// - `in-process:27182`.
   public var remotePeer: String
 
   /// A description of the local peer.
   ///
-  /// The format of the description should follow the pattern "<transport>:<address>" where
-  /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
-  /// "in-process"). This is a guideline for how descriptions should be formatted; different
+  /// The format of the description should follow the pattern `<transport>:<address>` where
+  /// `<transport>` indicates the underlying network transport (such as `ipv4`, `unix`, or
+  /// `in-process`). This is a guideline for how descriptions should be formatted; different
   /// implementations may not follow this format so you shouldn't make assumptions based on it.
   ///
   /// Some examples include:
-  /// - "ipv4:127.0.0.1:31415",
-  /// - "ipv6:[::1]:443",
-  /// - "in-process:27182".
+  /// - `ipv4:127.0.0.1:31415`,
+  /// - `ipv6:[::1]:443`,
+  /// - `in-process:27182`.
   public var localPeer: String
 
-  /// An optional field for transports to store specific data
+  /// An optional field for transports to store specific data.
   ///
   /// Refer to the transport documentation to understand what type of
   /// value this field will contain, if any.
   ///
-  /// An example of what this field can be used for, would be to store
-  /// things like a peer certificate from a mTLS connection
+  /// An example of what this field can be used for would be to store
+  /// things like a peer certificate from an mTLS connection.
   public var transportSpecific: (any TransportSpecific)?
 
   /// A handle for checking the cancellation status of an RPC.
   public var cancellation: RPCCancellationHandle
 
-  /// Create a new server context.
+  /// Creates a new server context.
   ///
   /// - Parameters:
   ///   - descriptor: A description of the method being called.

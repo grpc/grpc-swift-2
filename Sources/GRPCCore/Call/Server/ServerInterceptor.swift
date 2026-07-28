@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// A type that intercepts requests and response for server.
+/// A type that intercepts requests and responses for a server.
 ///
 /// Interceptors allow you to inspect and modify requests and responses. Requests are intercepted
 /// after they have been received by the transport and responses are intercepted after they have
@@ -30,7 +30,7 @@
 /// ## RPC filtering
 ///
 /// A common use of server-side interceptors is to filter requests from clients. Interceptors can
-/// reject requests which are invalid without service code being called. The following example
+/// reject requests that are invalid without service code being called. The following example
 /// demonstrates this.
 ///
 /// ```swift
@@ -59,7 +59,7 @@
 /// }
 /// ```
 ///
-/// For client-side interceptors see ``ClientInterceptor``.
+/// For client-side interceptors, see ``ClientInterceptor``.
 @available(gRPCSwift 2.0, *)
 public protocol ServerInterceptor: Sendable {
   /// Intercept a request object.

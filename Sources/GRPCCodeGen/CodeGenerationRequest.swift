@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// Describes the services, dependencies and trivia from an IDL file,
+/// Describes the services, dependencies, and trivia from an IDL file,
 /// and the IDL itself through its specific serializer and deserializer.
 @available(gRPCSwift 2.0, *)
 public struct CodeGenerationRequest {
@@ -22,12 +22,15 @@ public struct CodeGenerationRequest {
   public var fileName: String
 
   /// Any comments at the top of the file such as documentation and copyright headers.
+  ///
   /// They will be placed at the top of the generated file. They are already formatted,
-  /// meaning they contain  "///" and new lines.
+  /// meaning they contain "///" and new lines.
   public var leadingTrivia: String
 
-  /// The Swift imports that the generated file depends on. The gRPC specific imports aren't required
-  /// as they will be added by default in the generated file.
+  /// The Swift imports that the generated file depends on.
+  ///
+  /// The gRPC-specific imports aren't required as they will be added by default in the generated
+  /// file.
   ///
   /// - SeeAlso: ``Dependency``.
   public var dependencies: [Dependency]
@@ -38,7 +41,7 @@ public struct CodeGenerationRequest {
   public var services: [ServiceDescriptor]
 
   /// Closure that receives a message type as a `String` and returns a code snippet to
-  /// initialise a `MessageSerializer` for that type as a `String`.
+  /// initialize a `MessageSerializer` for that type as a `String`.
   ///
   /// The result is inserted in the generated code, where clients serialize RPC inputs and
   /// servers serialize RPC outputs.
@@ -57,7 +60,7 @@ public struct CodeGenerationRequest {
   /// The result is inserted in the generated code, where clients deserialize RPC outputs and
   /// servers deserialize RPC inputs.
   ///
-  /// For example, to serialize Protobuf messages you could specify a serializer as:
+  /// For example, to deserialize Protobuf messages you could specify a deserializer as:
   /// ```swift
   /// request.makeDeserializerCodeSnippet = { messageType in
   ///   "ProtobufDeserializer<\(messageType)>()"
@@ -128,6 +131,7 @@ extension CodeGenerationRequest {
 @available(gRPCSwift 2.0, *)
 public struct Dependency: Equatable, Sendable {
   /// If the dependency is an item, the property's value is the item representation.
+  ///
   /// If the dependency is a module, this property is nil.
   public var item: Item?
 
@@ -139,7 +143,7 @@ public struct Dependency: Equatable, Sendable {
 
   /// The name of the private interface for an `@_spi` import.
   ///
-  /// For example, if `spi` was "Secret" and the module name was "Foo" then the import
+  /// For example, if `spi` was "Secret" and the module name was "Foo", then the import
   /// would be `@_spi(Secret) import Foo`.
   public var spi: String?
 
@@ -162,7 +166,7 @@ public struct Dependency: Equatable, Sendable {
 
   /// Represents an item imported from a module.
   public struct Item: Equatable, Sendable {
-    /// The keyword that specifies the item's kind (e.g. `func`, `struct`).
+    /// The keyword that specifies the item's kind (for example, `func`, `struct`).
     public var kind: Kind
 
     /// The name of the imported item.
@@ -270,7 +274,8 @@ public struct Dependency: Equatable, Sendable {
 @available(gRPCSwift 2.0, *)
 public struct ServiceDescriptor: Hashable, Sendable {
   /// Documentation from comments above the IDL service description.
-  /// It is already formatted, meaning it contains  "///" and new lines.
+  ///
+  /// It is already formatted, meaning it contains "///" and new lines.
   public var documentation: String
 
   /// The name of the service.
@@ -328,7 +333,8 @@ extension ServiceDescriptor {
 @available(gRPCSwift 2.0, *)
 public struct MethodDescriptor: Hashable, Sendable {
   /// Documentation from comments above the IDL method description.
-  /// It is already formatted, meaning it contains  "///" and new lines.
+  ///
+  /// It is already formatted, meaning it contains "///" and new lines.
   public var documentation: String
 
   /// Method name in different formats.
@@ -392,7 +398,7 @@ extension MethodDescriptor {
 
 @available(gRPCSwift 2.0, *)
 public struct ServiceName: Hashable, Sendable {
-  /// The identifying name as used in the service/method descriptors including any namespace.
+  /// The identifying name as used in the service/method descriptors, including any namespace.
   ///
   /// This value is also used to identify the service to the remote peer, usually as part of the
   /// ":path" pseudoheader if doing gRPC over HTTP/2.
@@ -401,12 +407,12 @@ public struct ServiceName: Hashable, Sendable {
   /// value should be "foo.bar.Baz".
   public var identifyingName: String
 
-  /// The name as used on types including any namespace.
+  /// The name as used on types, including any namespace.
   ///
   /// This is used to generate a namespace for each service which contains a number of client and
   /// server protocols and concrete types.
   ///
-  /// If the service is declared in package "foo.bar" and the service is called "Baz" then this
+  /// If the service is declared in package "foo.bar" and the service is called "Baz", then this
   /// value should be "Foo\_Bar\_Baz".
   public var typeName: String
 
@@ -414,7 +420,7 @@ public struct ServiceName: Hashable, Sendable {
   ///
   /// This is used to provide a convenience getter for a descriptor of the service.
   ///
-  /// If the service is declared in package "foo.bar" and the service is called "Baz" then this
+  /// If the service is declared in package "foo.bar" and the service is called "Baz", then this
   /// value should be "foo\_bar\_Baz".
   public var propertyName: String
 
@@ -435,7 +441,7 @@ public struct MethodName: Hashable, Sendable {
   /// This value typically starts with an uppercase character, for example "Get".
   public var identifyingName: String
 
-  /// The name as used on types including any namespace.
+  /// The name as used on types, including any namespace.
   ///
   /// This is used to generate a namespace for each method which contains information about
   /// the method.
@@ -445,7 +451,7 @@ public struct MethodName: Hashable, Sendable {
 
   /// The name as used as a property.
   ///
-  /// This value typically starts with an lowercase character, for example "get".
+  /// This value typically starts with a lowercase character, for example "get".
   public var functionName: String
 
   public init(identifyingName: String, typeName: String, functionName: String) {
@@ -455,25 +461,27 @@ public struct MethodName: Hashable, Sendable {
   }
 }
 
-/// Represents the name associated with a namespace, service or a method, in three different formats.
+/// Represents the name associated with a namespace, a service, or a method, in three different formats.
 @available(*, deprecated, message: "Use ServiceName/MethodName instead.")
 @available(gRPCSwift 2.0, *)
 public struct Name: Hashable, Sendable {
   /// The base name is the name used for the namespace/service/method in the IDL file, so it should follow
   /// the specific casing of the IDL.
   ///
-  /// The base name is also used in the descriptors that identify a specific method or service :
+  /// The base name is also used in the descriptors that identify a specific method or service:
   /// `<service_namespace_baseName>.<service_baseName>.<method_baseName>`.
   public var base: String
 
-  /// The `generatedUpperCase` name is used in the generated code. It is expected
-  /// to be the UpperCamelCase version of the base name
+  /// The `generatedUpperCase` name is used in the generated code.
+  ///
+  /// It is expected to be the UpperCamelCase version of the base name.
   ///
   /// For example, if `base` is "fooBar", then `generatedUpperCase` is "FooBar".
   public var generatedUpperCase: String
 
-  /// The `generatedLowerCase` name is used in the generated code. It is expected
-  /// to be the lowerCamelCase version of the base name
+  /// The `generatedLowerCase` name is used in the generated code.
+  ///
+  /// It is expected to be the lowerCamelCase version of the base name.
   ///
   /// For example, if `base` is "FooBar", then `generatedLowerCase` is "fooBar".
   public var generatedLowerCase: String

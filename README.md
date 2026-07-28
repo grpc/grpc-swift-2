@@ -3,11 +3,11 @@
 This repository contains a gRPC implementation for Swift. You can read more
 about gRPC on the [gRPC project's website][grpcio].
 
-- 📚 **Documentation** and **tutorials** are available on the [Swift Package Index][spi-grpc-swift]
-- 💻 **Examples** are available in the [Examples](Examples) directory
-- 🚀 **Contributions** are welcome, please see [CONTRIBUTING.md](CONTRIBUTING.md)
-- 🪪 **License** is Apache 2.0, repeated in [LICENSE](License)
-- 🔒 **Security** issues should be reported via the process in [SECURITY.md](SECURITY.md)
+- 📚 **Documentation** and **tutorials** are available on the [Swift Package Index][spi-grpc-swift].
+- 💻 **Examples** are available in the [Examples](Examples) directory.
+- 🚀 **Contributions** are welcome; please see [CONTRIBUTING.md](CONTRIBUTING.md).
+- 🪪 **License** is Apache 2.0; see [LICENSE](LICENSE) for the full text.
+- 🔒 **Security** issues should be reported via the process in [SECURITY.md](SECURITY.md).
 - 🔀 **Related Repositories**:
   - [`grpc-swift-nio-transport`][grpc-swift-nio-transport] contains
     high-performance HTTP/2 client and server transport implementations for gRPC
@@ -21,10 +21,10 @@ about gRPC on the [gRPC project's website][grpcio].
 ## Quick Start
 
 The following snippet contains a Swift Package manifest to use gRPC Swift v2.x with
-the SwiftNIO based transport and SwiftProtobuf serialization:
+the SwiftNIO-based transport and SwiftProtobuf serialization:
 
 ```swift
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(

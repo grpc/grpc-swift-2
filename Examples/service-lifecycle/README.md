@@ -1,14 +1,14 @@
 # Service Lifecycle
 
-This example demonstrates gRPC Swift's integration with Swift Service Lifecycle
+This example demonstrates gRPC Swift’s integration with Swift Service Lifecycle,
 which is provided by the gRPC Swift Extras package.
 
 ## Overview
 
-A "service-lifecycle" command line tool that uses generated stubs for a
-'greeter' service starts an in-process client and server orchestrated using
-Swift Service Lifecycle. The client makes requests against the server which
-periodically changes its greeting.
+A `service-lifecycle` command line tool that uses generated stubs for a
+`Greeter` service, which starts an in-process client and server orchestrated
+using Swift Service Lifecycle. The client makes requests against the server,
+which periodically changes its greeting.
 
 ## Usage
 

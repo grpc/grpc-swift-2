@@ -18,7 +18,7 @@
 ///
 /// This protocol is used by the transport protocols (``ClientTransport`` and ``ServerTransport``)
 /// with the serialization protocols (``MessageSerializer`` and ``MessageDeserializer``) so that
-/// messages don't have to be copied to a fixed intermediate bag-of-bytes types.
+/// messages don't have to be copied to a fixed intermediate bag-of-bytes type.
 @available(gRPCSwift 2.0, *)
 public protocol GRPCContiguousBytes {
   /// Initialize the bytes to a repeated value.
@@ -31,13 +31,13 @@ public protocol GRPCContiguousBytes {
   /// Initialize the bag of bytes from a sequence of bytes.
   ///
   /// - Parameters:
-  ///   - sequence: a sequence of `UInt8` from which the bag of bytes should be constructed.
+  ///   - sequence: A sequence of `UInt8` from which the bag of bytes should be constructed.
   init<Bytes: Sequence>(_ sequence: Bytes) where Bytes.Element == UInt8
 
   /// The number of bytes in the bag of bytes.
   var count: Int { get }
 
-  /// Calls the given closure with the contents of underlying storage.
+  /// Calls the given closure with the contents of the underlying storage.
   ///
   /// - Note: Calling `withUnsafeBytes` multiple times does not guarantee that
   ///         the same buffer pointer will be passed in every time.
@@ -45,7 +45,7 @@ public protocol GRPCContiguousBytes {
   ///            outside of the lifetime of the call to the closure.
   func withUnsafeBytes<R>(_ body: (_ buffer: UnsafeRawBufferPointer) throws -> R) rethrows -> R
 
-  /// Calls the given closure with the contents of underlying storage.
+  /// Calls the given closure with the contents of the underlying storage.
   ///
   /// - Note: Calling `withUnsafeBytes` multiple times does not guarantee that
   ///         the same buffer pointer will be passed in every time.

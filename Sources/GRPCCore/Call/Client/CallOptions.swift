@@ -25,22 +25,25 @@
 public struct CallOptions: Sendable {
   /// The default timeout for the RPC.
   ///
-  /// If no reply is received in the specified amount of time the request is aborted
+  /// If no reply is received in the specified amount of time, the request is aborted
   /// with an ``RPCError`` with code ``RPCError/Code/deadlineExceeded``.
   ///
   /// The actual deadline used will be the minimum of the value specified here
-  /// and the value set by the application by the client API. If either one isn't set
-  /// then the other value is used. If neither is set then the request has no deadline.
+  /// and the value set by the application by the client API. If either one isn't set,
+  /// then the other value is used. If neither is set, then the request has no deadline.
   ///
   /// The timeout applies to the overall execution of an RPC. If, for example, a retry
-  /// policy is set then the timeout begins when the first attempt is started and _isn't_ reset
+  /// policy is set, then the timeout begins when the first attempt is started and _isn't_ reset
   /// when subsequent attempts start.
   public var timeout: Duration?
 
   /// Whether RPCs for this method should wait until the connection is ready.
   ///
-  /// If `false` the RPC will abort immediately if there is a transient failure connecting to
+  /// If `false`, the RPC will abort immediately if there is a transient failure connecting to
   /// the server. Otherwise gRPC will attempt to connect until the deadline is exceeded.
+  ///
+  /// If left unset, transports conventionally treat this the same as `false`, so RPCs fail fast
+  /// on a transient connection failure rather than queuing until the connection is ready.
   public var waitForReady: Bool?
 
   /// The maximum allowed payload size in bytes for an individual request message.
@@ -84,11 +87,11 @@ public struct CallOptions: Sendable {
   /// controls the compression used by the client for request messages.
   ///
   /// Note that this configuration is advisory: not all transports support compression and may
-  /// ignore this configuration. Transports which support compression will use this configuration
+  /// ignore this configuration. Transports that support compression will use this configuration
   /// in preference to the algorithm configured at a transport level. If the transport hasn't
-  /// enabled the use of the algorithm then compression won't be used for the call.
+  /// enabled the use of the algorithm, then compression won't be used for the call.
   ///
-  /// If `nil` the value configured on the transport will be used instead.
+  /// If `nil`, the value configured on the transport will be used instead.
   public var compression: CompressionAlgorithm?
 
   internal init(

@@ -16,8 +16,8 @@
 
 /// Stores and provides handlers for RPCs.
 ///
-/// The router stores a handler for each RPC it knows about. Each handler encapsulate the business
-/// logic for the RPC which is typically implemented by service owners. To register a handler you
+/// The router stores a handler for each RPC it knows about. Each handler encapsulates the business
+/// logic for the RPC that is typically implemented by service owners. To register a handler, you
 /// can call ``registerHandler(forMethod:deserializer:serializer:handler:)``. You can check whether
 /// the router has a handler for a method with ``hasHandler(forMethod:)`` or get a list of all
 /// methods with handlers registered by calling ``methods``. You can also remove the handler for a
@@ -25,11 +25,11 @@
 /// You can also register any interceptors that you want applied to registered handlers via the
 /// ``registerInterceptors(pipeline:)`` method.
 ///
-/// In most cases you won't need to interact with the router directly. Instead you should register
-/// your services with ``GRPCServer/init(transport:services:interceptors:)`` which will in turn
+/// In most cases, you won't need to interact with the router directly. Instead, you should register
+/// your services with ``GRPCServer/init(transport:services:interceptors:)``, which will in turn
 /// register each method with the router.
 ///
-/// You may wish to not serve all methods from your service in which case you can either:
+/// You may wish to not serve all methods from your service, in which case you can either:
 ///
 /// 1. Remove individual methods by calling ``removeHandler(forMethod:)``, or
 /// 2. Implement ``RegistrableRPCService/registerMethods(with:)`` to register only the methods you
@@ -140,7 +140,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
 
   /// Registers a handler with the router.
   ///
-  /// - Note: if a handler already exists for a given method then it will be replaced.
+  /// - Note: If a handler already exists for a given method, then it will be replaced.
   ///
   /// - Parameters:
   ///   - descriptor: A descriptor for the method to register a handler for.

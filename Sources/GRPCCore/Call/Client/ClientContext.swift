@@ -25,7 +25,7 @@ public struct ClientContext: Sendable {
   /// The format of the description should follow the pattern "<transport>:<address>" where
   /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
   /// "in-process"). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format so you shouldn't make assumptions based on it.
+  /// implementations may not follow this format, so you shouldn't make assumptions based on it.
   ///
   /// Some examples include:
   /// - "ipv4:127.0.0.1:31415",
@@ -38,7 +38,7 @@ public struct ClientContext: Sendable {
   /// The format of the description should follow the pattern "<transport>:<address>" where
   /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
   /// "in-process"). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format so you shouldn't make assumptions based on it.
+  /// implementations may not follow this format, so you shouldn't make assumptions based on it.
   ///
   /// Some examples include:
   /// - "ipv4:127.0.0.1:31415",
@@ -46,7 +46,7 @@ public struct ClientContext: Sendable {
   /// - "in-process:27182".
   public var localPeer: String
 
-  /// Create a new client interceptor context.
+  /// Creates a new client interceptor context.
   ///
   /// - Parameters:
   ///   - descriptor: A description of the method being called.

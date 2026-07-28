@@ -8,7 +8,7 @@ over time.
 ### Supported Swift Versions
 
 gRPC Swift supports the **three most recent Swift versions** that are **Swift 6
-or newer**. Within a minor Swift release only the latest patch version is supported.
+or newer**. Within a minor Swift release, only the latest patch version is supported.
 
 | grpc-swift | Minimum Supported Swift version |
 |------------|---------------------------------|
@@ -16,12 +16,12 @@ or newer**. Within a minor Swift release only the latest patch version is suppor
 
 ### Platforms
 
-gRPC Swift aims to support the same platforms as Swift project. These are listed
+gRPC Swift aims to support the same platforms as the Swift project. These are listed
 on [swift.org](https://www.swift.org/platform-support/).
 
 The only known unsupported platform from that list is currently Windows.
 
-Apple platforms have a minimum deployment version. These are as follows for gRPC
+Apple platforms have minimum deployment versions. These are as follows for gRPC
 Swift:
 
 | OS       | Minimum Deployment Version |

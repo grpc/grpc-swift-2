@@ -28,11 +28,14 @@ extension InProcessTransport {
   /// RPC requests made from clients (as `RPCStream`s).
   /// To stop listening to new requests, call ``beginGracefulShutdown()``.
   ///
-  /// - SeeAlso: `ClientTransport`
+  /// - SeeAlso: `ServerTransport`
   public final class Server: ServerTransport, Sendable {
+    /// The type of bytes this server sends and receives, represented as an array of bytes.
     public typealias Bytes = [UInt8]
 
+    /// The stream of inbound requests this server receives.
     public typealias Inbound = RPCAsyncSequence<RPCRequestPart<Bytes>, any Error>
+    /// The writer this server uses to send outbound responses.
     public typealias Outbound = RPCWriter<RPCResponsePart<Bytes>>.Closable
 
     private let newStreams: AsyncStream<RPCStream<Inbound, Outbound>>
@@ -102,6 +105,14 @@ extension InProcessTransport {
       }
     }
 
+    /// Starts the server, listening for new streams opened by an in-process client.
+    ///
+    /// This function returns only once ``beginGracefulShutdown()`` has been called and every
+    /// in-flight stream has finished, or when the calling task is cancelled. Call this from a
+    /// long-running task, typically inside a task group alongside the client's `connect()`.
+    ///
+    /// - Parameter streamHandler: A closure invoked with each new `RPCStream` and its
+    ///   `ServerContext`, responsible for handling the RPC.
     public func listen(
       streamHandler:
         @escaping @Sendable (
@@ -137,7 +148,7 @@ extension InProcessTransport {
       }
     }
 
-    /// Stop listening to any new `RPCStream` publications.
+    /// Stops listening to any new `RPCStream` publications.
     ///
     /// - SeeAlso: `ServerTransport`
     public func beginGracefulShutdown() {

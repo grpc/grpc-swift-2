@@ -16,10 +16,10 @@
 
 // - FIXME: Update example and documentation to show how to register an interceptor.
 
-/// A type that intercepts requests and response for clients.
+/// A type that intercepts requests and responses for clients.
 ///
 /// Interceptors allow you to inspect and modify requests and responses. Requests are intercepted
-/// before they are handed to a transport and responses are intercepted after they have been
+/// before they are handed to a transport, and responses are intercepted after they have been
 /// received from the transport. They are typically used for cross-cutting concerns like injecting
 /// metadata, validating messages, logging additional data, and tracing.
 ///
@@ -88,7 +88,7 @@
 /// }
 /// ```
 ///
-/// For server-side interceptors see ``ServerInterceptor``.
+/// For server-side interceptors, see ``ServerInterceptor``.
 @available(gRPCSwift 2.0, *)
 public protocol ClientInterceptor: Sendable {
   /// Intercept a request object.

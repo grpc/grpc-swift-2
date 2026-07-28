@@ -85,22 +85,22 @@ extension RuntimeError {
       Self(.invalidArgument)
     }
 
-    /// At attempt to start the server was made but it is already running.
+    /// An attempt to start the server was made but it is already running.
     public static var serverIsAlreadyRunning: Self {
       Self(.serverIsAlreadyRunning)
     }
 
-    /// At attempt to start the server was made but it has already stopped.
+    /// An attempt to start the server was made but it has already stopped.
     public static var serverIsStopped: Self {
       Self(.serverIsStopped)
     }
 
-    /// At attempt to start the client was made but it is already running.
+    /// An attempt to start the client was made but it is already running.
     public static var clientIsAlreadyRunning: Self {
       Self(.clientIsAlreadyRunning)
     }
 
-    /// At attempt to start the client was made but it has already stopped.
+    /// An attempt to start the client was made but it has already stopped.
     public static var clientIsStopped: Self {
       Self(.clientIsStopped)
     }
