@@ -17,7 +17,7 @@ For troubleshooting or new feature requests please use one of the other template
 Describe the bug as clearly and as concisely as you can. Without enough
 information, we will not be able to help you.
 
-Include the version of `grpc-swift` and `protoc-gen-grpc-swift` you are using
+Include the version of `grpc-swift-2` and `protoc-gen-grpc-swift-2` you are using
 (or the Podspec version if you are using CocoaPods), how you are building the
 code (eg. `swift build -c release`) as well as the platform(s) on which you
 experienced the bug.

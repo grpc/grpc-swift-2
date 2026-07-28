@@ -13,7 +13,7 @@ The tool uses the [SwiftNIO](https://github.com/grpc/grpc-swift-nio-transport)
 HTTP/2 transport.
 
 This example has an accompanying tutorial hosted on the [Swift Package
-Index](https://swiftpackageindex.com/grpc/grpc-swift/main/tutorials/grpccore/route-guide).
+Index](https://swiftpackageindex.com/grpc/grpc-swift-2/main/tutorials/grpccore/route-guide).
 
 ## Usage
 

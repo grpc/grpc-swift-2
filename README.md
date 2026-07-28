@@ -3,7 +3,7 @@
 This repository contains a gRPC implementation for Swift. You can read more
 about gRPC on the [gRPC project's website][grpcio].
 
-- 📚 **Documentation** and **tutorials** are available on the [Swift Package Index][spi-grpc-swift].
+- 📚 **Documentation** and **tutorials** are available on the [Swift Package Index][spi-grpc-swift-2].
 - 💻 **Examples** are available in the [Examples](Examples) directory.
 - 🚀 **Contributions** are welcome; please see [CONTRIBUTING.md](CONTRIBUTING.md).
 - 🪪 **License** is Apache 2.0; see [LICENSE](LICENSE) for the full text.
@@ -50,7 +50,7 @@ let package = Package(
 
 [gh-grpc]: https://github.com/grpc/grpc
 [grpcio]: https://grpc.io
-[spi-grpc-swift]: https://swiftpackageindex.com/grpc/grpc-swift-2/documentation
+[spi-grpc-swift-2]: https://swiftpackageindex.com/grpc/grpc-swift-2/documentation
 [grpc-swift-nio-transport]: https://github.com/grpc/grpc-swift-nio-transport
 [grpc-swift-protobuf]: https://github.com/grpc/grpc-swift-protobuf
 [grpc-swift-extras]: https://github.com/grpc/grpc-swift-extras
