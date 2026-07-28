@@ -955,6 +955,9 @@ nonisolated struct Grpc_ServiceConfig_RingHashLoadBalancingConfig: Sendable {
   /// Optional, defaults to 4096, max 8M.
   var maxRingSize: UInt64 = 0
 
+  /// Optional, see gRFC A76.
+  var requestHashHeader: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -1042,6 +1045,25 @@ nonisolated struct Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig: Sen
     ]
 
   }
+
+  init() {}
+}
+
+/// Configuration for the random_subsetting_experimental LB policy.
+/// See gRFC A68.
+nonisolated struct Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Number of backends every client will be connected to. The value is
+  /// required and must be greater than 0.
+  var subsetSize: UInt32 = 0
+
+  /// The configuration for the child policy. The value is required.
+  var childPolicy: [Grpc_ServiceConfig_LoadBalancingConfig] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 }
@@ -1189,6 +1211,14 @@ nonisolated struct Grpc_ServiceConfig_LoadBalancingConfig: Sendable {
     set {policy = .leastRequestExperimental(newValue)}
   }
 
+  var randomSubsettingExperimental: Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig {
+    get {
+      if case .randomSubsettingExperimental(let v)? = policy {return v}
+      return Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig()
+    }
+    set {policy = .randomSubsettingExperimental(newValue)}
+  }
+
   /// Deprecated xDS-related policies.
   ///
   /// NOTE: This field was marked as deprecated in the .proto file.
@@ -1259,6 +1289,7 @@ nonisolated struct Grpc_ServiceConfig_LoadBalancingConfig: Sendable {
     case xdsWrrLocalityExperimental(Grpc_ServiceConfig_XdsWrrLocalityLoadBalancingPolicyConfig)
     case ringHashExperimental(Grpc_ServiceConfig_RingHashLoadBalancingConfig)
     case leastRequestExperimental(Grpc_ServiceConfig_LeastRequestLocalityLoadBalancingPolicyConfig)
+    case randomSubsettingExperimental(Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig)
     /// Deprecated xDS-related policies.
     ///
     /// NOTE: This field was marked as deprecated in the .proto file.
@@ -1312,6 +1343,15 @@ nonisolated struct Grpc_ServiceConfig_ServiceConfig: Sendable {
   var hasHealthCheckConfig: Bool {self._healthCheckConfig != nil}
   /// Clears the value of `healthCheckConfig`. Subsequent reads from it will return its default value.
   mutating func clearHealthCheckConfig() {self._healthCheckConfig = nil}
+
+  var connectionScaling: Grpc_ServiceConfig_ServiceConfig.ConnectionScaling {
+    get {_connectionScaling ?? Grpc_ServiceConfig_ServiceConfig.ConnectionScaling()}
+    set {_connectionScaling = newValue}
+  }
+  /// Returns true if `connectionScaling` has been explicitly set.
+  var hasConnectionScaling: Bool {self._connectionScaling != nil}
+  /// Clears the value of `connectionScaling`. Subsequent reads from it will return its default value.
+  mutating func clearConnectionScaling() {self._connectionScaling = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1425,10 +1465,45 @@ nonisolated struct Grpc_ServiceConfig_ServiceConfig: Sendable {
     fileprivate var _serviceName: SwiftProtobuf.Google_Protobuf_StringValue? = nil
   }
 
+  /// Settings to control dynamic connection scaling.  For details, see:
+  /// https://github.com/grpc/proposal/blob/master/A105-max_concurrent_streams-connection-scaling.md
+  nonisolated struct ConnectionScaling: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// Maximum connections gRPC will maintain for each subchannel in
+    /// this channel.  When no streams are available for an RPC in a
+    /// subchannel, gRPC will automatically create new connections up
+    /// to this limit.  If this value changes during the life of a
+    /// channel, existing subchannels will be updated to reflect
+    /// the change.  No connections will be closed as a result of
+    /// lowering this value; down-scaling will only happen as
+    /// connections are lost naturally.
+    ///
+    /// Values higher than the client-enforced limit (by default, 10)
+    /// will be clamped to that limit.
+    var maxConnectionsPerSubchannel: SwiftProtobuf.Google_Protobuf_UInt32Value {
+      get {_maxConnectionsPerSubchannel ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+      set {_maxConnectionsPerSubchannel = newValue}
+    }
+    /// Returns true if `maxConnectionsPerSubchannel` has been explicitly set.
+    var hasMaxConnectionsPerSubchannel: Bool {self._maxConnectionsPerSubchannel != nil}
+    /// Clears the value of `maxConnectionsPerSubchannel`. Subsequent reads from it will return its default value.
+    mutating func clearMaxConnectionsPerSubchannel() {self._maxConnectionsPerSubchannel = nil}
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _maxConnectionsPerSubchannel: SwiftProtobuf.Google_Protobuf_UInt32Value? = nil
+  }
+
   init() {}
 
   fileprivate var _retryThrottling: Grpc_ServiceConfig_ServiceConfig.RetryThrottlingPolicy? = nil
   fileprivate var _healthCheckConfig: Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig? = nil
+  fileprivate var _connectionScaling: Grpc_ServiceConfig_ServiceConfig.ConnectionScaling? = nil
 }
 
 /// Represents an xDS server.
@@ -2763,7 +2838,7 @@ nonisolated extension Grpc_ServiceConfig_XdsClusterImplLoadBalancingPolicyConfig
 
 nonisolated extension Grpc_ServiceConfig_RingHashLoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RingHashLoadBalancingConfig"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}min_ring_size\0\u{3}max_ring_size\0")
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}min_ring_size\0\u{3}max_ring_size\0\u{3}request_hash_header\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -2773,6 +2848,7 @@ nonisolated extension Grpc_ServiceConfig_RingHashLoadBalancingConfig: SwiftProto
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.minRingSize) }()
       case 2: try { try decoder.decodeSingularUInt64Field(value: &self.maxRingSize) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.requestHashHeader) }()
       default: break
       }
     }
@@ -2785,12 +2861,16 @@ nonisolated extension Grpc_ServiceConfig_RingHashLoadBalancingConfig: SwiftProto
     if self.maxRingSize != 0 {
       try visitor.visitSingularUInt64Field(value: self.maxRingSize, fieldNumber: 2)
     }
+    if !self.requestHashHeader.isEmpty {
+      try visitor.visitSingularStringField(value: self.requestHashHeader, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Grpc_ServiceConfig_RingHashLoadBalancingConfig, rhs: Grpc_ServiceConfig_RingHashLoadBalancingConfig) -> Bool {
     if lhs.minRingSize != rhs.minRingSize {return false}
     if lhs.maxRingSize != rhs.maxRingSize {return false}
+    if lhs.requestHashHeader != rhs.requestHashHeader {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -2900,9 +2980,44 @@ nonisolated extension Grpc_ServiceConfig_OverrideHostLoadBalancingPolicyConfig.H
   static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}HEALTHY\0\u{2}\u{2}DRAINING\0")
 }
 
+nonisolated extension Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".RandomSubsettingLoadBalancingConfig"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}subset_size\0\u{3}child_policy\0")
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.subsetSize) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.childPolicy) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.subsetSize != 0 {
+      try visitor.visitSingularUInt32Field(value: self.subsetSize, fieldNumber: 1)
+    }
+    if !self.childPolicy.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.childPolicy, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig, rhs: Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig) -> Bool {
+    if lhs.subsetSize != rhs.subsetSize {return false}
+    if lhs.childPolicy != rhs.childPolicy {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 nonisolated extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".LoadBalancingConfig"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}round_robin\0\u{1}xds\0\u{1}grpclb\0\u{1}pick_first\0\u{1}xds_experimental\0\u{1}cds_experimental\0\u{1}eds_experimental\0\u{1}lrs_experimental\0\u{1}priority_experimental\0\u{1}weighted_target_experimental\0\u{1}xds_cluster_resolver_experimental\0\u{1}xds_cluster_impl_experimental\0\u{1}ring_hash_experimental\0\u{1}xds_cluster_manager_experimental\0\u{5}outlier_detection\0outlier_detection_experimental\0\u{1}xds_wrr_locality_experimental\0\u{1}least_request_experimental\0\u{1}override_host_experimental\0\u{5}rls\0rls_experimental\0\u{1}weighted_round_robin\0")
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}round_robin\0\u{1}xds\0\u{1}grpclb\0\u{1}pick_first\0\u{1}xds_experimental\0\u{1}cds_experimental\0\u{1}eds_experimental\0\u{1}lrs_experimental\0\u{1}priority_experimental\0\u{1}weighted_target_experimental\0\u{1}xds_cluster_resolver_experimental\0\u{1}xds_cluster_impl_experimental\0\u{1}ring_hash_experimental\0\u{1}xds_cluster_manager_experimental\0\u{5}outlier_detection\0outlier_detection_experimental\0\u{1}xds_wrr_locality_experimental\0\u{1}least_request_experimental\0\u{1}override_host_experimental\0\u{5}rls\0rls_experimental\0\u{1}weighted_round_robin\0\u{1}random_subsetting_experimental\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3170,6 +3285,19 @@ nonisolated extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Mess
           self.policy = .weightedRoundRobin(v)
         }
       }()
+      case 21: try {
+        var v: Grpc_ServiceConfig_RandomSubsettingLoadBalancingConfig?
+        var hadOneofValue = false
+        if let current = self.policy {
+          hadOneofValue = true
+          if case .randomSubsettingExperimental(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.policy = .randomSubsettingExperimental(v)
+        }
+      }()
       default: break
       }
     }
@@ -3261,6 +3389,10 @@ nonisolated extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Mess
       guard case .weightedRoundRobin(let v)? = self.policy else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
     }()
+    case .randomSubsettingExperimental?: try {
+      guard case .randomSubsettingExperimental(let v)? = self.policy else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
+    }()
     case nil: break
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -3275,7 +3407,7 @@ nonisolated extension Grpc_ServiceConfig_LoadBalancingConfig: SwiftProtobuf.Mess
 
 nonisolated extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".ServiceConfig"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}load_balancing_policy\0\u{3}method_config\0\u{3}retry_throttling\0\u{3}load_balancing_config\0\u{3}health_check_config\0")
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}load_balancing_policy\0\u{3}method_config\0\u{3}retry_throttling\0\u{3}load_balancing_config\0\u{3}health_check_config\0\u{3}connection_scaling\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -3288,6 +3420,7 @@ nonisolated extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, S
       case 3: try { try decoder.decodeSingularMessageField(value: &self._retryThrottling) }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.loadBalancingConfig) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._healthCheckConfig) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._connectionScaling) }()
       default: break
       }
     }
@@ -3313,6 +3446,9 @@ nonisolated extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, S
     try { if let v = self._healthCheckConfig {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     } }()
+    try { if let v = self._connectionScaling {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -3322,6 +3458,7 @@ nonisolated extension Grpc_ServiceConfig_ServiceConfig: SwiftProtobuf.Message, S
     if lhs.methodConfig != rhs.methodConfig {return false}
     if lhs._retryThrottling != rhs._retryThrottling {return false}
     if lhs._healthCheckConfig != rhs._healthCheckConfig {return false}
+    if lhs._connectionScaling != rhs._connectionScaling {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -3395,6 +3532,40 @@ nonisolated extension Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig: SwiftP
 
   static func ==(lhs: Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig, rhs: Grpc_ServiceConfig_ServiceConfig.HealthCheckConfig) -> Bool {
     if lhs._serviceName != rhs._serviceName {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension Grpc_ServiceConfig_ServiceConfig.ConnectionScaling: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Grpc_ServiceConfig_ServiceConfig.protoMessageName + ".ConnectionScaling"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}max_connections_per_subchannel\0")
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._maxConnectionsPerSubchannel) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._maxConnectionsPerSubchannel {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Grpc_ServiceConfig_ServiceConfig.ConnectionScaling, rhs: Grpc_ServiceConfig_ServiceConfig.ConnectionScaling) -> Bool {
+    if lhs._maxConnectionsPerSubchannel != rhs._maxConnectionsPerSubchannel {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

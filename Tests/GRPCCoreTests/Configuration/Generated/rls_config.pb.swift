@@ -264,7 +264,8 @@ nonisolated struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
 
   /// How long are responses valid for (like HTTP Cache-Control).
   /// If omitted or zero, the longest valid cache time is used.
-  /// This value is clamped to 5 minutes to avoid unflushable bad responses.
+  /// This value is clamped to 5 minutes to avoid unflushable bad responses,
+  /// unless stale_age is specified.
   var maxAge: SwiftProtobuf.Google_Protobuf_Duration {
     get {_maxAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_maxAge = newValue}
@@ -279,6 +280,7 @@ nonisolated struct Grpc_Lookup_V1_RouteLookupConfig: Sendable {
   /// This value should be less than max_age by at least the length of a
   /// typical RTT to the Route Lookup Service to fully mask the RTT latency.
   /// If omitted, keys are only re-requested after they have expired.
+  /// This value is clamped to 5 minutes.
   var staleAge: SwiftProtobuf.Google_Protobuf_Duration {
     get {_staleAge ?? SwiftProtobuf.Google_Protobuf_Duration()}
     set {_staleAge = newValue}
