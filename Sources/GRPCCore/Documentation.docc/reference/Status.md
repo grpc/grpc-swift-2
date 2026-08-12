@@ -6,9 +6,9 @@
 
 - ``init(code:message:)``
 - ``init(httpStatusCode:)``
+- ``Code-swift.struct``
 
 ### Reading a status
 
 - ``code-swift.property``
 - ``message``
-- ``Code-swift.struct``
