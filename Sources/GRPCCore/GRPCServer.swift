@@ -140,7 +140,7 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
     }
   }
 
-  /// Creates a new server.
+  /// Creates a new server that applies the given interceptors to every RPC.
   ///
   /// - Parameters:
   ///   - transport: The transport the server should listen on.
@@ -162,7 +162,7 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
     )
   }
 
-  /// Creates a new server.
+  /// Creates a new server that applies interceptors selectively to the RPCs each one targets.
   ///
   /// - Parameters:
   ///   - transport: The transport the server should listen on.
@@ -250,7 +250,7 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
   }
 }
 
-/// Creates and runs a gRPC server.
+/// Creates and runs a gRPC server, applying the given interceptors to every RPC.
 ///
 /// - Parameters:
 ///   - transport: The transport the server should listen on.
@@ -282,7 +282,7 @@ public func withGRPCServer<Transport: ServerTransport, Result: Sendable>(
   )
 }
 
-/// Creates and runs a gRPC server.
+/// Creates and runs a gRPC server, applying interceptors selectively to the RPCs each one targets.
 ///
 /// - Parameters:
 ///   - transport: The transport the server should listen on.

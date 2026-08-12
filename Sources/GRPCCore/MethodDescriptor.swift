@@ -74,7 +74,7 @@ public struct MethodDescriptor: Sendable, Hashable {
     }
   }
 
-  /// Creates a new method descriptor.
+  /// Creates a new method descriptor from a service descriptor and method name.
   ///
   /// - Parameters:
   ///   - service: The name of the service, including the package name. For example,
@@ -84,7 +84,7 @@ public struct MethodDescriptor: Sendable, Hashable {
     self.init(service: service, method: method, type: nil)
   }
 
-  /// Creates a new method descriptor.
+  /// Creates a new method descriptor from a service descriptor, method name, and RPC type.
   ///
   /// - Parameters:
   ///   - service: The name of the service, including the package name. For example,
@@ -98,7 +98,7 @@ public struct MethodDescriptor: Sendable, Hashable {
     self.type = type
   }
 
-  /// Creates a new method descriptor.
+  /// Creates a new method descriptor from a fully qualified service name and method name.
   ///
   /// - Parameters:
   ///   - fullyQualifiedService: The fully qualified name of the service, including the package
@@ -108,7 +108,7 @@ public struct MethodDescriptor: Sendable, Hashable {
     self.init(fullyQualifiedService: fullyQualifiedService, method: method, type: nil)
   }
 
-  /// Creates a new method descriptor.
+  /// Creates a new method descriptor from a fully qualified service name, method name, and RPC type.
   ///
   /// - Parameters:
   ///   - fullyQualifiedService: The fully qualified name of the service, including the package

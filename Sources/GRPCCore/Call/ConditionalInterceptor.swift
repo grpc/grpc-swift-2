@@ -137,9 +137,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
-  /// Creates an operation, specifying which interceptor to apply and to which RPCs.
-  ///
-  /// Accepts any ``ClientInterceptor`` and a ``Subject`` describing which RPCs it applies to.
+  /// Creates an operation that applies a client interceptor to a specific set of RPCs.
   ///
   /// - Parameters:
   ///   - interceptor: The ``ClientInterceptor`` to register with the client.
@@ -154,9 +152,7 @@ extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ServerInterceptor {
-  /// Creates an operation, specifying which interceptor to apply and to which RPCs.
-  ///
-  /// Accepts any ``ServerInterceptor`` and a ``Subject`` describing which RPCs it applies to.
+  /// Creates an operation that applies a server interceptor to a specific set of RPCs.
   ///
   /// - Parameters:
   ///   - interceptor: The ``ServerInterceptor`` to register with the server.

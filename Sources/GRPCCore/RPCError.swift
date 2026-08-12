@@ -36,7 +36,7 @@ public struct RPCError: Sendable, Hashable, Error {
   /// The original error which led to this error being thrown.
   public var cause: (any Error)?
 
-  /// Creates a new RPC error.
+  /// Creates a new RPC error that accepts any error as its cause.
   ///
   /// If the given `cause` is also an ``RPCError`` sharing the same `code`,
   /// then they will be flattened into a single error, by merging the messages and metadata.
@@ -67,7 +67,7 @@ public struct RPCError: Sendable, Hashable, Error {
     }
   }
 
-  /// Creates a new RPC error.
+  /// Creates a new RPC error that accepts another RPC error as its cause.
   ///
   /// If the given `cause` shares the same `code`, then it will be flattened
   /// into a single error, by merging the messages and metadata.
@@ -148,8 +148,8 @@ extension RPCError {
     /// Creates an error code from a status code, if the status wasn't successful.
     ///
     /// - Parameter code: The status code to create this ``RPCError/Code-swift.struct`` from.
-    /// 
-    /// Converts from ``Status/Code-swift.struct``. 
+    ///
+    /// Converts from ``Status/Code-swift.struct``.
     /// Returns `nil` if `code` is ``Status/Code-swift.struct/ok``, since that isn't a valid error.
     public init?(_ code: Status.Code) {
       if code == .ok {
@@ -342,7 +342,7 @@ extension RPCErrorConvertible {
     [:]
   }
 
-  /// The original error which led to this error being thrown.
+  /// By default, a value has no original error.
   public var rpcErrorCause: (any Error)? {
     nil
   }
@@ -350,7 +350,7 @@ extension RPCErrorConvertible {
 
 @available(gRPCSwift 2.0, *)
 extension RPCErrorConvertible where Self: Error {
-  /// The original error which led to this error being thrown.
+  /// When a value is itself an error, it's treated as its own original error.
   public var rpcErrorCause: (any Error)? {
     self
   }

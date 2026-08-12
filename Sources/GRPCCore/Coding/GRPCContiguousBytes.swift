@@ -37,7 +37,7 @@ public protocol GRPCContiguousBytes {
   /// The number of bytes in the bag of bytes.
   var count: Int { get }
 
-  /// Calls the given closure with the contents of the underlying storage.
+  /// Calls the given closure with read-only access to the underlying storage.
   ///
   /// - Note: Calling `withUnsafeBytes` multiple times does not guarantee that
   ///         the same buffer pointer will be passed in every time.
@@ -45,7 +45,7 @@ public protocol GRPCContiguousBytes {
   ///            outside of the lifetime of the call to the closure.
   func withUnsafeBytes<R>(_ body: (_ buffer: UnsafeRawBufferPointer) throws -> R) rethrows -> R
 
-  /// Calls the given closure with the contents of the underlying storage.
+  /// Calls the given closure with mutable access to the underlying storage.
   ///
   /// - Note: Calling `withUnsafeBytes` multiple times does not guarantee that
   ///         the same buffer pointer will be passed in every time.

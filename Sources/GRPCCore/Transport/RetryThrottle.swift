@@ -81,7 +81,7 @@ public final class RetryThrottle: Sendable {
     }
   }
 
-  /// Creates a new throttle.
+  /// Creates a new throttle with explicit token limits.
   ///
   /// - Parameters:
   ///   - maxTokens: The maximum number of tokens available. Must be in the range `1...1000`.
@@ -106,7 +106,7 @@ public final class RetryThrottle: Sendable {
     self.scaledTokensAvailable = Mutex(scaledTokens)
   }
 
-  /// Creates a new throttle.
+  /// Creates a new throttle configured from a retry-throttling policy.
   ///
   /// - Parameter policy: The policy to use to configure the throttle.
   public convenience init(policy: ServiceConfig.RetryThrottling) {

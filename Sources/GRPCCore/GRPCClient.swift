@@ -173,7 +173,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     }
   }
 
-  /// Creates a new client with the given transport, interceptors, and configuration.
+  /// Creates a new client that applies the given interceptors to every RPC.
   ///
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
@@ -192,7 +192,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     )
   }
 
-  /// Creates a new client with the given transport, interceptors, and configuration.
+  /// Creates a new client that applies interceptors selectively to the RPCs each one targets.
   ///
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
@@ -392,7 +392,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
   }
 }
 
-/// Creates and runs a new client with the given transport and interceptors.
+/// Creates and runs a new client with the given transport, applying the given interceptors to every RPC.
 ///
 /// - Parameters:
 ///   - transport: The transport used to establish a communication channel with a server.
@@ -420,7 +420,7 @@ public func withGRPCClient<Transport: ClientTransport, Result: Sendable>(
   )
 }
 
-/// Creates and runs a new client with the given transport and interceptors.
+/// Creates and runs a new client with the given transport, applying interceptors selectively to the RPCs each one targets.
 ///
 /// - Parameters:
 ///   - transport: The transport used to establish a communication channel with a server.
