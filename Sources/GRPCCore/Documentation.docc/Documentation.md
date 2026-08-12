@@ -7,7 +7,8 @@ A gRPC library for Swift written natively in Swift.
 ### Package structure
 
 gRPC Swift spans multiple Swift packages, each exposing one or more modules.
-The following list provides a map to the libraries and their documentation:
+This module provides the higher-level documentation to provide gRPC clients and services using these collected packages.
+The following is a map of the libraries and their documentation:
 
 - **[grpc-swift-2](https://github.com/grpc/grpc-swift-2)** — the core gRPC runtime.
   - `GRPCCore` provides the transport-agnostic gRPC engine with ``GRPCClient``, ``GRPCServer``, call execution, streaming primitives, and the ``ClientTransport``/``ServerTransport`` protocols. It layers with your choice of a transport, with common options available in `grpc-swift-nio-transport` below.
@@ -30,9 +31,6 @@ The following list provides a map to the libraries and their documentation:
   - [`GRPCOTelTracingInterceptors`](https://swiftpackageindex.com/grpc/grpc-swift-extras/documentation/grpcoteltracinginterceptors) — client *and* server interceptors that emit OpenTelemetry spans per RPC. Add it to instrument distributed tracing across gRPC calls with OTel-convention span attributes, without hand-writing the interceptor plumbing.
   - [`GRPCServiceLifecycle`](https://swiftpackageindex.com/grpc/grpc-swift-extras/documentation/grpcservicelifecycle) — adapts both ``GRPCClient`` and ``GRPCServer`` to the `Service` protocol of [swift-service-lifecycle](https://swiftpackageindex.com/swift-server/swift-service-lifecycle/documentation/servicelifecycle). Add it if your process already runs a `ServiceGroup` and you want gRPC startup/shutdown to participate in the same graceful-shutdown sequence.
   - [`GRPCInteropTests`](https://swiftpackageindex.com/grpc/grpc-swift-extras/documentation/grpcinteroptests) — a shared cross-implementation gRPC interop test suite. Primarily for contributors, skip this unless you're validating a new transport or language implementation against the gRPC interop spec.
-
-This package, and this module (``GRPCCore``) in particular, include higher-level documentation such
-as tutorials.
 
 ## Topics
 
@@ -67,6 +65,7 @@ Resources for developers working on gRPC Swift:
 - ``withGRPCClient(transport:interceptorPipeline:isolation:handleClient:)``
 - ``withGRPCServer(transport:services:interceptors:isolation:handleServer:)``
 - ``withGRPCServer(transport:services:interceptorPipeline:isolation:handleServer:)``
+- ``GRPCServerContext``
 
 ### Request and response types
 
@@ -78,6 +77,8 @@ Resources for developers working on gRPC Swift:
 - ``StreamingServerRequest``
 - ``ServerResponse``
 - ``StreamingServerResponse``
+- ``Status``
+- ``Metadata``
 
 ### Service definition and routing
 
@@ -111,17 +112,20 @@ Resources for developers working on gRPC Swift:
 - ``MessageDeserializer``
 - ``CompressionAlgorithm``
 - ``CompressionAlgorithmSet``
+- ``GRPCContiguousBytes``
 
-### Transport protocols and supporting types
+### Transport protocols
 
 - ``ClientTransport``
 - ``ServerTransport``
+- ``RPCStream``
+- ``CallOptions``
+- ``RetryThrottle``
 - ``RPCRequestPart``
 - ``RPCResponsePart``
-- ``Status``
-- ``Metadata``
-- ``RetryThrottle``
-- ``RPCStream``
+
+### Streaming primitives
+
 - ``RPCWriterProtocol``
 - ``ClosableRPCWriterProtocol``
 - ``RPCWriter``
