@@ -17,16 +17,17 @@ set -eu
 
 here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 root="$here/../.."
-protoc=$(which protoc)
 
 # Checkout and build the plugins.
 build_dir=$(mktemp -d)
 git clone https://github.com/grpc/grpc-swift-protobuf --depth 1 "$build_dir"
+swift build --package-path "$build_dir" --product protoc
 swift build --package-path "$build_dir" --product protoc-gen-swift
 swift build --package-path "$build_dir" --product protoc-gen-grpc-swift-2
 
 # Grab the plugin paths.
 bin_path=$(swift build --package-path "$build_dir" --show-bin-path)
+protoc="$bin_path/protoc"
 protoc_gen_swift="$bin_path/protoc-gen-swift"
 protoc_gen_grpc_swift="$bin_path/protoc-gen-grpc-swift-2"
 

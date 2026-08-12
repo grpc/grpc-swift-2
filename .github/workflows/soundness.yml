@@ -33,8 +33,6 @@ jobs:
           persist-credentials: false
       - name: Mark the workspace as safe
         run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
-      - name: Install protoc
-        run: apt update && apt install -y protobuf-compiler
       - name: Run soundness checks
         run: |
           ./dev/check-generated-code.sh
