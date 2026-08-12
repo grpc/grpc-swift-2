@@ -11,7 +11,7 @@
 
 - ``beginGracefulShutdown()``
 
-### Associated types
+### Inspecting the transport
 
 - ``Bytes``
 - ``Inbound``

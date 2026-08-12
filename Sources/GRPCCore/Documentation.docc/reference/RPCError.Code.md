@@ -2,24 +2,36 @@
 
 ## Topics
 
-### Getting the standard codes
+### Handling invalid or conflicting requests
 
-- ``cancelled``
-- ``unknown``
 - ``invalidArgument``
-- ``deadlineExceeded``
+- ``outOfRange``
 - ``notFound``
 - ``alreadyExists``
-- ``permissionDenied``
-- ``resourceExhausted``
 - ``failedPrecondition``
+
+### Handling authorization failures
+
+- ``unauthenticated``
+- ``permissionDenied``
+
+### Handling timing and cancellation
+
+- ``deadlineExceeded``
+- ``cancelled``
+
+### Handling concurrency and capacity limits
+
 - ``aborted``
-- ``outOfRange``
+- ``resourceExhausted``
+- ``unavailable``
+
+### Handling server and protocol errors
+
+- ``unknown``
 - ``unimplemented``
 - ``internalError``
-- ``unavailable``
 - ``dataLoss``
-- ``unauthenticated``
 
 ### Creating a code
 

@@ -8,6 +8,7 @@
 - ``init(code:message:metadata:cause:)-9hwle``
 - ``init(status:metadata:)``
 - ``init(_:)``
+- ``RPCError/Code``
 
 ### Reading an error
 
@@ -15,4 +16,3 @@
 - ``message``
 - ``metadata``
 - ``cause``
-- ``Code-swift.struct``

@@ -95,5 +95,4 @@ the HTTP status is synthesized into a ``Status`` for you to catch as an
 For clients using the rich error model, the ``RPCError`` can be caught and a
 detailed error can be extracted from it using `unpackGoogleRPCStatus()`.
 
-See [`error-details`](https://github.com/grpc/grpc-swift-2/tree/main/Examples/error-details) for
-an example.
+See [`error-details`](https://github.com/grpc/grpc-swift-2/tree/main/Examples/error-details) for an example.

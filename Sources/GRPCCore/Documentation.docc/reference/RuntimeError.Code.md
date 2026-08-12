@@ -2,17 +2,17 @@
 
 ## Topics
 
-### Server codes
+### Getting server codes
 
 - ``serverIsAlreadyRunning``
 - ``serverIsStopped``
 
-### Client codes
+### Getting client codes
 
 - ``clientIsAlreadyRunning``
 - ``clientIsStopped``
 
-### General codes
+### Getting general codes
 
 - ``invalidArgument``
 - ``transportError``

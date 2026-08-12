@@ -16,7 +16,7 @@
 
 @available(gRPCSwift 2.0, *)
 extension RPCWriter {
-  /// A concrete ``RPCWriter`` that wraps another ``ClosableRPCWriterProtocol``.
+  /// A concrete, closable writer that wraps another ``ClosableRPCWriterProtocol``.
   public struct Closable: ClosableRPCWriterProtocol {
     @usableFromInline
     let writer: any ClosableRPCWriterProtocol<Element>

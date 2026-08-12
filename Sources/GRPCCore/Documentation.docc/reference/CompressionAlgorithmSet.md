@@ -4,10 +4,6 @@
 
 ### Creating a set
 
-- ``init(rawValue:)``
-
-### Getting the standard sets
-
 - ``none``
 - ``deflate``
 - ``gzip``
@@ -18,4 +14,8 @@
 - ``contains(_:)``
 - ``elements``
 - ``Elements-swift.struct``
+
+### Working with raw values
+
 - ``rawValue``
+- ``init(rawValue:)``

@@ -5,11 +5,11 @@
 ### Creating a configuration
 
 - ``init(names:waitForReady:timeout:maxRequestMessageBytes:maxResponseMessageBytes:executionPolicy:)``
-- ``Name``
 
 ### Reading configuration
 
 - ``names``
+- ``Name``
 - ``waitForReady``
 - ``timeout``
 - ``maxRequestMessageBytes``
