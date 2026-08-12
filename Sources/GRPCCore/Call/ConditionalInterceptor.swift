@@ -88,7 +88,10 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
       }
     }
 
-    /// An operation subject specifying an interceptor that will be applied to RPCs whose ``MethodDescriptor`` satisfies a `predicate`.
+    /// An operation subject specifying an interceptor that applies to RPCs matching a custom predicate.
+    ///
+    /// The predicate receives the RPC's ``MethodDescriptor`` and returns whether the interceptor
+    /// should apply.
     ///
     /// - Important: The result of `predicate` is **cached per `MethodDescriptor`** by the client.
     ///   The predicate is evaluated the first time a given method is encountered, and that result
@@ -134,7 +137,10 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
-  /// Creates an operation, specifying which ``ClientInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation, specifying which interceptor to apply and to which RPCs.
+  ///
+  /// Accepts any ``ClientInterceptor`` and a ``Subject`` describing which RPCs it applies to.
+  ///
   /// - Parameters:
   ///   - interceptor: The ``ClientInterceptor`` to register with the client.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.
@@ -148,7 +154,10 @@ extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ServerInterceptor {
-  /// Creates an operation, specifying which ``ServerInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation, specifying which interceptor to apply and to which RPCs.
+  ///
+  /// Accepts any ``ServerInterceptor`` and a ``Subject`` describing which RPCs it applies to.
+  ///
   /// - Parameters:
   ///   - interceptor: The ``ServerInterceptor`` to register with the server.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.

@@ -79,7 +79,9 @@ private import Synchronization
 public final class GRPCServer<Transport: ServerTransport>: Sendable {
   typealias Stream = RPCStream<Transport.Inbound, Transport.Outbound>
 
-  /// The ``ServerTransport`` implementation that the server uses to listen for new requests.
+  /// The transport implementation that the server uses to listen for new requests.
+  ///
+  /// Conforms to ``ServerTransport``.
   public let transport: Transport
 
   /// The services registered which the server is serving.

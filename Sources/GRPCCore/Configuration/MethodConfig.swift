@@ -349,8 +349,7 @@ public struct HedgingPolicy: Hashable, Sendable {
     didSet { self.maxAttempts = try! validateMaxAttempts(self.maxAttempts) }
   }
 
-  /// The first RPC will be sent immediately, but each subsequent RPC will be sent at intervals
-  /// of `hedgingDelay`.
+  /// The first RPC is sent immediately, and each subsequent RPC is sent after this delay.
   ///
   /// Set this to zero to immediately send all RPCs.
   public var hedgingDelay: Duration {

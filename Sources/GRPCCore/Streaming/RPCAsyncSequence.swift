@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// A type-erasing `AsyncSequence`.
+/// A type-erasing wrapper around an asynchronous sequence.
 @available(gRPCSwift 2.0, *)
 public struct RPCAsyncSequence<
   Element: Sendable,
@@ -29,7 +29,7 @@ public struct RPCAsyncSequence<
   @usableFromInline
   let _wrapped: any AsyncSequence<Element, Failure>
 
-  /// Creates an ``RPCAsyncSequence`` by wrapping another `AsyncSequence`.
+  /// Creates a new sequence by wrapping another asynchronous sequence.
   @inlinable
   public init<Source: AsyncSequence<Element, Failure>>(
     wrapping other: Source
@@ -42,7 +42,7 @@ public struct RPCAsyncSequence<
     AsyncIterator(wrapping: self._wrapped.makeAsyncIterator())
   }
 
-  /// The iterator used by ``RPCAsyncSequence``.
+  /// An iterator over the elements of an asynchronous sequence.
   public struct AsyncIterator: AsyncIteratorProtocol {
     @usableFromInline
     private(set) var iterator: any AsyncIteratorProtocol<Element, Failure>

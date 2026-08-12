@@ -87,7 +87,7 @@ public struct ClientResponse<Message: Sendable>: Sendable {
     /// metadata provided by the service.
     public var trailingMetadata: Metadata
 
-    /// Creates a `Contents`.
+    /// Creates contents representing a successful response.
     ///
     /// - Parameters:
     ///   - metadata: Metadata received from the server at the beginning of the response.
@@ -103,7 +103,7 @@ public struct ClientResponse<Message: Sendable>: Sendable {
       self.trailingMetadata = trailingMetadata
     }
 
-    /// Creates a `Contents`.
+    /// Creates contents representing a failed response.
     ///
     /// - Parameters:
     ///   - metadata: Metadata received from the server at the beginning of the response.
@@ -227,7 +227,7 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
       case trailingMetadata(Metadata)
     }
 
-    /// Creates a ``Contents``.
+    /// Creates contents for an accepted response.
     ///
     /// - Parameters:
     ///   - metadata: Metadata received from the server at the beginning of the response.
@@ -390,7 +390,7 @@ extension StreamingClientResponse {
     }
   }
 
-  /// Returns the body parts (that is, `messages` and `trailingMetadata`) returned from the server.
+  /// Returns the message and trailing-metadata parts returned from the server.
   ///
   /// For rejected RPCs (in other words, where ``accepted`` is `failure`), the `RPCAsyncSequence` throws an ``RPCError``.
   public var bodyParts: RPCAsyncSequence<Contents.BodyPart, any Error> {

@@ -155,7 +155,9 @@ extension Status {
       }
     }
 
-    /// Creates a status code from an ``RPCError/Code-swift.struct``.
+    /// Creates a status code from an error code.
+    ///
+    /// Converts from ``RPCError/Code-swift.struct``.
     ///
     /// - Parameters:
     ///   - code: The error code to create this ``Status/Code-swift.struct`` from.

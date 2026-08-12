@@ -135,7 +135,7 @@ public struct Metadata: Sendable, Hashable {
     self.elements = []
   }
 
-  /// Initialize `Metadata` from a `Sequence` of `Element`s.
+  /// Creates a metadata collection from a sequence of key-value pairs.
   public init(_ elements: some Sequence<Element>) {
     self.elements = elements.map { key, value in
       KeyValuePair(key: key, value: value)
@@ -158,7 +158,7 @@ public struct Metadata: Sendable, Hashable {
     self.addValue(.string(stringValue), forKey: key)
   }
 
-  /// Adds a new key-value pair, where the value is binary data, in the form of `[UInt8]`.
+  /// Adds a new key-value pair whose value is binary data.
   ///
   /// - Parameters:
   ///   - binaryValue: The binary data (that is, `[UInt8]`) to be associated with the given key.
@@ -176,14 +176,14 @@ public struct Metadata: Sendable, Hashable {
     self.elements.append(.init(key: key, value: value))
   }
 
-  /// Adds the contents of a `Sequence` of key-value pairs to this `Metadata` instance.
+  /// Adds the contents of a sequence of key-value pairs to this instance.
   ///
   /// - Parameter other: the `Sequence` whose key-value pairs should be added into this `Metadata` instance.
   public mutating func add(contentsOf other: some Sequence<Element>) {
     self.elements.append(contentsOf: other.map(KeyValuePair.init))
   }
 
-  /// Adds the contents of another `Metadata` to this instance.
+  /// Adds the contents of another metadata collection to this instance.
   ///
   /// - Parameter other: the `Metadata` whose key-value pairs should be added into this one.
   public mutating func add(contentsOf other: Metadata) {
@@ -215,7 +215,7 @@ public struct Metadata: Sendable, Hashable {
     self.replaceOrAddValue(.string(stringValue), forKey: key)
   }
 
-  /// Adds a key-value pair to the collection, where the value is `[UInt8]`.
+  /// Adds a key-value pair to the collection, where the value is binary data.
   ///
   /// If there are pairs already associated with the given key, they will all be removed first, and the new pair
   /// will be added. If no pairs are present with the given key, a new one will be added.
@@ -271,7 +271,7 @@ public struct Metadata: Sendable, Hashable {
 extension Metadata: RandomAccessCollection {
   public typealias Element = (key: String, value: Value)
 
-  /// A position of a key-value pair in a ``Metadata`` collection.
+  /// A position of a key-value pair in a metadata collection.
   public struct Index: Comparable, Sendable {
     @usableFromInline
     let _base: Array<Element>.Index
@@ -314,7 +314,9 @@ extension Metadata {
   /// A sequence of metadata values for a given key.
   public struct Values: Sequence, Sendable {
 
-    /// An iterator for all metadata ``Value``s associated with a given key.
+    /// An iterator over the values associated with a given key.
+    ///
+    /// Produces ``Metadata/Value`` elements.
     public struct Iterator: IteratorProtocol, Sendable {
       private var metadataIterator: Metadata.Iterator
       private let key: String
@@ -347,7 +349,7 @@ extension Metadata {
     }
   }
 
-  /// Get a ``Values`` sequence for a given key.
+  /// Returns all values associated with a given key.
   ///
   /// - Parameter key: The returned sequence will only return values for this key.
   ///
@@ -397,7 +399,7 @@ extension Metadata {
     }
   }
 
-  /// Get a ``StringValues`` sequence for a given key.
+  /// Returns the string values associated with a given key.
   ///
   /// - Parameter key: The returned sequence will only return string values for this key.
   ///
@@ -453,7 +455,7 @@ extension Metadata {
     }
   }
 
-  /// A subscript to get a ``BinaryValues`` sequence for a given key.
+  /// Returns the binary values associated with a given key.
   ///
   /// As it's iterated, this sequence will return values originally stored as binary data for a given key, and will
   /// also try to decode values stored as strings as if they were base64-encoded strings; only strings that

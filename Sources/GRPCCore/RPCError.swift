@@ -98,13 +98,14 @@ public struct RPCError: Sendable, Hashable, Error {
     }
   }
 
-  /// Creates a new RPC error from the provided ``Status``.
-  ///
-  /// Returns `nil` if the provided ``Status`` has code ``Status/Code-swift.struct/ok``.
+  /// Creates a new RPC error from a status.
   ///
   /// - Parameters:
   ///   - status: The status to convert.
   ///   - metadata: Any metadata to attach to the error.
+  ///
+  /// Converts from a ``Status``.
+  /// Returns `nil` if the provided ``Status`` has code ``Status/Code-swift.struct/ok``.
   public init?(status: Status, metadata: Metadata = [:]) {
     guard let code = Code(status.code) else { return nil }
     self.init(code: code, message: status.message, metadata: metadata)
@@ -134,7 +135,7 @@ extension RPCError: CustomStringConvertible {
 
 @available(gRPCSwift 2.0, *)
 extension RPCError {
-  /// A code representing the high-level classification of an ``RPCError``.
+  /// A code representing the high-level classification of an error.
   public struct Code: Hashable, Sendable, CustomStringConvertible {
     /// The numeric value of the error code.
     public var rawValue: Int { Int(self.wrapped.rawValue) }
@@ -144,10 +145,12 @@ extension RPCError {
       self.wrapped = code
     }
 
-    /// Creates an error code from the given ``Status/Code-swift.struct``; returns `nil` if the
-    /// code is ``Status/Code-swift.struct/ok``.
+    /// Creates an error code from a status code, if the status wasn't successful.
     ///
     /// - Parameter code: The status code to create this ``RPCError/Code-swift.struct`` from.
+    /// 
+    /// Converts from ``Status/Code-swift.struct``. 
+    /// Returns `nil` if `code` is ``Status/Code-swift.struct/ok``, since that isn't a valid error.
     public init?(_ code: Status.Code) {
       if code == .ok {
         return nil
@@ -302,8 +305,9 @@ extension RPCError.Code {
   public static let unauthenticated = Self(code: .unauthenticated)
 }
 
-/// A value that can be converted to an ``RPCError``.
+/// A value that can be converted to an error.
 ///
+/// Converts to an ``RPCError``.
 /// You can conform types to this protocol to have more control over the status codes and
 /// error information provided to clients when a service throws an error.
 @available(gRPCSwift 2.0, *)

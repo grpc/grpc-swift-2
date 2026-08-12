@@ -50,7 +50,7 @@ public struct ServiceConfig: Hashable, Sendable {
   /// and hedged RPCs will not be sent.
   public var retryThrottling: RetryThrottling?
 
-  /// Creates a new ``ServiceConfig``.
+  /// Creates a new service configuration.
   ///
   /// - Parameters:
   ///   - methodConfig: Per-method configuration.

@@ -27,7 +27,7 @@ public protocol MessageSerializer<Message>: Sendable {
   /// The type of message this serializer can serialize.
   associatedtype Message
 
-  /// Serializes a ``Message`` into a sequence of bytes.
+  /// Serializes a message into a sequence of bytes.
   ///
   /// - Parameter message: The message to serialize.
   /// - Returns: The serialized bytes of a message.
@@ -47,7 +47,7 @@ public protocol MessageDeserializer<Message>: Sendable {
   /// The type of message this deserializer can deserialize.
   associatedtype Message
 
-  /// Deserializes a sequence of bytes into a ``Message``.
+  /// Deserializes a sequence of bytes into a message.
   ///
   /// - Parameter serializedMessageBytes: The bytes to deserialize.
   /// - Returns: The deserialized message.

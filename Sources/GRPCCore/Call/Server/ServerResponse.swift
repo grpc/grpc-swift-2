@@ -200,7 +200,7 @@ public struct StreamingServerResponse<Message: Sendable>: Sendable {
     /// > ``withRPCCancellationHandler(operation:onCancelRPC:)``.
     public var producer: @Sendable (RPCWriter<Message>) async throws -> Metadata
 
-    /// Creates a ``Contents``.
+    /// Creates contents for an accepted response.
     ///
     /// - Parameters:
     ///   - metadata: Metadata to send to the client at the start of the response.

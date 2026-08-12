@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-/// A type-erasing ``RPCWriterProtocol``.
+/// A type-erasing writer.
+///
+/// Wraps any ``RPCWriterProtocol``.
 @available(gRPCSwift 2.0, *)
 public struct RPCWriter<Element: Sendable>: Sendable, RPCWriterProtocol {
   private let writer: any RPCWriterProtocol<Element>
 
-  /// Creates an ``RPCWriter`` by wrapping the `other` writer.
+  /// Creates a new writer that wraps another writer.
   ///
   /// - Parameter other: The writer to wrap.
   public init(wrapping other: some RPCWriterProtocol<Element>) {

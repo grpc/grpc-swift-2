@@ -88,12 +88,16 @@ public struct CompressionAlgorithmSet: OptionSet, Hashable, Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension CompressionAlgorithmSet {
-  /// A sequence of ``CompressionAlgorithm`` values present in the set.
+  /// The compression algorithms present in this set.
+  ///
+  /// Iterating the sequence produces ``CompressionAlgorithm`` values.
   public var elements: Elements {
     Elements(algorithmSet: self)
   }
 
-  /// A sequence of ``CompressionAlgorithm`` values present in a ``CompressionAlgorithmSet``.
+  /// A sequence of the compression algorithms present in a set.
+  ///
+  /// Iterating this sequence produces ``CompressionAlgorithm`` values.
   public struct Elements: Sequence, Sendable {
     public typealias Element = CompressionAlgorithm
 
@@ -107,7 +111,7 @@ extension CompressionAlgorithmSet {
       return Iterator(algorithmSet: self.algorithmSet)
     }
 
-    /// The iterator used by ``CompressionAlgorithmSet/Elements-swift.struct``.
+    /// An iterator over the compression algorithms in a set.
     public struct Iterator: IteratorProtocol, Sendable {
       private let algorithmSet: CompressionAlgorithmSet
       private var iterator: IndexingIterator<[CompressionAlgorithm.Value]>

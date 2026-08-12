@@ -1,6 +1,6 @@
 # Benchmarks
 
-This article discusses benchmarking in `grpc-swift-2`.
+This article discusses benchmarking in the grpc-swift-2 repository.
 
 ## Overview
 

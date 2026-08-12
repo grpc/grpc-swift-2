@@ -39,7 +39,7 @@ public protocol RPCWriterProtocol<Element>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension RPCWriterProtocol {
-  /// Writes an `AsyncSequence` of values into the sink.
+  /// Writes an asynchronous sequence of values into the sink.
   ///
   /// - Parameter elements: The elements to write.
   public func write<Elements: AsyncSequence>(
