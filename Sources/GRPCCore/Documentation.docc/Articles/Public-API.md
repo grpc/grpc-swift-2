@@ -21,7 +21,7 @@ For clarity, the project comprises the following Swift packages:
 
 ### Library targets
 
-All library targets made available as package products are considered to be
+The project considers all library targets made available as package products to be
 public API. Examples of these include `GRPCCore` and `GRPCProtobuf`.
 
 > Exceptions:
@@ -42,9 +42,8 @@ targets are part of the public API. Examples include `Metadata`,
 
 ### Configuration and inputs
 
-Any configuration, input, and interfaces to executable products that have
-inputs (such as command line arguments, or configuration files) are considered
-to be public API. Examples of these include the configuration file passed to the
+The project considers any configuration, input, and interfaces to executable products that have
+inputs (such as command line arguments, or configuration files) to be public API. Examples of these include the configuration file passed to the
 Swift Package Manager build plugin for generating stubs provided by
 [grpc-swift-protobuf][3].
 
@@ -62,16 +61,16 @@ To illustrate this, the maintainers may:
 2. Add a new top-level function to an existing module called `grpcRun()` but
    will not add a new top-level function called `run()`.
 3. Add a new module called `GRPCFoo`. Any symbols added to the new module at the
-   point the module becomes API aren't required to have a “GRPC” prefix; symbols
-   added after that point will be prefixed as required by (1) and (2).
+   point the module becomes API aren't required to have a “GRPC” prefix; the maintainers
+   will prefix symbols added after that point, as required by (1) and (2).
 
 This allows the project to follow Semantic Versioning without breaking adopter
 code in minor and patch releases.
 
 ## Guidelines for users
 
-In order to not have your code broken by a gRPC Swift update, you should only use
-the public API as described above. There are a number of other guidelines you
+So a gRPC Swift update doesn't break your code, you should only use
+the public API described above. There are a number of other guidelines you
 should follow as well:
 
 1. You _may_ conform your own types to protocols provided by gRPC Swift.

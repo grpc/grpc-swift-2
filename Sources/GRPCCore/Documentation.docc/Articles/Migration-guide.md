@@ -232,13 +232,13 @@ compiles and commit any changes.
 
 > If you only need to migrate clients, then skip this section.
 
-By now, your package should be set up to depend on a patched version of 1.x and 2.x
-and have both sets of generated code and still compile. It's time to make some
+By now, your package should depend on a patched version of 1.x and 2.x, have both sets of
+generated code, and still compile. It's time to make some
 code changes, so let's start by migrating a service.
 
 
-A number of these steps can be automated, and the `v1_to_v2` script can do just
-this. However, it might not be sufficient, and you should read through the
+The `v1_to_v2` script can automate a number of these steps. However, it might not be
+sufficient, and you should read through the
 steps below to understand what transformations are done.
 
 Find the service you wish to migrate. The first step is to update any imports
@@ -256,7 +256,7 @@ skip to the section called `ServiceProtocol`.
 
 The requirements for each method are also slightly different; in 2.x the context
 type is called `ServerContext` as opposed to `GRPCAsyncServerCallContext` in 1.x.
-It also has different functionality, but that will be covered later. The types
+It also has different functionality, but this guide covers that later. The types
 for streaming requests and responses are also different:
 - `GRPCAsyncRequestStream<T>` became `RPCAsyncSequence<T, any Error>`, and
 - `GRPCAsyncResponseStreamWriter<T>` became `RPCWriter<T>`.
@@ -290,16 +290,16 @@ service to the 1.x protocol and the 2.x protocol. Add conformance to the
 service (if your service is called `Baz` and declared in the `foo.bar` Protocol
 Buffers package, then this would be `Foo_Bar_Baz.ServiceProtocol`).
 
-Let Xcode generate stubs for the methods that haven't been implemented yet and
+Let Xcode generate stubs for the methods you haven't implemented yet and
 fill each one with a `fatalError` so that your app builds. Each method
 should take a `ServerRequest` or `StreamingServerRequest` and context as input
 and return a `ServerResponse` or `StreamingServerResponse`. Request metadata is
 available on the request object. For single responses, you can set initial and
 trailing metadata when you create the response. For streaming responses, you can
 set initial metadata in the initializer and return trailing metadata from the
-closure you provide to the initializer. This is demonstrated in the
+closure you provide to the initializer. The
 [`echo-metadata`](https://github.com/grpc/grpc-swift-2/tree/main/Examples/echo-metadata)
-example.
+example demonstrates this.
 
 One important difference between this approach and the `SimpleServiceProtocol`
 (and 1.x) is that responses aren't completed until the body of the response has
@@ -359,11 +359,11 @@ it, it's time to commit any changes you've made.
 
 Migrating client code is more difficult as you typically use client code
 throughout a wider part of your app. Our approach is to migrate from client
-calls first and then work upwards through your app to where the client is
-created.
+calls first and then work upwards through your app to where you create the
+client.
 
-Start by finding a place within the target being migrated where a generated
-client is being used.
+Start by finding a place within the target you're migrating where you use a
+generated client.
 
 Note that the generated client in 2.x is generic over a transport type; any
 types or functions using it will either need to choose a concrete type or
@@ -373,11 +373,11 @@ also become generic. The most similar replacements to 1.x are:
 - `HTTP2ClientTransport.TransportServices`.
 
 Changing the type of the client will cause numerous build errors. To keep the
-number of errors manageable, you'll migrate one function at a time. How this
-is done depends on whether the generated client is passed in to the function
-or stored on a property.
+number of errors manageable, you'll migrate one function at a time. How you do this
+depends on whether the function receives the generated client as a parameter
+or a property stores it.
 
-If the function is passed a generated client, then duplicate it, changing the
+If you pass the function a generated client, then duplicate it, changing the
 signature to use a 2.x generated client. The new client is
 named `{Service}.Client` where `{Service}` is the namespaced name of your
 service (if your service is named `Baz` and declared in the `foo.bar`
@@ -452,7 +452,7 @@ any of the unused functions.
 
 ## Client migration
 
-Once all client call sites have been updated, you'll need to update how you
+Once you've updated all client call sites, you'll need to update how you
 create the client. Find where you create the client in your app. In this file,
 you'll need to add imports for `GRPCCore` (which provides the client type) and
 `GRPCNIOTransportHTTP2` (which provides HTTP/2 transports built on top of

@@ -8,10 +8,10 @@ Benchmarks for this package are in a separate Swift Package in the `IntegrationT
 subdirectory of the repository.
 
 They use the [`package-benchmark`](https://github.com/ordo-one/package-benchmark) plugin.
-Benchmarks depend on the [`jemalloc`](https://jemalloc.net) memory allocation library, which is
-used by `package-benchmark` to capture memory allocation statistics.
+Benchmarks depend on the [`jemalloc`](https://jemalloc.net) memory allocation library, which
+`package-benchmark` uses to capture memory allocation statistics.
 
-An installation guide can be found in the [Getting Started article](https://swiftpackageindex.com/ordo-one/package-benchmark/documentation/benchmark/gettingstarted)
+You can find an installation guide in the [Getting Started article](https://swiftpackageindex.com/ordo-one/package-benchmark/documentation/benchmark/gettingstarted)
 for `package-benchmark`.
 
 ### Running the benchmarks
@@ -23,8 +23,8 @@ You can run the benchmarks CLI by going to the `IntegrationTests/Benchmarks` sub
 swift package benchmark
 ```
 
-Profiling benchmarks, or building them in release mode in Xcode, isn't currently
-supported with `jemalloc` enabled. Disable `jemalloc` to do either.
+You can't currently profile benchmarks, or build them in release mode in Xcode, with
+`jemalloc` enabled. Disable `jemalloc` to do either.
 
 Quit Xcode, then open it from the command line with the `BENCHMARK_DISABLE_JEMALLOC=true`
 environment variable set:

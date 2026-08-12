@@ -7,7 +7,7 @@ about gRPC on the [gRPC project's website][grpcio].
 - 💻 **Examples** are available in the [Examples](Examples) directory.
 - 🚀 **Contributions** are welcome; please see [CONTRIBUTING.md](CONTRIBUTING.md).
 - 🪪 **License** is Apache 2.0; see [LICENSE](LICENSE) for the full text.
-- 🔒 **Security** issues should be reported via the process in [SECURITY.md](SECURITY.md).
+- 🔒 **Security**: report issues using the process in [SECURITY.md](SECURITY.md).
 - 🔀 **Related Repositories**:
   - [`grpc-swift-nio-transport`][grpc-swift-nio-transport] contains
     high-performance HTTP/2 client and server transport implementations for gRPC

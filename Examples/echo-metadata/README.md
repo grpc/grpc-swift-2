@@ -2,7 +2,7 @@
 
 This example demonstrates how to interact with `Metadata` on RPCs: how to set and read it on unary 
 and streaming requests, as well as how to set and read both initial and trailing metadata on unary 
-and streaming responses. This is done using a simple `echo` server and client, and the SwiftNIO-based 
+and streaming responses. This example does this using a simple `echo` server and client, and the SwiftNIO-based 
 HTTP/2 transport.
 
 ## Overview
@@ -15,7 +15,7 @@ provided `message` as both the request’s message and as the value for the `ech
 the request’s metadata.
 
 The server will then echo back the message and the metadata’s `echo-message` key-value pair sent
-by the client. The request’s metadata will be echoed in both the initial and the trailing metadata.
+by the client. The server will echo the request’s metadata in both the initial and the trailing metadata.
 
 The tool uses the [SwiftNIO](https://github.com/grpc/grpc-swift-nio-transport) HTTP/2 transport.
 
