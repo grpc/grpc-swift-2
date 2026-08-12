@@ -65,6 +65,7 @@ extension RuntimeError: CustomStringConvertible {
 
 @available(gRPCSwift 2.0, *)
 extension RuntimeError {
+  /// A code representing the high-level classification of a ``RuntimeError``.
   public struct Code: Hashable, Sendable {
     private enum Value {
       case invalidArgument

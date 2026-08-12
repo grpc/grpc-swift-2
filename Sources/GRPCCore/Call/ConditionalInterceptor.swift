@@ -28,6 +28,7 @@
 ///   server interceptors, respectively.
 @available(gRPCSwift 2.0, *)
 public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
+  /// Describes which RPCs an interceptor applies to.
   public struct Subject: Sendable {
 
     private let predicate: @Sendable (_ descriptor: MethodDescriptor) -> Bool

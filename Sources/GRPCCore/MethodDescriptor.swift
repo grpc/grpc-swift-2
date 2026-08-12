@@ -38,6 +38,7 @@ public struct MethodDescriptor: Sendable, Hashable {
   @available(gRPCSwift 2.3, *)
   public var type: RPCType?
 
+  /// The pattern of request and response messages exchanged over an RPC.
   @available(gRPCSwift 2.3, *)
   @frozen
   public enum RPCType: Hashable, Sendable, CaseIterable {

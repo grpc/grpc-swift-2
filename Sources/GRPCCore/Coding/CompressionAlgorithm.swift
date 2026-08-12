@@ -107,6 +107,7 @@ extension CompressionAlgorithmSet {
       return Iterator(algorithmSet: self.algorithmSet)
     }
 
+    /// The iterator used by ``CompressionAlgorithmSet/Elements-swift.struct``.
     public struct Iterator: IteratorProtocol, Sendable {
       private let algorithmSet: CompressionAlgorithmSet
       private var iterator: IndexingIterator<[CompressionAlgorithm.Value]>

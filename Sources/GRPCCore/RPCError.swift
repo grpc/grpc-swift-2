@@ -134,6 +134,7 @@ extension RPCError: CustomStringConvertible {
 
 @available(gRPCSwift 2.0, *)
 extension RPCError {
+  /// A code representing the high-level classification of an ``RPCError``.
   public struct Code: Hashable, Sendable, CustomStringConvertible {
     /// The numeric value of the error code.
     public var rawValue: Int { Int(self.wrapped.rawValue) }

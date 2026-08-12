@@ -42,6 +42,7 @@ public struct RPCAsyncSequence<
     AsyncIterator(wrapping: self._wrapped.makeAsyncIterator())
   }
 
+  /// The iterator used by ``RPCAsyncSequence``.
   public struct AsyncIterator: AsyncIteratorProtocol {
     @usableFromInline
     private(set) var iterator: any AsyncIteratorProtocol<Element, Failure>

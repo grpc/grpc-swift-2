@@ -271,6 +271,7 @@ public struct Metadata: Sendable, Hashable {
 extension Metadata: RandomAccessCollection {
   public typealias Element = (key: String, value: Value)
 
+  /// A position of a key-value pair in a ``Metadata`` collection.
   public struct Index: Comparable, Sendable {
     @usableFromInline
     let _base: Array<Element>.Index

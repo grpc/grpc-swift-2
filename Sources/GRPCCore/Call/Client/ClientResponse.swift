@@ -201,6 +201,7 @@ public struct ClientResponse<Message: Sendable>: Sendable {
 /// ```
 @available(gRPCSwift 2.0, *)
 public struct StreamingClientResponse<Message: Sendable>: Sendable {
+  /// The contents of an accepted response with a stream of messages.
   public struct Contents: Sendable {
     /// Metadata received from the server at the beginning of the response.
     ///

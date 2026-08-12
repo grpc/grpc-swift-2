@@ -232,6 +232,7 @@ extension ServiceConfig.LoadBalancingConfig: Codable {
 
 @available(gRPCSwift 2.0, *)
 extension ServiceConfig {
+  /// Configuration for throttling retries and hedging attempts.
   public struct RetryThrottling: Hashable, Sendable, Codable {
     /// The initial and maximum number of tokens.
     ///
