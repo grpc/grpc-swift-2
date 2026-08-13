@@ -12,7 +12,7 @@ struct RouteGuide: AsyncParsableCommand {
     }
   }
 
-  func loadFeatures() throws -> [Routeguide_Feature] {
+  static func loadFeatures() throws -> [Routeguide_Feature] {
     guard let url = Bundle.module.url(forResource: "route_guide_db", withExtension: "json") else {
       throw ExitCode.failure
     }

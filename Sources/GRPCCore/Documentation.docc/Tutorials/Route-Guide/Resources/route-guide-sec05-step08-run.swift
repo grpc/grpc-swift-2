@@ -3,7 +3,7 @@ import GRPCNIOTransportHTTP2
 
 extension RouteGuide {
   func runServer() async throws {
-    let features = try self.loadFeatures()
+    let features = try Self.loadFeatures()
     let routeGuide = RouteGuideService(features: features)
     let server = GRPCServer(
       transport: .http2NIOPosix(
