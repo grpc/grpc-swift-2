@@ -27,7 +27,7 @@ public struct RuntimeError: Error, Hashable, Sendable {
   /// instance of the error.
   public var message: String
 
-  /// The original error which led to this error being thrown.
+  /// The original error that caused this error.
   public var cause: (any Error)?
 
   /// Creates a new error.
@@ -35,7 +35,7 @@ public struct RuntimeError: Error, Hashable, Sendable {
   /// - Parameters:
   ///   - code: The error code.
   ///   - message: A description of the error.
-  ///   - cause: The original error which led to this error being thrown.
+  ///   - cause: The original error that caused this error.
   public init(code: Code, message: String, cause: (any Error)? = nil) {
     self.code = code
     self.message = message
@@ -86,22 +86,22 @@ extension RuntimeError {
       Self(.invalidArgument)
     }
 
-    /// An attempt to start the server was made but it is already running.
+    /// The caller tried to start the server, but it's already running.
     public static var serverIsAlreadyRunning: Self {
       Self(.serverIsAlreadyRunning)
     }
 
-    /// An attempt to start the server was made but it has already stopped.
+    /// The caller tried to start the server, but it has already stopped.
     public static var serverIsStopped: Self {
       Self(.serverIsStopped)
     }
 
-    /// An attempt to start the client was made but it is already running.
+    /// The caller tried to start the client, but it's already running.
     public static var clientIsAlreadyRunning: Self {
       Self(.clientIsAlreadyRunning)
     }
 
-    /// An attempt to start the client was made but it has already stopped.
+    /// The caller tried to start the client, but it has already stopped.
     public static var clientIsStopped: Self {
       Self(.clientIsStopped)
     }

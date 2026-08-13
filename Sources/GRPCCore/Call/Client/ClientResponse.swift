@@ -16,7 +16,7 @@
 
 /// A response for a single message received by a client.
 ///
-/// Single responses are used for unary and client-streaming RPCs. For streaming responses,
+/// Use single responses for unary and client-streaming RPCs. For streaming responses,
 /// see ``StreamingClientResponse``.
 ///
 /// A single response captures every part of the response stream and distinguishes successful
@@ -121,8 +121,8 @@ public struct ClientResponse<Message: Sendable>: Sendable {
   /// Whether the RPC was accepted or rejected.
   ///
   /// The `success` case indicates the RPC completed successfully with an
-  /// ``Status/Code-swift.struct/ok`` status code. The `failure` case indicates that the RPC was
-  /// rejected by the server and wasn't processed or couldn't be processed successfully.
+  /// ``Status/Code-swift.struct/ok`` status code. The `failure` case indicates that the server
+  /// rejected the RPC and didn't process it, or couldn't process it successfully.
   public var accepted: Result<Contents, RPCError>
 
   /// Creates a new response.
@@ -135,7 +135,7 @@ public struct ClientResponse<Message: Sendable>: Sendable {
 
 /// A response for a stream of messages received by a client.
 ///
-/// Stream responses are used for server-streaming and bidirectional-streaming RPCs. For single
+/// Use stream responses for server-streaming and bidirectional-streaming RPCs. For single
 /// responses, see ``ClientResponse``.
 ///
 /// A stream response captures every part of the response stream over time and distinguishes
@@ -214,7 +214,7 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
     ///
     /// If the RPC fails, then the sequence will throw an ``RPCError``.
     ///
-    /// The sequence may only be iterated once.
+    /// You may only iterate the sequence once.
     public var bodyParts: RPCAsyncSequence<BodyPart, any Error>
 
     /// Parts received from the server.
@@ -243,10 +243,10 @@ public struct StreamingClientResponse<Message: Sendable>: Sendable {
 
   /// Whether the RPC was accepted or rejected.
   ///
-  /// The `success` case indicates the RPC was accepted by the server for
+  /// The `success` case indicates that the server accepted the RPC for
   /// processing; however, the RPC may still fail by throwing an error from its
-  /// `messages` sequence. The `failure` case indicates that the RPC was
-  /// rejected by the server.
+  /// `messages` sequence. The `failure` case indicates that the server
+  /// rejected the RPC.
   public var accepted: Result<Contents, RPCError>
 
   /// Creates a new response.

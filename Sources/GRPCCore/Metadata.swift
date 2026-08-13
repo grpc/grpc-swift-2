@@ -16,12 +16,12 @@
 
 /// A collection of metadata key-value pairs, found in RPC streams.
 ///
-/// Metadata is a side channel associated with an RPC that allows you to send information between clients
-/// and servers. Metadata is stored as a list of key-value pairs where keys aren't required to be unique;
-/// a single key may have multiple values associated with it.
+/// Metadata is a side channel associated with an RPC that allows you to send information between
+/// clients and servers. Metadata stores key-value pairs as a list, so keys aren't required to be
+/// unique; a single key may have multiple values associated with it.
 ///
 /// Keys are case-insensitive ASCII strings. Values may be ASCII strings or binary data. The keys
-/// for binary data should end with "-bin": this will be asserted when adding a new binary value.
+/// for binary data should end with "-bin": adding a new binary value asserts this.
 /// Keys must not be prefixed with "grpc-" as these are reserved for gRPC.
 ///
 /// # Using Metadata
@@ -76,9 +76,9 @@
 /// }
 /// ```
 ///
-/// - Note: Binary values are encoded as base64 strings when they are sent over the wire, so keys with
-/// the "-bin" suffix may have string values (rather than binary). These are deserialized automatically when
-/// using ``subscript(binaryValues:)``.
+/// - Note: gRPC encodes binary values as base64 strings when it sends them over the wire, so keys
+/// with the "-bin" suffix may have string values (rather than binary). ``subscript(binaryValues:)``
+/// deserializes these automatically.
 @available(gRPCSwift 2.0, *)
 public struct Metadata: Sendable, Hashable {
 
@@ -91,8 +91,8 @@ public struct Metadata: Sendable, Hashable {
 
     /// The value as a String.
     ///
-    /// If it was originally stored as a binary, the base64-encoded String version
-    /// of the binary data will be returned instead.
+    /// If this value's case is `.binary`, this method returns the base64-encoded String version
+    /// of the binary data instead.
     public func encoded() -> String {
       switch self {
       case .string(let string):
@@ -112,8 +112,9 @@ public struct Metadata: Sendable, Hashable {
     ///
     /// - Parameters:
     ///   - key: The key for the key-value pair.
-    ///   - value: The value to be associated with the given key. If it's a binary value, then the associated
-    ///   key must end in "-bin", otherwise, this method will produce an assertion failure.
+    ///   - value: The value to associate with the given key. If it's a binary value, then the
+    ///   associated key must end in "-bin", otherwise, this method will produce an assertion
+    ///   failure.
     init(key: String, value: Value) {
       if case .binary = value {
         assert(key.hasSuffix("-bin"), "Keys for binary values must end in -bin")
@@ -152,8 +153,8 @@ public struct Metadata: Sendable, Hashable {
   /// Adds a new key-value pair, where the value is a string.
   ///
   /// - Parameters:
-  ///   - stringValue: The string value to be associated with the given key.
-  ///   - key: The key to be associated with the given value.
+  ///   - stringValue: The string value to associate with the given key.
+  ///   - key: The key to associate with the given value.
   public mutating func addString(_ stringValue: String, forKey key: String) {
     self.addValue(.string(stringValue), forKey: key)
   }
@@ -161,8 +162,8 @@ public struct Metadata: Sendable, Hashable {
   /// Adds a new key-value pair whose value is binary data.
   ///
   /// - Parameters:
-  ///   - binaryValue: The binary data (that is, `[UInt8]`) to be associated with the given key.
-  ///   - key: The key to be associated with the given value. Must end in "-bin".
+  ///   - binaryValue: The binary data (that is, `[UInt8]`) to associate with the given key.
+  ///   - key: The key to associate with the given value. Must end in "-bin".
   public mutating func addBinary(_ binaryValue: [UInt8], forKey key: String) {
     self.addValue(.binary(binaryValue), forKey: key)
   }
@@ -170,29 +171,30 @@ public struct Metadata: Sendable, Hashable {
   /// Adds a new key-value pair.
   ///
   /// - Parameters:
-  ///   - value: The ``Value`` to be associated with the given key.
-  ///   - key: The key to be associated with the given value. If value is binary, it must end in "-bin".
+  ///   - value: The ``Value`` to associate with the given key.
+  ///   - key: The key to associate with the given value. If value is binary, it must end in "-bin".
   internal mutating func addValue(_ value: Value, forKey key: String) {
     self.elements.append(.init(key: key, value: value))
   }
 
   /// Adds the contents of a sequence of key-value pairs to this instance.
   ///
-  /// - Parameter other: the `Sequence` whose key-value pairs should be added into this `Metadata` instance.
+  /// - Parameter other: The `Sequence` containing the key-value pairs to add to this `Metadata`
+  /// instance.
   public mutating func add(contentsOf other: some Sequence<Element>) {
     self.elements.append(contentsOf: other.map(KeyValuePair.init))
   }
 
   /// Adds the contents of another metadata collection to this instance.
   ///
-  /// - Parameter other: the `Metadata` whose key-value pairs should be added into this one.
+  /// - Parameter other: The `Metadata` containing the key-value pairs to add to this one.
   public mutating func add(contentsOf other: Metadata) {
     self.elements.append(contentsOf: other.elements)
   }
 
   /// Removes all values associated with the given key.
   ///
-  /// - Parameter key: The key for which all values should be removed.
+  /// - Parameter key: The key for which to remove all values.
   ///
   /// - Complexity: O(*n*), where *n* is the number of entries in the metadata instance.
   public mutating func removeAllValues(forKey key: String) {
@@ -203,12 +205,12 @@ public struct Metadata: Sendable, Hashable {
 
   /// Adds a key-value pair to the collection, where the value is a string.
   ///
-  /// If there are pairs already associated with the given key, they will all be removed first, and the new pair
-  /// will be added. If no pairs are present with the given key, a new one will be added.
+  /// If pairs already exist for the given key, this method removes them first and adds the new
+  /// pair. If no pairs exist for the given key, it adds a new one.
   ///
   /// - Parameters:
-  ///   - stringValue: The string value to be associated with the given key.
-  ///   - key: The key to be associated with the given value.
+  ///   - stringValue: The string value to associate with the given key.
+  ///   - key: The key to associate with the given value.
   ///
   /// - Complexity: O(*n*), where *n* is the number of entries in the metadata instance.
   public mutating func replaceOrAddString(_ stringValue: String, forKey key: String) {
@@ -217,12 +219,12 @@ public struct Metadata: Sendable, Hashable {
 
   /// Adds a key-value pair to the collection, where the value is binary data.
   ///
-  /// If there are pairs already associated with the given key, they will all be removed first, and the new pair
-  /// will be added. If no pairs are present with the given key, a new one will be added.
+  /// If pairs already exist for the given key, this method removes them first and adds the new
+  /// pair. If no pairs exist for the given key, it adds a new one.
   ///
   /// - Parameters:
-  ///   - binaryValue: The `[UInt8]` to be associated with the given key.
-  ///   - key: The key to be associated with the given value. Must end in "-bin".
+  ///   - binaryValue: The `[UInt8]` to associate with the given key.
+  ///   - key: The key to associate with the given value. Must end in "-bin".
   ///
   /// - Complexity: O(*n*), where *n* is the number of entries in the metadata instance.
   public mutating func replaceOrAddBinary(_ binaryValue: [UInt8], forKey key: String) {
@@ -231,12 +233,12 @@ public struct Metadata: Sendable, Hashable {
 
   /// Adds a key-value pair to the collection.
   ///
-  /// If there are pairs already associated with the given key, they will all be removed first, and the new pair
-  /// will be added. If no pairs are present with the given key, a new one will be added.
+  /// If pairs already exist for the given key, this method removes them first and adds the new
+  /// pair. If no pairs exist for the given key, it adds a new one.
   ///
   /// - Parameters:
-  ///   - value: The ``Value`` to be associated with the given key.
-  ///   - key: The key to be associated with the given value. If value is binary, it must end in "-bin".
+  ///   - value: The ``Value`` to associate with the given key.
+  ///   - key: The key to associate with the given value. If value is binary, it must end in "-bin".
   ///
   /// - Complexity: O(*n*), where *n* is the number of entries in the metadata instance.
   internal mutating func replaceOrAddValue(_ value: Value, forKey key: String) {
@@ -246,7 +248,7 @@ public struct Metadata: Sendable, Hashable {
 
   /// Removes all key-value pairs from this metadata instance.
   ///
-  /// - Parameter keepingCapacity: Whether the current capacity should be kept or reset.
+  /// - Parameter keepingCapacity: Whether to keep or reset the current capacity.
   ///
   /// - Complexity: O(*n*), where *n* is the number of entries in the metadata instance.
   public mutating func removeAll(keepingCapacity: Bool) {
@@ -457,9 +459,9 @@ extension Metadata {
 
   /// Returns the binary values associated with a given key.
   ///
-  /// As it's iterated, this sequence will return values originally stored as binary data for a given key, and will
-  /// also try to decode values stored as strings as if they were base64-encoded strings; only strings that
-  /// are successfully decoded will be returned.
+  /// As it's iterated, this sequence returns values originally stored as binary data for a given
+  /// key, and tries to decode values stored as strings as if they were base64-encoded strings; it
+  /// returns only successfully decoded strings.
   ///
   /// - Parameter key: The returned sequence will only return binary (that is, `[UInt8]`) values for this key.
   ///

@@ -19,15 +19,15 @@ private import Synchronization
 /// A gRPC server.
 ///
 /// The server accepts connections from clients and listens on each connection for new streams
-/// which are initiated by the client. Each stream maps to a single RPC. The server routes accepted
+/// that the client initiates. Each stream maps to a single RPC. The server routes accepted
 /// streams to a service to handle the RPC or rejects them with an appropriate error if no service
 /// can handle the RPC.
 ///
 /// A ``GRPCServer`` listens with a specific transport implementation (for example, HTTP/2 or in-process),
 /// and routes requests from the transport to the service instance. You can also use "interceptors"
 /// to implement cross-cutting logic that applies to all accepted RPCs. Example uses of interceptors
-/// include request filtering, authentication, and logging. Once requests have been intercepted
-/// they are passed to a handler which in turn returns a response to send back to the client.
+/// include request filtering, authentication, and logging. Once the interceptors have processed a
+/// request, the server passes it to a handler, which in turn returns a response to send back to the client.
 ///
 /// ## Configuring and starting a server
 ///
@@ -60,8 +60,8 @@ private import Synchronization
 ///
 /// If the `with`-style methods for creating a server aren't suitable for your application then you
 /// can create and run it manually. This requires you to call the ``serve()`` method in a task
-/// which instructs the server to start its transport and listen for new RPCs. A ``RuntimeError`` is
-/// thrown if the transport can't be started or encounters some other runtime error.
+/// which instructs the server to start its transport and listen for new RPCs. This method throws a
+/// ``RuntimeError`` if the transport can't start or encounters some other runtime error.
 ///
 /// ```swift
 /// // Start running the server.
@@ -91,14 +91,14 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
   private let state: Mutex<State>
 
   private enum State: Sendable {
-    /// The server hasn't been started yet. Can transition to `running` or `stopped`.
+    /// The server hasn't started yet. Can transition to `running` or `stopped`.
     case notStarted
     /// The server is running and accepting RPCs. Can transition to `stopping`.
     case running
-    /// The server is stopping and no new RPCs will be accepted. Existing RPCs may run to
+    /// The server is stopping and won't accept new RPCs. Existing RPCs may run to
     /// completion. May transition to `stopped`.
     case stopping
-    /// The server has stopped, no RPCs are in flight and no more will be accepted. This state
+    /// The server has stopped: no RPCs are in flight and it won't accept any more. This state
     /// is terminal.
     case stopped
 
@@ -146,9 +146,9 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
   ///   - transport: The transport the server should listen on.
   ///   - services: Services offered by the server.
   ///   - interceptors: A collection of interceptors providing cross-cutting functionality to each
-  ///       accepted RPC. The order in which interceptors are added reflects the order in which they
-  ///       are called. The first interceptor added will be the first interceptor to intercept each
-  ///       request. The last interceptor added will be the final interceptor to intercept each
+  ///       accepted RPC. The order in which you add interceptors determines the order in which they
+  ///       run. The first interceptor added is the first interceptor to intercept each
+  ///       request. The last interceptor added is the final interceptor to intercept each
   ///       request before calling the appropriate handler.
   public convenience init(
     transport: Transport,
@@ -168,9 +168,9 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
   ///   - transport: The transport the server should listen on.
   ///   - services: Services offered by the server.
   ///   - interceptorPipeline: A collection of interceptors providing cross-cutting functionality to each
-  ///       accepted RPC. The order in which interceptors are added reflects the order in which they
-  ///       are called. The first interceptor added will be the first interceptor to intercept each
-  ///       request. The last interceptor added will be the final interceptor to intercept each
+  ///       accepted RPC. The order in which you add interceptors determines the order in which they
+  ///       run. The first interceptor added is the first interceptor to intercept each
+  ///       request. The last interceptor added is the final interceptor to intercept each
   ///       request before calling the appropriate handler.
   public convenience init(
     transport: Transport,
@@ -199,17 +199,16 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
 
   /// Starts the server and runs until the registered transport has closed.
   ///
-  /// No RPCs are processed until the configured transport is listening. If the transport fails to start
-  /// listening, or if it encounters a runtime error, then ``RuntimeError`` is thrown.
+  /// The server processes no RPCs until the configured transport is listening. If the transport fails to start
+  /// listening, or if it encounters a runtime error, then this function throws ``RuntimeError``.
   ///
-  /// This function returns when the configured transport has stopped listening and all requests have been
-  /// handled. You can signal to the transport that it should stop listening by calling
+  /// This function returns when the configured transport has stopped listening and the server has handled
+  /// all requests. To signal to the transport that it should stop listening, call
   /// ``beginGracefulShutdown()``. The server will continue to process existing requests.
   ///
   /// To stop the server more abruptly you can cancel the task that this function is running in.
   ///
-  /// - Note: You can only call this function once, repeated calls will result in a
-  ///   ``RuntimeError`` being thrown.
+  /// - Note: Call this function at most once; repeated calls throw a ``RuntimeError``.
   public func serve() async throws {
     try self.state.withLock { try $0.startServing() }
 
@@ -256,14 +255,14 @@ public final class GRPCServer<Transport: ServerTransport>: Sendable {
 ///   - transport: The transport the server should listen on.
 ///   - services: Services offered by the server.
 ///   - interceptors: A collection of interceptors providing cross-cutting functionality to each
-///       accepted RPC. The order in which interceptors are added reflects the order in which they
-///       are called. The first interceptor added will be the first interceptor to intercept each
-///       request. The last interceptor added will be the final interceptor to intercept each
+///       accepted RPC. The order in which you add interceptors determines the order in which they
+///       run. The first interceptor added is the first interceptor to intercept each
+///       request. The last interceptor added is the final interceptor to intercept each
 ///       request before calling the appropriate handler.
 ///   - isolation: A reference to the actor to which the enclosing code is isolated, or nil if the
 ///       code is nonisolated.
 ///   - handleServer: A closure which is called with the server. When the closure returns, the
-///       server is shutdown gracefully.
+///       server shuts down gracefully.
 /// - Returns: The result of the `handleServer` closure.
 @available(gRPCSwift 2.0, *)
 public func withGRPCServer<Transport: ServerTransport, Result: Sendable>(
@@ -288,14 +287,14 @@ public func withGRPCServer<Transport: ServerTransport, Result: Sendable>(
 ///   - transport: The transport the server should listen on.
 ///   - services: Services offered by the server.
 ///   - interceptorPipeline: A collection of interceptors providing cross-cutting functionality to each
-///       accepted RPC. The order in which interceptors are added reflects the order in which they
-///       are called. The first interceptor added will be the first interceptor to intercept each
-///       request. The last interceptor added will be the final interceptor to intercept each
+///       accepted RPC. The order in which you add interceptors determines the order in which they
+///       run. The first interceptor added is the first interceptor to intercept each
+///       request. The last interceptor added is the final interceptor to intercept each
 ///       request before calling the appropriate handler.
 ///   - isolation: A reference to the actor to which the enclosing code is isolated, or nil if the
 ///       code is nonisolated.
 ///   - handleServer: A closure which is called with the server. When the closure returns, the
-///       server is shutdown gracefully.
+///       server shuts down gracefully.
 /// - Returns: The result of the `handleServer` closure.
 @available(gRPCSwift 2.0, *)
 public func withGRPCServer<Transport: ServerTransport, Result: Sendable>(

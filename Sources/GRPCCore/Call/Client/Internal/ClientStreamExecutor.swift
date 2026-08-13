@@ -23,7 +23,7 @@ internal enum ClientStreamExecutor: Sendable {
   ///   - request: A streaming request.
   ///   - method: A description of the method to call.
   ///   - context: The client context.
-  ///   - attempt: The attempt number for the RPC that will be executed.
+  ///   - attempt: The attempt number for the RPC that this executor will execute.
   ///   - serializer: A request serializer.
   ///   - deserializer: A response deserializer.
   ///   - stream: The stream to execute the RPC on.

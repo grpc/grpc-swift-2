@@ -782,9 +782,9 @@ private func docs(
 
   let otherParameters = """
     ///   - options: Options to apply to this RPC.
-    ///   - handleResponse: A closure which handles the response, the result of which is
-    ///       returned to the caller. Returning from the closure will cancel the RPC if it
-    ///       hasn't already finished.
+    ///   - handleResponse: A closure which handles the response and returns its result to
+    ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+    ///       already finished.
     /// - Returns: The result of `handleResponse`.
     """
 
@@ -821,16 +821,16 @@ private func explodedDocs(for method: MethodDescriptor) -> String {
   if method.isInputStreaming {
     parameters += "\n"
     parameters += """
-      ///   - producer: A closure producing request messages to send to the server. The request
-      ///       stream is closed when the closure returns.
+      ///   - producer: A closure producing request messages to send to the server. Returning
+      ///       from the closure closes the request stream.
       """
   }
 
   parameters += "\n"
   parameters += """
-    ///   - handleResponse: A closure which handles the response, the result of which is
-    ///       returned to the caller. Returning from the closure will cancel the RPC if it
-    ///       hasn't already finished.
+    ///   - handleResponse: A closure which handles the response and returns its result to
+    ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+    ///       already finished.
     /// - Returns: The result of `handleResponse`.
     """
 

@@ -19,15 +19,16 @@ public import Synchronization  // should be @usableFromInline
 
 /// An `AsyncSequence` which can broadcast its values to multiple consumers concurrently.
 ///
-/// The sequence is not a general-purpose broadcast sequence; it is tailored specifically for the
-/// requirements of gRPC Swift, in particular it is used to support retrying and hedging requests.
+/// The sequence is not a general-purpose broadcast sequence; gRPC Swift tailors it specifically
+/// to its own requirements, using it in particular to support retrying and hedging requests.
 ///
 /// In order to achieve this it maintains on an internal buffer of elements which is limited in
 /// size. Each iterator ("subscriber") maintains an offset into the elements which the sequence has
 /// produced over time. If a subscriber is consuming too slowly (and the buffer is full) then the
 /// sequence will cancel the subscriber's subscription to the stream, dropping the oldest element
 /// in the buffer to make space for more elements. If the buffer is full and all subscribers are
-/// equally slow then all producers are suspended until the buffer drops to a reasonable size.
+/// equally slow then the sequence suspends all producers until the buffer drops to a reasonable
+/// size.
 ///
 /// The expectation is that the number of subscribers will be low; for retries there will be at most
 /// one subscriber at a time, for hedging there may be at most five subscribers at a time.
@@ -65,8 +66,8 @@ struct BroadcastAsyncSequence<Element: Sendable>: Sendable, AsyncSequence {
     return AsyncIterator(_storage: _storage, id: id)
   }
 
-  /// Returns true if it is known to be safe for the next subscriber to subscribe and successfully
-  /// consume elements.
+  /// Returns true if the sequence knows it's safe for the next subscriber to subscribe and
+  /// successfully consume elements.
   ///
   /// This function can return `false` if there are active subscribers or the internal buffer no
   /// longer contains the first element in the sequence.
@@ -234,7 +235,7 @@ final class _BroadcastSequenceStorage<Element: Sendable>: Sendable {
     }
   }
 
-  /// Indicate that no more values will be produced.
+  /// Indicate that the sequence will produce no more values.
   ///
   /// - Parameter result: Whether the stream is finishing cleanly or because of an error.
   @inlinable
@@ -262,7 +263,7 @@ final class _BroadcastSequenceStorage<Element: Sendable>: Sendable {
   /// Returns the next element for the given subscriber, if it is available.
   ///
   /// - Parameter id: The ID of the subscriber requesting the element.
-  /// - Returns: The next element or `nil` if the stream has been terminated.
+  /// - Returns: The next element or `nil` if the stream has finished.
   @inlinable
   func nextElement(
     forSubscriber id: _BroadcastSequenceStateMachine<Element>.Subscriptions.ID
@@ -306,8 +307,8 @@ final class _BroadcastSequenceStorage<Element: Sendable>: Sendable {
     }
   }
 
-  /// Returns true if it's guaranteed that the next subscriber may join and safely begin consuming
-  /// elements.
+  /// Returns true if the storage guarantees that the next subscriber may join and safely begin
+  /// consuming elements.
   @inlinable
   var isKnownSafeForNextSubscriber: Bool {
     self._state.withLock { state in
@@ -390,13 +391,13 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
 
   @usableFromInline
   enum State: Sendable {
-    /// No subscribers and no elements have been produced.
+    /// No subscribers exist, and the producer hasn't produced any elements yet.
     case initial(Initial)
-    /// Subscribers exist but no elements have been produced.
+    /// Subscribers exist, but the producer hasn't produced any elements yet.
     case subscribed(Subscribed)
-    /// Elements have been produced, there may or may not be subscribers.
+    /// The producer has produced elements; subscribers may or may not exist.
     case streaming(Streaming)
-    /// No more elements will be produced. There may or may not been subscribers.
+    /// The producer won't produce any more elements. Subscribers may or may not exist.
     case finished(Finished)
     /// Temporary state to avoid CoWs.
     case _modifying
@@ -530,10 +531,10 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
       let bufferSize: Int
 
       // TODO: (optimisation) one-or-many Deque to avoid allocations in the case of a single writer
-      /// Producers which have been suspended.
+      /// Suspended producers.
       @usableFromInline
       var producers: [(ProducerContinuation, Int)]
-      /// The IDs of producers which have been cancelled.
+      /// The IDs of cancelled producers.
       @usableFromInline
       var cancelledProducers: [Int]
       /// The next token for a producer.
@@ -1389,8 +1390,9 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
 extension _BroadcastSequenceStateMachine {
   /// A collection of elements tagged with an identifier.
   ///
-  /// Identifiers are assigned when elements are added to the collection and are monotonically
-  /// increasing. If element 'A' is added before element 'B' then 'A' will have a lower ID than 'B'.
+  /// The collection assigns each element an identifier as callers add it, and identifiers increase
+  /// monotonically. If a caller adds element 'A' before element 'B' then 'A' has a lower ID than
+  /// 'B'.
   @usableFromInline
   struct Elements: Sendable {
     /// The ID of an element
@@ -1502,7 +1504,7 @@ extension _BroadcastSequenceStateMachine {
 
     @usableFromInline
     enum ElementLookup: Sendable {
-      /// The element was found in the collection.
+      /// The lookup found the element in the collection.
       case found(Element)
       /// The element isn't in the collection, but it could be in the future.
       case maybeAvailableLater
@@ -1578,7 +1580,7 @@ extension _BroadcastSequenceStateMachine {
       @usableFromInline
       var nextElementID: _BroadcastSequenceStateMachine<Element>.Elements.ID
 
-      /// A continuation which which will be resumed when the next element becomes available.
+      /// A continuation that the state machine resumes when the next element becomes available.
       @usableFromInline
       var continuation: ConsumerContinuation?
 
@@ -1595,7 +1597,7 @@ extension _BroadcastSequenceStateMachine {
 
       /// Returns and sets the continuation to `nil` if one exists.
       ///
-      /// The next element ID is advanced if a contination exists.
+      /// This function advances the next element ID if a continuation exists.
       ///
       /// - Returns: The continuation, if one existed.
       @inlinable
@@ -1642,9 +1644,8 @@ extension _BroadcastSequenceStateMachine {
     /// - Parameters:
     ///   - id: The ID of the subscriber.
     ///   - body: A closure to mutate the element ID of the subscriber which returns the result and
-    ///      a boolean indicating whether the subscriber should be removed.
-    /// - Returns: The result returned from the closure or `nil` if no subscriber exists with the
-    ///     given ID.
+    ///      a boolean indicating whether the caller should remove the subscriber.
+    /// - Returns: The closure's result, or `nil` if no subscriber exists with the given ID.
     @inlinable
     mutating func withMutableElementID<R>(
       forSubscriber id: ID,
@@ -1664,7 +1665,7 @@ extension _BroadcastSequenceStateMachine {
     /// - Parameters:
     ///   - continuation: The continuation to set.
     ///   - id: The ID of the subscriber.
-    /// - Returns: A boolean indicating whether the continuation was set or not.
+    /// - Returns: A boolean indicating whether this function set the continuation.
     @inlinable
     mutating func setContinuation(
       _ continuation: ConsumerContinuation,
@@ -1693,8 +1694,8 @@ extension _BroadcastSequenceStateMachine {
 
     /// Removes the subscriber with the given ID.
     /// - Parameter id: The ID of the subscriber to remove.
-    /// - Returns: A tuple indicating whether a subscriber was removed and any continuation
-    ///     associated with the subscriber.
+    /// - Returns: A tuple indicating whether this function removed a subscriber, and any
+    ///     continuation associated with it.
     @inlinable
     mutating func removeSubscriber(withID id: ID) -> (Bool, ConsumerContinuation?) {
       guard let index = self._subscribers.firstIndex(where: { $0.id == id }) else {

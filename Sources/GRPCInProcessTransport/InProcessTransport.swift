@@ -20,7 +20,7 @@ public import GRPCCore
 public struct InProcessTransport: Sendable {
   /// The server side of this transport pairing.
   ///
-  /// Pass this to a `GRPCServer` to accept RPCs made via ``client``.
+  /// Pass this to a `GRPCServer` to accept RPCs that ``client`` makes.
   public let server: Self.Server
 
   /// The client side of this transport pairing.
@@ -31,7 +31,7 @@ public struct InProcessTransport: Sendable {
   /// Initializes a new ``InProcessTransport`` pairing a ``Client`` and a ``Server``.
   ///
   /// - Parameters:
-  ///   - serviceConfig: Configuration describing how methods should be executed.
+  ///   - serviceConfig: Configuration describing how to execute methods.
   public init(serviceConfig: ServiceConfig = ServiceConfig()) {
     let peer = System.pid().map { "in-process:\($0)" } ?? "in-process"
     self.server = Self.Server(peer: peer)

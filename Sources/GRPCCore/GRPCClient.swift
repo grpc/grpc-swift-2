@@ -68,14 +68,14 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
   /// The state of the client.
   private enum State: Sendable {
 
-    /// The client hasn't been started yet. Can transition to `running` or `stopped`.
+    /// The client hasn't started yet. Can transition to `running` or `stopped`.
     case notStarted
     /// The client is running and can send RPCs. Can transition to `stopping`.
     case running
-    /// The client is stopping and no new RPCs will be sent. Existing RPCs may run to
+    /// The client is stopping and won't send new RPCs. Existing RPCs may run to
     /// completion. May transition to `stopped`.
     case stopping
-    /// The client has stopped, no RPCs are in flight and no more will be accepted. This state
+    /// The client has stopped: no RPCs are in flight and it won't accept any more. This state
     /// is terminal.
     case stopped
 
@@ -141,13 +141,14 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
     /// A collection of interceptors providing cross-cutting functionality to each accepted RPC, keyed by the method to which they apply.
     ///
-    /// The list of interceptors for each method is computed from `interceptorsPipeline` when calling a method for the first time.
-    /// This caching is done to avoid having to compute the applicable interceptors for each request made.
+    /// This type computes the list of interceptors for each method from `interceptorPipeline` the
+    /// first time it calls that method, and caches the result to avoid recomputing the applicable
+    /// interceptors for each request.
     ///
-    /// The order in which interceptors are added reflects the order in which they are called. The
-    /// first interceptor added will be the first interceptor to intercept each request. The last
-    /// interceptor added will be the final interceptor to intercept each request before calling
-    /// the appropriate handler.
+    /// The order in which you add interceptors determines the order in which they run. The first
+    /// interceptor added is the first interceptor to intercept each request. The last interceptor
+    /// added is the final interceptor to intercept each request before calling the appropriate
+    /// handler.
     var interceptorsPerMethod: [MethodDescriptor: [any ClientInterceptor]]
 
     init(interceptorPipeline: [ConditionalInterceptor<any ClientInterceptor>]) {
@@ -178,9 +179,9 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
   ///   - interceptors: A collection of ``ClientInterceptor``s providing cross-cutting functionality to each
-  ///       accepted RPC. The order in which interceptors are added reflects the order in which they
-  ///       are called. The first interceptor added will be the first interceptor to intercept each
-  ///       request. The last interceptor added will be the final interceptor to intercept each
+  ///       accepted RPC. The order in which you add interceptors determines the order in which they
+  ///       run. The first interceptor added is the first interceptor to intercept each
+  ///       request. The last interceptor added is the final interceptor to intercept each
   ///       request before calling the appropriate handler.
   convenience public init(
     transport: Transport,
@@ -197,10 +198,11 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
   /// - Parameters:
   ///   - transport: The transport used to establish a communication channel with a server.
   ///   - interceptorPipeline: A collection of ``ConditionalInterceptor``s providing cross-cutting
-  ///       functionality to each accepted RPC. Only applicable interceptors from the pipeline will be applied to each RPC.
-  ///       The order in which interceptors are added reflects the order in which they are called.
-  ///       The first interceptor added will be the first interceptor to intercept each request.
-  ///       The last interceptor added will be the final interceptor to intercept each request before calling the appropriate handler.
+  ///       functionality to each accepted RPC. This applies only the interceptors from the
+  ///       pipeline that apply to each RPC. The order in which you add interceptors determines
+  ///       the order in which they run. The first interceptor added is the first interceptor
+  ///       to intercept each request. The last interceptor added is the final interceptor to
+  ///       intercept each request before calling the appropriate handler.
   public init(
     transport: Transport,
     interceptorPipeline: [ConditionalInterceptor<any ClientInterceptor>]
@@ -211,11 +213,11 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Starts the client.
   ///
-  /// This returns once ``beginGracefulShutdown()`` has been called and all in-flight RPCs have finished executing.
+  /// This returns once you've called ``beginGracefulShutdown()`` and all in-flight RPCs have finished executing.
   /// If you need to abruptly stop all work you should cancel the task executing this method.
   ///
-  /// The client, and by extension this function, can only be run once. If the client is already
-  /// running or has already been closed then a ``RuntimeError`` is thrown.
+  /// Call this function at most once per client. If the client is already
+  /// running, or you've already closed it, this function throws a ``RuntimeError``.
   public func runConnections() async throws {
     try self.stateMachine.withLock { try $0.state.run() }
 
@@ -237,9 +239,9 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Closes the client.
   ///
-  /// The transport will be closed: this means that it will be given enough time to wait for
-  /// in-flight RPCs to finish executing, but no new RPCs will be accepted. You can cancel the task
-  /// executing ``runConnections()`` if you want to abruptly stop in-flight RPCs.
+  /// This closes the transport, giving it enough time to wait for
+  /// in-flight RPCs to finish executing, but it won't accept new RPCs. To abruptly stop
+  /// in-flight RPCs, cancel the task executing ``runConnections()``.
   public func beginGracefulShutdown() {
     let wasRunning = self.stateMachine.withLock { $0.state.beginGracefulShutdown() }
     if wasRunning {
@@ -349,8 +351,8 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Starts a bidirectional streaming RPC.
   ///
-  /// - Note: ``runConnections()`` must have been called and still executing, and ``beginGracefulShutdown()`` mustn't
-  /// have been called.
+  /// - Note: You must have called ``runConnections()`` and it must still be executing, and you
+  /// mustn't have called ``beginGracefulShutdown()``.
   ///
   /// - Parameters:
   ///   - request: The streaming request.
@@ -397,14 +399,14 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 /// - Parameters:
 ///   - transport: The transport used to establish a communication channel with a server.
 ///   - interceptors: A collection of ``ClientInterceptor``s providing cross-cutting functionality to each
-///       accepted RPC. The order in which interceptors are added reflects the order in which they
-///       are called. The first interceptor added will be the first interceptor to intercept each
-///       request. The last interceptor added will be the final interceptor to intercept each
+///       accepted RPC. The order in which you add interceptors determines the order in which they
+///       run. The first interceptor added is the first interceptor to intercept each
+///       request. The last interceptor added is the final interceptor to intercept each
 ///       request before calling the appropriate handler.
 ///   - isolation: A reference to the actor to which the enclosing code is isolated, or nil if the
 ///       code is nonisolated.
 ///   - handleClient: A closure which is called with the client. When the closure returns, the
-///       client is shutdown gracefully.
+///       client shuts down gracefully.
 @available(gRPCSwift 2.0, *)
 public func withGRPCClient<Transport: ClientTransport, Result: Sendable>(
   transport: Transport,
@@ -425,14 +427,14 @@ public func withGRPCClient<Transport: ClientTransport, Result: Sendable>(
 /// - Parameters:
 ///   - transport: The transport used to establish a communication channel with a server.
 ///   - interceptorPipeline: A collection of ``ConditionalInterceptor``s providing cross-cutting
-///       functionality to each accepted RPC. Only applicable interceptors from the pipeline will be applied to each RPC.
-///       The order in which interceptors are added reflects the order in which they are called.
-///       The first interceptor added will be the first interceptor to intercept each request.
-///       The last interceptor added will be the final interceptor to intercept each request before calling the appropriate handler.
+///       functionality to each accepted RPC. This applies only the interceptors from the pipeline
+///       that apply to each RPC. The order in which you add interceptors determines the order in
+///       which they run. The first interceptor added is the first interceptor to intercept each request.
+///       The last interceptor added is the final interceptor to intercept each request before calling the appropriate handler.
 ///   - isolation: A reference to the actor to which the enclosing code is isolated, or nil if the
 ///       code is nonisolated.
 ///   - handleClient: A closure which is called with the client. When the closure returns, the
-///       client is shutdown gracefully.
+///       client shuts down gracefully.
 /// - Returns: The result of the `handleClient` closure.
 @available(gRPCSwift 2.0, *)
 public func withGRPCClient<Transport: ClientTransport, Result: Sendable>(

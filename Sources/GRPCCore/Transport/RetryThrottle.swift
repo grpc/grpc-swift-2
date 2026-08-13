@@ -18,7 +18,7 @@ private import Synchronization
 
 /// A throttle used to rate-limit retries and hedging attempts.
 ///
-/// gRPC prevents servers from being overloaded by retries and hedging by using a token-based
+/// gRPC prevents retries and hedging from overloading servers by using a token-based
 /// throttling mechanism at the transport level.
 ///
 /// Each client transport maintains a throttle for the server it is connected to, and gRPC records
@@ -43,18 +43,18 @@ public final class RetryThrottle: Sendable {
   /// The maximum number of tokens, multiplied by 1000.
   private let scaledMaxTokens: Int
   /// The retry threshold, multiplied by 1000. If ``scaledTokensAvailable`` is above this then
-  /// retries are permitted.
+  /// the throttle permits retries.
   private let scaledRetryThreshold: Int
 
   /// Returns the throttling token ratio.
   ///
-  /// The number of tokens held by the throttle is incremented by this value for each successful
+  /// The throttle increments the number of tokens it holds by this value for each successful
   /// response. In the context of throttling, a successful response is one that:
   /// - receives metadata from the server, or
-  /// - is terminated with a non-retryable or fatal status code.
+  /// - ends with a non-retryable or fatal status code.
   ///
-  /// If the response is a pushback response, then it is not considered to be successful, even if
-  /// either of the preceding conditions are met.
+  /// If the response is a pushback response, then it does not count as successful, even if it
+  /// meets either of the preceding conditions.
   public var tokenRatio: Double {
     Double(self.scaledTokenRatio) / 1000
   }
@@ -67,14 +67,14 @@ public final class RetryThrottle: Sendable {
   /// The number of tokens the throttle currently has.
   ///
   /// If this value is less than or equal to the retry threshold (defined as `maxTokens / 2`),
-  /// then RPCs will not be retried and hedging will be disabled.
+  /// then the throttle will not retry RPCs and will disable hedging.
   public var tokens: Double {
     self.scaledTokensAvailable.withLock {
       Double($0) / 1000
     }
   }
 
-  /// Returns whether retries and hedging are permitted at this time.
+  /// Returns whether the throttle permits retries and hedging at this time.
   public var isRetryPermitted: Bool {
     self.scaledTokensAvailable.withLock {
       $0 > self.scaledRetryThreshold
@@ -87,7 +87,8 @@ public final class RetryThrottle: Sendable {
   ///   - maxTokens: The maximum number of tokens available. Must be in the range `1...1000`.
   ///   - tokenRatio: The number of tokens to increment the available tokens by for successful
   ///       responses. See the documentation on this type for a description of what counts as a
-  ///       successful response. Note that only three decimal places are used from this value.
+  ///       successful response. Note that the throttle uses only three decimal places from this
+  ///       value.
   /// - Precondition: `maxTokens` must be in the range `1...1000`.
   /// - Precondition: `tokenRatio` must be `>= 0.001`.
   public init(maxTokens: Int, tokenRatio: Double) {
@@ -122,7 +123,7 @@ public final class RetryThrottle: Sendable {
   }
 
   /// Records a failure, removing tokens from the throttle.
-  /// - Returns: Whether retries will now be throttled.
+  /// - Returns: Whether the throttle will now limit retries.
   @usableFromInline
   @discardableResult
   func recordFailure() -> Bool {

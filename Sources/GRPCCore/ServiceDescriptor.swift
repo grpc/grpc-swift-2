@@ -42,8 +42,8 @@ public struct ServiceDescriptor: Sendable, Hashable {
   }
 
   /// The fully qualified service name in the format:
-  /// - "package.service": if a package name is specified. For example, "helloworld.Greeter".
-  /// - "service": if a package name is not specified. For example, "Greeter".
+  /// - "package.service": if you specify a package name. For example, "helloworld.Greeter".
+  /// - "service": if you don't specify a package name. For example, "Greeter".
   public var fullyQualifiedService: String
 
   /// Creates a new descriptor from the fully qualified service name.

@@ -76,50 +76,50 @@ public struct MethodConfig: Hashable, Sendable {
 
   /// The default timeout for the RPC.
   ///
-  /// If no reply is received in the specified amount of time, the request is aborted
+  /// If gRPC doesn't receive a reply in the specified amount of time, it aborts the request
   /// with an ``RPCError`` with code ``RPCError/Code/deadlineExceeded``.
   ///
   /// The actual deadline used will be the minimum of the value specified here
   /// and the value set by the application by the client API. If either one isn't set,
-  /// then the other value is used. If neither is set, then the request has no deadline.
+  /// gRPC uses the other value. If neither is set, then the request has no deadline.
   ///
-  /// The timeout applies to the overall execution of an RPC. If, for example, a retry
-  /// policy is set, then the timeout begins when the first attempt is started and _isn't_ reset
-  /// when subsequent attempts start.
+  /// The timeout applies to the overall execution of an RPC. For example, if you set a retry
+  /// policy, the timeout begins when the first attempt starts, and subsequent attempts don't
+  /// reset it.
   public var timeout: Duration?
 
   /// The maximum allowed payload size in bytes for an individual message.
   ///
-  /// If a client attempts to send an object larger than this value, it will not be sent, and the
-  /// client will see an error. Note that 0 is a valid value, meaning that the request message
-  /// must be empty.
+  /// If a client attempts to send an object larger than this value, the client won't send it,
+  /// and the client will see an error. Note that 0 is a valid value, meaning that the request
+  /// message must be empty.
   ///
-  /// Note that if compression is used, the uncompressed message size is validated.
+  /// Note that if you use compression, gRPC validates the uncompressed message size.
   public var maxRequestMessageBytes: Int?
 
   /// The maximum allowed payload size in bytes for an individual response message.
   ///
-  /// If a server attempts to send an object larger than this value, it will not
-  /// be sent, and an error will be sent to the client instead. Note that 0 is a valid value,
-  /// meaning that the response message must be empty.
+  /// If a server attempts to send an object larger than this value, the server won't send it,
+  /// and it will send an error to the client instead. Note that 0 is a valid value, meaning
+  /// that the response message must be empty.
   ///
-  /// Note that if compression is used, the uncompressed message size is validated.
+  /// Note that if you use compression, gRPC validates the uncompressed message size.
   public var maxResponseMessageBytes: Int?
 
-  /// The policy determining how many times, and when, the RPC is executed.
+  /// The policy that determines how many times, and when, gRPC executes the RPC.
   ///
   /// There are two policy types:
   /// 1. Retry
   /// 2. Hedging
   ///
-  /// The retry policy allows an RPC to be retried a limited number of times if the RPC
-  /// fails with one of the configured set of status codes. RPCs are only retried if they
+  /// The retry policy allows gRPC to retry an RPC a limited number of times if the RPC
+  /// fails with one of the configured set of status codes. gRPC only retries RPCs if they
   /// fail immediately, that is, the first response part received from the server is a
   /// status code.
   ///
-  /// The hedging policy allows an RPC to be executed multiple times concurrently. Typically
-  /// each execution will be staggered by some delay. The first successful response will be
-  /// reported to the client. Hedging is only suitable for idempotent RPCs.
+  /// The hedging policy allows gRPC to execute an RPC multiple times concurrently. Typically,
+  /// gRPC staggers each execution by some delay. gRPC reports the first successful response
+  /// to the client. Hedging is only suitable for idempotent RPCs.
   public var executionPolicy: RPCExecutionPolicy?
 
   /// Creates an execution configuration.
@@ -148,7 +148,7 @@ public struct MethodConfig: Hashable, Sendable {
   }
 }
 
-/// Whether an RPC should be retried or hedged.
+/// Whether to retry or hedge an RPC.
 @available(gRPCSwift 2.0, *)
 public struct RPCExecutionPolicy: Hashable, Sendable {
   @usableFromInline
@@ -206,14 +206,14 @@ public struct RPCExecutionPolicy: Hashable, Sendable {
 ///
 /// gRPC retries RPCs when the first response from the server is a status code that matches
 /// one of the configured retryable status codes. If the server begins processing the RPC and
-/// first responds with metadata and later responds with a retryable status code, then the RPC
-/// won't be retried.
+/// first responds with metadata and later responds with a retryable status code, then gRPC
+/// won't retry the RPC.
 ///
-/// Execution attempts are limited by ``maxAttempts``, which includes the original attempt. The
-/// maximum number of attempts is limited to five.
+/// ``maxAttempts`` limits execution attempts, including the original attempt. gRPC caps the
+/// maximum number of attempts at five.
 ///
-/// Subsequent attempts are executed after some delay. The first _retry_, or second attempt, will
-/// be started after a randomly chosen delay between zero and ``initialBackoff``. More generally,
+/// gRPC executes subsequent attempts after some delay. It starts the first _retry_, or second
+/// attempt, after a randomly chosen delay between zero and ``initialBackoff``. More generally,
 /// the nth retry will happen after a randomly chosen delay between zero
 /// and `min(initialBackoff * backoffMultiplier^(n-1), maxBackoff)`.
 ///
@@ -223,7 +223,7 @@ public struct RPCExecutionPolicy: Hashable, Sendable {
 public struct RetryPolicy: Hashable, Sendable {
   /// The maximum number of RPC attempts, including the original attempt.
   ///
-  /// Must be greater than one. Values greater than five are treated as five.
+  /// Must be greater than one. gRPC treats values greater than five as five.
   public var maxAttempts: Int {
     didSet { self.maxAttempts = try! validateMaxAttempts(self.maxAttempts) }
   }
@@ -251,7 +251,7 @@ public struct RetryPolicy: Hashable, Sendable {
     willSet { try! Self.validateBackoffMultiplier(newValue) }
   }
 
-  /// The set of status codes that may be retried.
+  /// The set of status codes that gRPC may retry.
   ///
   /// - Precondition: Must not be empty.
   public var retryableStatusCodes: Set<Status.Code> {
@@ -267,7 +267,7 @@ public struct RetryPolicy: Hashable, Sendable {
   ///   - maxBackoff: The maximum period of time to wait between attempts. Must be greater than
   ///       zero.
   ///   - backoffMultiplier: The exponential backoff multiplier. Must be greater than zero.
-  ///   - retryableStatusCodes: The set of status codes that may be retried. Must not be empty.
+  ///   - retryableStatusCodes: The set of status codes that gRPC may retry. Must not be empty.
   /// - Precondition: `maxAttempts` must be greater than one.
   /// - Precondition: `initialBackoff`, `maxBackoff`, and `backoffMultiplier` must be greater
   ///     than zero.
@@ -330,8 +330,8 @@ public struct RetryPolicy: Hashable, Sendable {
 
 /// Policy for hedging an RPC.
 ///
-/// Hedged RPCs may execute more than once on a server, so only idempotent methods should
-/// be hedged.
+/// Hedged RPCs may execute more than once on a server, so only hedge idempotent
+/// methods.
 ///
 /// gRPC executes the RPC at most ``maxAttempts`` times, staggering each attempt
 /// by ``hedgingDelay``.
@@ -342,14 +342,14 @@ public struct RetryPolicy: Hashable, Sendable {
 public struct HedgingPolicy: Hashable, Sendable {
   /// The maximum number of RPC attempts, including the original attempt.
   ///
-  /// Values greater than five are treated as five.
+  /// gRPC treats values greater than five as five.
   ///
   /// - Precondition: Must be greater than one.
   public var maxAttempts: Int {
     didSet { self.maxAttempts = try! validateMaxAttempts(self.maxAttempts) }
   }
 
-  /// The first RPC is sent immediately, and each subsequent RPC is sent after this delay.
+  /// gRPC sends the first RPC immediately and sends each subsequent RPC after this delay.
   ///
   /// Set this to zero to immediately send all RPCs.
   public var hedgingDelay: Duration {
@@ -358,9 +358,8 @@ public struct HedgingPolicy: Hashable, Sendable {
 
   /// The set of status codes that indicate other hedged RPCs may still succeed.
   ///
-  /// If a non-fatal status code is returned by the server, hedged RPCs will continue.
-  /// Otherwise, outstanding requests will be cancelled and the error returned to the
-  /// application layer.
+  /// If the server returns a non-fatal status code, hedged RPCs will continue. Otherwise,
+  /// gRPC cancels outstanding requests and returns the error to the application layer.
   public var nonFatalStatusCodes: Set<Status.Code>
 
   /// Creates a new hedging policy.

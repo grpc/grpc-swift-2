@@ -6,10 +6,10 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
   /// Known features.
   private let features: [Routeguide_Feature]
 
-  /// Notes recorded by clients.
+  /// Notes that clients record.
   private let receivedNotes: Notes
 
-  /// A thread-safe store for notes sent by clients.
+  /// A thread-safe store for notes that clients send.
   private final class Notes: Sendable {
     private let notes: Mutex<[Routeguide_RouteNote]>
 
@@ -17,10 +17,10 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
       self.notes = Mutex([])
     }
 
-    /// Records a note and returns all other notes recorded at the same location.
+    /// Records a note and returns the other notes it has already recorded at the same location.
     ///
     /// - Parameter receivedNote: A note to record.
-    /// - Returns: Other notes recorded at the same location.
+    /// - Returns: The other notes it has already recorded at the same location.
     func recordNote(_ receivedNote: Routeguide_RouteNote) -> [Routeguide_RouteNote] {
       return self.notes.withLock { notes in
         var notesFromSameLocation: [Routeguide_RouteNote] = []
@@ -42,7 +42,7 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
     self.receivedNotes = Notes()
   }
 
-  /// Returns the first feature found at the given location, if one exists.
+  /// Returns the first feature at the given location, if one exists.
   private func findFeature(latitude: Int32, longitude: Int32) -> Routeguide_Feature? {
     self.features.first {
       $0.location.latitude == latitude && $0.location.longitude == longitude

@@ -16,8 +16,8 @@
 
 /// A status object represents the outcome of an RPC.
 ///
-/// Each ``Status`` is composed of a ``Status/code-swift.property`` and ``Status/message``. Each
-/// service implementation chooses the code and message returned to the client for each RPC
+/// Each ``Status`` consists of a ``Status/code-swift.property`` and ``Status/message``. Each
+/// service implementation chooses the code and message that it returns to the client for each RPC
 /// it implements. However, client and server implementations may also generate status objects
 /// on their own if an error happens.
 ///
@@ -113,7 +113,7 @@ extension Status {
 extension Status {
   /// Status codes for gRPC operations.
   ///
-  /// The outcome of every RPC is indicated by a status code.
+  /// A status code indicates the outcome of every RPC.
   public struct Code: Hashable, CustomStringConvertible, Sendable {
     // Source: https://github.com/grpc/grpc/blob/6c0578099835c854b0ff36a4b8db98ed49278ed5/doc/statuscodes.md
     enum Wrapped: UInt8, Hashable, Sendable {
@@ -200,15 +200,15 @@ extension Status.Code {
   /// The operation completed successfully.
   public static let ok = Self(code: .ok)
 
-  /// The operation was cancelled (typically by the caller).
+  /// The caller typically cancelled the operation.
   public static let cancelled = Self(code: .cancelled)
 
   /// Unknown error.
   ///
-  /// An example of where this error may be returned is if a
-  /// Status value received from another address space belongs to an error-space
-  /// that is not known in this address space. Also errors raised by APIs that
-  /// do not return enough error information may be converted to this error.
+  /// The system may return this error if a
+  /// Status value it received from another address space belongs to an error-space
+  /// this address space doesn't know about. The system may also convert errors that
+  /// APIs raise without returning enough error information into this error.
   public static let unknown = Self(code: .unknown)
 
   /// Client specified an invalid argument.
@@ -222,13 +222,13 @@ extension Status.Code {
   /// Deadline expired before operation could complete.
   ///
   /// For operations that
-  /// change the state of the system, this error may be returned even if the
-  /// operation has completed successfully. For example, a successful response
-  /// from a server could have been delayed long enough for the deadline to
+  /// change the state of the system, the server may return this error even if the
+  /// operation has completed successfully. For example, the network could delay a
+  /// successful response from a server long enough for the deadline to
   /// expire.
   public static let deadlineExceeded = Self(code: .deadlineExceeded)
 
-  /// Some requested entity (for example, file or directory) was not found.
+  /// The server couldn't find the requested entity (for example, a file or directory).
   public static let notFound = Self(code: .notFound)
 
   /// Some entity that we attempted to create (for example, file or directory) already
@@ -237,9 +237,9 @@ extension Status.Code {
 
   /// The caller does not have permission to execute the specified operation.
   ///
-  /// ``permissionDenied`` must not be used for rejections caused by exhausting
+  /// Don't use ``permissionDenied`` for rejections caused by exhausting
   /// some resource (use ``resourceExhausted`` instead for those errors).
-  /// ``permissionDenied`` must not be used if the caller cannot be identified
+  /// Don't use ``permissionDenied`` if the caller cannot be identified
   /// (use ``unauthenticated`` instead for those errors).
   public static let permissionDenied = Self(code: .permissionDenied)
 
@@ -247,11 +247,11 @@ extension Status.Code {
   /// entire file system is out of space.
   public static let resourceExhausted = Self(code: .resourceExhausted)
 
-  /// Operation was rejected because the system is not in a state required for
+  /// The system rejected the operation because it wasn't in a state required for
   /// the operation's execution.
   ///
-  /// For example, directory to be deleted may be
-  /// non-empty, an rmdir operation is applied to a non-directory, etc.
+  /// For example, the directory you want to delete may be
+  /// non-empty, or you apply an rmdir operation to a non-directory, etc.
   ///
   /// A litmus test that may help a service implementor in deciding
   /// between ``failedPrecondition``, ``aborted``, and ``unavailable``:
@@ -259,9 +259,9 @@ extension Status.Code {
   /// - Use ``aborted`` if the client should retry at a higher-level
   ///   (for example, restarting a read-modify-write sequence).
   /// - Use ``failedPrecondition`` if the client should not retry until
-  ///   the system state has been explicitly fixed. For example, if an "rmdir"
-  ///   fails because the directory is non-empty, ``failedPrecondition``
-  ///   should be returned since the client should not retry unless
+  ///   it has explicitly fixed the system state. For example, if an "rmdir"
+  ///   fails because the directory is non-empty, the server should return
+  ///   ``failedPrecondition`` since the client should not retry unless
   ///   they have first fixed up the directory by deleting files from it.
   /// - Use ``failedPrecondition`` if the client performs conditional
   ///   REST Get/Update/Delete on a resource and the resource on the
@@ -269,22 +269,22 @@ extension Status.Code {
   ///   read-modify-write on the same resource.
   public static let failedPrecondition = Self(code: .failedPrecondition)
 
-  /// The operation was aborted, typically due to a concurrency issue like
-  /// sequencer check failures, transaction aborts, etc.
+  /// A concurrency issue, such as sequencer check failures or transaction aborts, typically
+  /// aborts the operation.
   ///
   /// See litmus test above for deciding between ``failedPrecondition``, ``aborted``,
   /// and ``unavailable``.
   public static let aborted = Self(code: .aborted)
 
-  /// Operation was attempted past the valid range.
+  /// The client attempted an operation past the valid range.
   ///
   /// For example, seeking or reading
   /// past end of file.
   ///
   /// Unlike ``invalidArgument``, this error indicates a problem that may be fixed
   /// if the system state changes. For example, a 32-bit file system will
-  /// generate ``invalidArgument`` if asked to read at an offset that is not in the
-  /// range [0,2^32-1], but it will generate ``outOfRange`` if asked to read from
+  /// generate ``invalidArgument`` if the caller asks it to read at an offset that is not in the
+  /// range [0,2^32-1], but it will generate ``outOfRange`` if the caller asks it to read from
   /// an offset past the current file size.
   ///
   /// There is a fair bit of overlap between ``failedPrecondition`` and
@@ -293,19 +293,19 @@ extension Status.Code {
   /// easily look for an ``outOfRange`` error to detect when they are done.
   public static let outOfRange = Self(code: .outOfRange)
 
-  /// Operation is not implemented or not supported/enabled in this service.
+  /// The service doesn't implement, support, or enable this operation.
   public static let unimplemented = Self(code: .unimplemented)
 
   /// Internal errors.
   ///
-  /// This means some invariants expected by the underlying system have
-  /// been broken. If you see one of these errors, something is very broken.
+  /// This means something has broken invariants that the underlying system expects. If you see
+  /// one of these errors, something is very broken.
   public static let internalError = Self(code: .internalError)
 
   /// The service is currently unavailable.
   ///
   /// This is most likely a transient
-  /// condition and may be corrected by retrying with a backoff.
+  /// condition, and retrying with a backoff may correct it.
   ///
   /// See litmus test above for deciding between ``failedPrecondition``, ``aborted``,
   /// and ``unavailable``.

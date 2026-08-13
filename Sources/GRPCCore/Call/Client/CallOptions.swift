@@ -16,7 +16,7 @@
 
 /// Options applied to a call.
 ///
-/// If set, these options are used in preference to any options configured on
+/// If set, gRPC uses these options in preference to any options configured on
 /// the client or its transport.
 ///
 /// You can create the default set of options, which defers all possible
@@ -25,31 +25,31 @@
 public struct CallOptions: Sendable {
   /// The default timeout for the RPC.
   ///
-  /// If no reply is received in the specified amount of time, the request is aborted
+  /// If the client doesn't receive a reply in the specified amount of time, it aborts the request
   /// with an ``RPCError`` with code ``RPCError/Code/deadlineExceeded``.
   ///
   /// The actual deadline used will be the minimum of the value specified here
-  /// and the value set by the application by the client API. If either one isn't set,
-  /// then the other value is used. If neither is set, then the request has no deadline.
+  /// and the value set by the application by the client API. If you don't set either one,
+  /// gRPC uses the other value. If you set neither, the request has no deadline.
   ///
-  /// The timeout applies to the overall execution of an RPC. If, for example, a retry
-  /// policy is set, then the timeout begins when the first attempt is started and _isn't_ reset
+  /// The timeout applies to the overall execution of an RPC. If, for example, you set a retry
+  /// policy, then the timeout begins when the first attempt starts, and gRPC doesn't reset it
   /// when subsequent attempts start.
   public var timeout: Duration?
 
   /// Whether RPCs for this method should wait until the connection is ready.
   ///
   /// If `false`, the RPC will abort immediately if there is a transient failure connecting to
-  /// the server. Otherwise gRPC will attempt to connect until the deadline is exceeded.
+  /// the server. Otherwise gRPC will attempt to connect until the deadline passes.
   ///
-  /// If left unset, transports conventionally treat this the same as `false`, so RPCs fail fast
-  /// on a transient connection failure rather than queuing until the connection is ready.
+  /// If you leave this unset, transports conventionally treat it the same as `false`, so RPCs
+  /// fail fast on a transient connection failure rather than queuing until the connection is ready.
   public var waitForReady: Bool?
 
   /// The maximum allowed payload size in bytes for an individual request message.
   ///
-  /// If a client attempts to send an object larger than this value, it will not be sent and the
-  /// client will see an error. Note that 0 is a valid value, meaning that the request message
+  /// If a client attempts to send an object larger than this value, the client won't send it and
+  /// will see an error instead. Note that 0 is a valid value, meaning that the request message
   /// must be empty.
   ///
   /// Note that if compression is used the uncompressed message size is validated.
@@ -57,27 +57,27 @@ public struct CallOptions: Sendable {
 
   /// The maximum allowed payload size in bytes for an individual response message.
   ///
-  /// If a server attempts to send an object larger than this value, it will not
-  /// be sent, and an error will be sent to the client instead. Note that 0 is a valid value,
+  /// If a server attempts to send an object larger than this value, the server won't send the
+  /// object and instead sends an error to the client. Note that 0 is a valid value,
   /// meaning that the response message must be empty.
   ///
   /// Note that if compression is used the uncompressed message size is validated.
   public var maxResponseMessageBytes: Int?
 
-  /// The policy determining how many times, and when, the RPC is executed.
+  /// The policy determining how many times, and when, gRPC executes the RPC.
   ///
   /// There are two policy types:
   /// 1. Retry
   /// 2. Hedging
   ///
-  /// The retry policy allows an RPC to be retried a limited number of times if the RPC
-  /// fails with one of the configured set of status codes. RPCs are only retried if they
+  /// The retry policy lets gRPC retry an RPC a limited number of times if the RPC
+  /// fails with one of the configured set of status codes. gRPC only retries RPCs if they
   /// fail immediately, that is, the first response part received from the server is a
   /// status code.
   ///
-  /// The hedging policy allows an RPC to be executed multiple times concurrently. Typically
-  /// each execution will be staggered by some delay. The first successful response will be
-  /// reported to the client. Hedging is only suitable for idempotent RPCs.
+  /// The hedging policy lets gRPC execute an RPC multiple times concurrently. Typically
+  /// gRPC staggers each execution by some delay. gRPC reports the first successful response
+  /// to the client. Hedging is only suitable for idempotent RPCs.
   public var executionPolicy: RPCExecutionPolicy?
 
   /// The compression used for the call.
@@ -89,9 +89,9 @@ public struct CallOptions: Sendable {
   /// Note that this configuration is advisory: not all transports support compression and may
   /// ignore this configuration. Transports that support compression will use this configuration
   /// in preference to the algorithm configured at a transport level. If the transport hasn't
-  /// enabled the use of the algorithm, then compression won't be used for the call.
+  /// enabled the use of the algorithm, then it won't use compression for the call.
   ///
-  /// If `nil`, the value configured on the transport will be used instead.
+  /// If `nil`, gRPC uses the value configured on the transport instead.
   public var compression: CompressionAlgorithm?
 
   internal init(

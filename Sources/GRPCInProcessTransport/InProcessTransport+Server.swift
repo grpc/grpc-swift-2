@@ -25,12 +25,12 @@ extension InProcessTransport {
   /// involved, as the client and server will communicate directly with each other via in-process streams.
   ///
   /// To use this server, you call ``listen(streamHandler:)`` and iterate over the returned `AsyncSequence` to get all
-  /// RPC requests made from clients (as `RPCStream`s).
+  /// RPC requests that clients make (as `RPCStream`s).
   /// To stop listening to new requests, call ``beginGracefulShutdown()``.
   ///
   /// - SeeAlso: `ServerTransport`
   public final class Server: ServerTransport, Sendable {
-    /// The type of bytes this server sends and receives, represented as an array of bytes.
+    /// The type of bytes this server sends and receives: an array of bytes.
     public typealias Bytes = [UInt8]
 
     /// The stream of inbound requests this server receives.
@@ -89,12 +89,12 @@ extension InProcessTransport {
       self.peer = peer
     }
 
-    /// Publish a new ``RPCStream``, which will be returned by the transport's ``events``
-    /// successful case.
+    /// Publish a new ``RPCStream``, which the transport's ``events`` successful case returns.
     ///
     /// - Parameter stream: The new ``RPCStream`` to publish.
     /// - Throws: ``RPCError`` with code ``RPCError/Code-swift.struct/failedPrecondition``
-    /// if the server transport stopped listening to new streams (i.e., if ``beginGracefulShutdown()`` has been called).
+    /// if the server transport stopped listening to new streams (i.e., if you have already called
+    /// ``beginGracefulShutdown()``).
     internal func acceptStream(_ stream: RPCStream<Inbound, Outbound>) throws {
       let yieldResult = self.newStreamsContinuation.yield(stream)
       if case .terminated = yieldResult {
@@ -105,14 +105,14 @@ extension InProcessTransport {
       }
     }
 
-    /// Starts the server, listening for new streams opened by an in-process client.
+    /// Starts the server, listening for new streams that an in-process client opens.
     ///
-    /// This function returns only once ``beginGracefulShutdown()`` has been called and every
+    /// This function returns only once you have called ``beginGracefulShutdown()`` and every
     /// in-flight stream has finished, or when the calling task is cancelled. Call this from a
     /// long-running task, typically inside a task group alongside the client's `connect()`.
     ///
-    /// - Parameter streamHandler: A closure invoked with each new `RPCStream` and its
-    ///   `ServerContext`, responsible for handling the RPC.
+    /// - Parameter streamHandler: A closure that this method invokes with each new `RPCStream` and
+    ///   its `ServerContext`; it's responsible for handling the RPC.
     public func listen(
       streamHandler:
         @escaping @Sendable (

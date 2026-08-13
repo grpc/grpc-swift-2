@@ -20,7 +20,7 @@
 ///
 /// You typically won't have to implement this protocol yourself as the generated service code
 /// provides conformance for your generated service type. However, if you need to customise which
-/// methods your service offers or how the methods are registered, then you can override the
+/// methods your service offers or how it registers the methods, then override the
 /// generated conformance by implementing ``registerMethods(with:)`` manually by calling
 /// ``RPCRouter/registerHandler(forMethod:deserializer:serializer:handler:)`` for each method
 /// you want to register with the router.
@@ -28,7 +28,7 @@
 public protocol RegistrableRPCService: Sendable {
   /// Registers the service's methods for handling RPCs.
   ///
-  /// Methods are registered with the provided ``RPCRouter``.
+  /// This method registers methods with the provided ``RPCRouter``.
   ///
   /// - Parameter router: The router to register methods with.
   func registerMethods<Transport: ServerTransport>(with router: inout RPCRouter<Transport>)
