@@ -36,6 +36,8 @@ extension ClientRPCExecutor {
     let serializer: Serializer
     @usableFromInline
     let deserializer: Deserializer
+    @usableFromInline
+    let diagnostics: GRPCClientDiagnosticsRecorder?
 
     @inlinable
     init(
@@ -43,13 +45,15 @@ extension ClientRPCExecutor {
       deadline: ContinuousClock.Instant?,
       interceptors: [any ClientInterceptor],
       serializer: Serializer,
-      deserializer: Deserializer
+      deserializer: Deserializer,
+      diagnostics: GRPCClientDiagnosticsRecorder?
     ) {
       self.transport = transport
       self.deadline = deadline
       self.interceptors = interceptors
       self.serializer = serializer
       self.deserializer = deserializer
+      self.diagnostics = diagnostics
     }
   }
 }
@@ -99,9 +103,10 @@ extension ClientRPCExecutor.OneShotExecutor {
     options: CallOptions,
     responseHandler: @Sendable @escaping (StreamingClientResponse<Output>) async throws -> R
   ) async -> Result<R, any Error> {
+    let attemptDiagnostics = self.diagnostics?.beginAttempt(1)
     return await withTaskGroup(of: Void.self, returning: Result<R, any Error>.self) { group in
       do {
-        return try await self.transport.withStream(
+        let result = try await self.transport.withStream(
           descriptor: method,
           options: options
         ) { stream, context in
@@ -113,6 +118,7 @@ extension ClientRPCExecutor.OneShotExecutor {
             serializer: self.serializer,
             deserializer: self.deserializer,
             interceptors: self.interceptors,
+            diagnostics: attemptDiagnostics,
             stream: stream
           )
 
@@ -125,7 +131,10 @@ extension ClientRPCExecutor.OneShotExecutor {
 
           return result
         }
+        attemptDiagnostics?.finishWithoutStatus()
+        return result
       } catch {
+        attemptDiagnostics?.finish(throwing: error)
         return .failure(error)
       }
     }
