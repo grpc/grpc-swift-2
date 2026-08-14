@@ -222,7 +222,7 @@ extension Status.Code {
   /// Deadline expired before operation could complete.
   ///
   /// For operations that
-  /// change the state of the system, the server may return this error even if the
+  /// change the state of the system, this error may occur even if the
   /// operation has completed successfully. For example, the network could delay a
   /// successful response from a server long enough for the deadline to
   /// expire.
