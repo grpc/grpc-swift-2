@@ -45,12 +45,6 @@ let dependencies: [Package.Dependency] = [
     from: "1.31.0",
     traits: []
   ),
-
-  // Documentation preview/generation:
-  .package(
-    url: "https://github.com/swiftlang/swift-docc-plugin.git",
-    from: "1.4.0"
-  ),
 ]
 
 // -------------------------------------------------------------------------------------------------
