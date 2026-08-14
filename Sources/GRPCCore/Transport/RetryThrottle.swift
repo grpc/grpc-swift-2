@@ -67,7 +67,7 @@ public final class RetryThrottle: Sendable {
   /// The number of tokens the throttle currently has.
   ///
   /// If this value is less than or equal to the retry threshold (defined as `maxTokens / 2`),
-  /// then the throttle will not retry RPCs and will disable hedging.
+  /// then the throttle no longer permits retries or hedging.
   public var tokens: Double {
     self.scaledTokensAvailable.withLock {
       Double($0) / 1000

@@ -57,9 +57,9 @@ public struct CallOptions: Sendable {
 
   /// The maximum allowed payload size in bytes for an individual response message.
   ///
-  /// If a server attempts to send an object larger than this value, the server won't send the
-  /// object and instead sends an error to the client. Note that 0 is a valid value,
-  /// meaning that the response message must be empty.
+  /// If the server sends an object larger than this value, the client won't accept it and will
+  /// see an error instead. Note that 0 is a valid value, meaning that the response message must
+  /// be empty.
   ///
   /// Note that if compression is used the uncompressed message size is validated.
   public var maxResponseMessageBytes: Int?

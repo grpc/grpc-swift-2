@@ -409,8 +409,8 @@ public struct ServiceName: Hashable, Sendable {
 
   /// The name as used on types, including any namespace.
   ///
-  /// Generated code uses this to generate a namespace for each service, which contains a number
-  /// of client and server protocols and concrete types.
+  /// The code generator uses this to generate a namespace for each service, which contains a
+  /// number of client and server protocols and concrete types.
   ///
   /// If you declare the service in package "foo.bar" and call it "Baz", then this
   /// value should be "Foo\_Bar\_Baz".
@@ -418,7 +418,8 @@ public struct ServiceName: Hashable, Sendable {
 
   /// The name as used as a property.
   ///
-  /// Generated code uses this to provide a convenience getter for a descriptor of the service.
+  /// The code generator uses this to provide a convenience getter for a descriptor of the
+  /// service.
   ///
   /// If you declare the service in package "foo.bar" and call it "Baz", then this
   /// value should be "foo\_bar\_Baz".
@@ -443,7 +444,7 @@ public struct MethodName: Hashable, Sendable {
 
   /// The name as used on types, including any namespace.
   ///
-  /// Generated code uses this to generate a namespace for each method, which contains
+  /// The code generator uses this to generate a namespace for each method, which contains
   /// information about the method.
   ///
   /// This value typically starts with an uppercase character, for example "Get".

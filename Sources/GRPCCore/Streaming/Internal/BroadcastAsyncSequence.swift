@@ -391,13 +391,13 @@ struct _BroadcastSequenceStateMachine<Element: Sendable>: Sendable {
 
   @usableFromInline
   enum State: Sendable {
-    /// No subscribers exist, and the producer hasn't produced any elements yet.
+    /// No subscribers exist, and no producers have produced any elements yet.
     case initial(Initial)
-    /// Subscribers exist, but the producer hasn't produced any elements yet.
+    /// Subscribers exist, but no producers have produced any elements yet.
     case subscribed(Subscribed)
-    /// The producer has produced elements; subscribers may or may not exist.
+    /// Producers have produced elements; subscribers may or may not exist.
     case streaming(Streaming)
-    /// The producer won't produce any more elements. Subscribers may or may not exist.
+    /// No producers will produce any more elements. Subscribers may or may not exist.
     case finished(Finished)
     /// Temporary state to avoid CoWs.
     case _modifying
@@ -1580,7 +1580,7 @@ extension _BroadcastSequenceStateMachine {
       @usableFromInline
       var nextElementID: _BroadcastSequenceStateMachine<Element>.Elements.ID
 
-      /// A continuation that the state machine resumes when the next element becomes available.
+      /// A continuation that's resumed when the next element becomes available.
       @usableFromInline
       var continuation: ConsumerContinuation?
 

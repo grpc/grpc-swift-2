@@ -228,7 +228,7 @@ extension Status.Code {
   /// expire.
   public static let deadlineExceeded = Self(code: .deadlineExceeded)
 
-  /// The server couldn't find the requested entity (for example, a file or directory).
+  /// The requested entity (for example, a file or directory) couldn't be found.
   public static let notFound = Self(code: .notFound)
 
   /// Some entity that we attempted to create (for example, file or directory) already
@@ -293,7 +293,7 @@ extension Status.Code {
   /// easily look for an ``outOfRange`` error to detect when they are done.
   public static let outOfRange = Self(code: .outOfRange)
 
-  /// The service doesn't implement, support, or enable this operation.
+  /// This operation isn't implemented, supported, or enabled.
   public static let unimplemented = Self(code: .unimplemented)
 
   /// Internal errors.

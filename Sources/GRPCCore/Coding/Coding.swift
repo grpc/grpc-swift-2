@@ -16,7 +16,7 @@
 
 /// Serializes a message into a sequence of bytes.
 ///
-/// Message serializers convert an input message to a sequence of bytes. The transport uses
+/// Message serializers convert an input message to a sequence of bytes. gRPC uses
 /// serializers to convert messages into a form suitable for sending over a network. A
 /// ``MessageDeserializer`` performs the reverse operation, deserialization.
 ///
@@ -36,7 +36,7 @@ public protocol MessageSerializer<Message>: Sendable {
 
 /// Deserializes a sequence of bytes into a message.
 ///
-/// Message deserializers convert a sequence of bytes into a message. The transport uses
+/// Message deserializers convert a sequence of bytes into a message. gRPC uses
 /// deserializers to convert bytes received from the network into an application-specific
 /// message. A ``MessageSerializer`` performs the reverse operation, serialization.
 ///
