@@ -31,8 +31,8 @@ private import Synchronization
 /// ## Creating a client
 ///
 /// You can create and run a client using ``withGRPCClient(transport:interceptors:isolation:handleClient:)``
-/// or ``withGRPCClient(transport:interceptorPipeline:isolation:handleClient:)`` which create, configure, and
-/// run the client providing scoped access to it via the `handleClient` closure. The client will
+/// or ``withGRPCClient(transport:interceptorPipeline:isolation:handleClient:)`` which creates, configures, and
+/// runs the client, providing scoped access to it through the `handleClient` closure. The client will
 /// begin gracefully shutting down when the closure returns.
 ///
 /// ```swift
@@ -41,6 +41,14 @@ private import Synchronization
 ///   // ...
 /// }
 /// ```
+///
+/// Within the closure, create service-specific clients to access any gRPC services available at the server that the transport connects to.
+/// For example, a client for a service called `Api` could be created using the related generated code:
+/// ```swift
+/// let apiClient = Grpc_Api.Client(wrapping: client)
+/// ```
+///
+/// You can use a single `GRPCClient` instance to connect to as many services as the endpoint provides.
 ///
 /// ## Creating a client manually
 ///
@@ -51,12 +59,20 @@ private import Synchronization
 /// The ``runConnections()`` method won't return until the client has finished handling all requests. You can
 /// signal to the client that it should stop creating new request streams by calling ``beginGracefulShutdown()``.
 /// This gives the client enough time to drain any requests already in flight. To stop the client
-/// more abruptly you can cancel the task running your client. If your application requires
-/// additional resources that need their lifecycles managed you should consider using [Swift Service
-/// Lifecycle](https://github.com/swift-server/swift-service-lifecycle).
+/// more abruptly you can cancel the task running your client.
 ///
-/// Once the client has stopped it can't be restarted: calling ``runConnections()`` again throws a
-/// ``RuntimeError``. Create a new ``GRPCClient`` (and a new transport) if you need to reconnect.
+/// If your application requires additional resources that need their lifecycles managed,
+/// consider managing the client and its resources with [Swift Service
+/// Lifecycle](https://github.com/swift-server/swift-service-lifecycle).
+/// Use the [GRPCServiceLifecycle](https://swiftpackageindex.com/grpc/grpc-swift-extras/documentation/grpcservicelifecycle) module
+/// of [grpc-swift-extras](https://swiftpackageindex.com/grpc/grpc-swift-extras) to conform a `GRPCClient` to the `Service` protocol, and use it directly
+/// within a [ServiceGroup](https://swiftpackageindex.com/swift-server/swift-service-lifecycle/documentation/servicelifecycle/servicegroup).
+/// Read [Adopting ServiceLifecycle in applications](https://swiftpackageindex.com/swift-server/swift-service-lifecycle/documentation/servicelifecycle/adopting-servicelifecycle-in-applications) or
+/// [Adopting ServiceLifecycle in libraries](https://swiftpackageindex.com/swift-server/swift-service-lifecycle/documentation/servicelifecycle/adopting-servicelifecycle-in-libraries) for more detail.
+///
+/// Once the client stops, it can't be restarted. If you call ``runConnections()`` again,
+/// the client throws a ``RuntimeError``.
+/// Create a new ``GRPCClient`` (and a new transport) if you need to reconnect.
 @available(gRPCSwift 2.0, *)
 public final class GRPCClient<Transport: ClientTransport>: Sendable {
   /// The transport which provides a bidirectional communication channel with the server.
@@ -142,8 +158,8 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
     /// A collection of interceptors providing cross-cutting functionality to each accepted RPC, keyed by the method to which they apply.
     ///
     /// This type computes the list of interceptors for each method from `interceptorPipeline` the
-    /// first time it calls that method, and caches the result to avoid recomputing the applicable
-    /// interceptors for each request.
+    /// first time a caller invokes that method, and caches the result to avoid recomputing the
+    /// applicable interceptors for each request.
     ///
     /// The order in which you add interceptors determines the order in which they run. The first
     /// interceptor added is the first interceptor to intercept each request. The last interceptor
@@ -239,7 +255,7 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Closes the client.
   ///
-  /// This closes the transport, giving it enough time to wait for
+  /// This begins closing the transport, giving it enough time for
   /// in-flight RPCs to finish executing, but it won't accept new RPCs. To abruptly stop
   /// in-flight RPCs, cancel the task executing ``runConnections()``.
   public func beginGracefulShutdown() {
@@ -250,6 +266,10 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
   }
 
   /// Executes a unary RPC.
+  ///
+  /// - Note: You mustn't have called ``beginGracefulShutdown()``. You don't need to have called
+  /// ``runConnections()`` first — a request made before the client starts running is queued — but
+  /// if you have called it, it must still be executing.
   ///
   /// - Parameters:
   ///   - request: The unary request.
@@ -285,6 +305,10 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Starts a client-streaming RPC.
   ///
+  /// - Note: You mustn't have called ``beginGracefulShutdown()``. You don't need to have called
+  /// ``runConnections()`` first — a request made before the client starts running is queued — but
+  /// if you have called it, it must still be executing.
+  ///
   /// - Parameters:
   ///   - request: The request stream.
   ///   - descriptor: The method descriptor for which to execute this request.
@@ -319,6 +343,10 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Starts a server-streaming RPC.
   ///
+  /// - Note: You mustn't have called ``beginGracefulShutdown()``. You don't need to have called
+  /// ``runConnections()`` first — a request made before the client starts running is queued — but
+  /// if you have called it, it must still be executing.
+  ///
   /// - Parameters:
   ///   - request: The unary request.
   ///   - descriptor: The method descriptor for which to execute this request.
@@ -351,8 +379,9 @@ public final class GRPCClient<Transport: ClientTransport>: Sendable {
 
   /// Starts a bidirectional streaming RPC.
   ///
-  /// - Note: You must have called ``runConnections()`` and it must still be executing, and you
-  /// mustn't have called ``beginGracefulShutdown()``.
+  /// - Note: You mustn't have called ``beginGracefulShutdown()``. You don't need to have called
+  /// ``runConnections()`` first — a request made before the client starts running is queued — but
+  /// if you have called it, it must still be executing.
   ///
   /// - Parameters:
   ///   - request: The streaming request.
