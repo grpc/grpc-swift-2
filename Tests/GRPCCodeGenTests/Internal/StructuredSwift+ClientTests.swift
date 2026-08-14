@@ -128,9 +128,9 @@ extension StructuredSwiftTests {
           ///   - serializer: A serializer for `BarInput` messages.
           ///   - deserializer: A deserializer for `BarOutput` messages.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           func bar<Result>(
             request: GRPCCore.ClientRequest<BarInput>,
@@ -210,9 +210,9 @@ extension StructuredSwiftTests {
           /// - Parameters:
           ///   - request: A request containing a single `BarInput` message.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func bar<Result>(
             request: GRPCCore.ClientRequest<BarInput>,
@@ -371,9 +371,9 @@ extension StructuredSwiftTests {
           ///   - message: request message to send.
           ///   - metadata: Additional metadata to send, defaults to empty.
           ///   - options: Options to apply to this RPC, defaults to `.defaults`.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func bar<Result>(
             _ message: Input,
@@ -522,9 +522,9 @@ extension StructuredSwiftTests {
           ///   - serializer: A serializer for `Input` messages.
           ///   - deserializer: A deserializer for `Output` messages.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func unary<Result>(
             request: GRPCCore.ClientRequest<Input>,
@@ -556,9 +556,9 @@ extension StructuredSwiftTests {
           ///   - serializer: A serializer for `Input` messages.
           ///   - deserializer: A deserializer for `Output` messages.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func clientStreaming<Result>(
             request: GRPCCore.StreamingClientRequest<Input>,
@@ -590,9 +590,9 @@ extension StructuredSwiftTests {
           ///   - serializer: A serializer for `Input` messages.
           ///   - deserializer: A deserializer for `Output` messages.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func serverStreaming<Result>(
             request: GRPCCore.ClientRequest<Input>,
@@ -622,9 +622,9 @@ extension StructuredSwiftTests {
           ///   - serializer: A serializer for `Input` messages.
           ///   - deserializer: A deserializer for `Output` messages.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           \(access) func bidiStreaming<Result>(
             request: GRPCCore.StreamingClientRequest<Input>,

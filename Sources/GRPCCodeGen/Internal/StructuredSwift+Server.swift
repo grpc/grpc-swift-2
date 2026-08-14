@@ -70,9 +70,9 @@ extension ProtocolDescription {
         /// - Parameters:
         ///   - request: A streaming request of `\(method.inputType)` messages.
         ///   - context: Context providing information about the RPC.
-        /// - Throws: Any error which occurred during the processing of the request. The server
-        ///     maps thrown errors of type `RPCError` to appropriate statuses and converts all
-        ///     other errors to an internal error.
+        /// - Throws: Any error which occurred during the processing of the request. Thrown errors
+        ///     of type `RPCError` are mapped to appropriate statuses. All other errors are converted
+        ///     to an internal error.
         /// - Returns: A streaming response of `\(method.outputType)` messages.
         """
 
@@ -175,9 +175,9 @@ extension ProtocolDescription {
         /// - Parameters:
         ///   - request: \(request)
         ///   - context: Context providing information about the RPC.
-        /// - Throws: Any error which occurred during the processing of the request. The server
-        ///     maps thrown errors of type `RPCError` to appropriate statuses and converts all
-        ///     other errors to an internal error.
+        /// - Throws: Any error which occurred during the processing of the request. Thrown errors
+        ///     of type `RPCError` are mapped to appropriate statuses. All other errors are converted
+        ///     to an internal error.
         /// - Returns: \(returns)
         """
 
@@ -592,9 +592,9 @@ extension ProtocolDescription {
       parameters += "\n"
       parameters += """
         ///   - context: Context providing information about the RPC.
-        /// - Throws: Any error which occurred during the processing of the request. The server
-        ///     maps thrown errors of type `RPCError` to appropriate statuses and converts all
-        ///     other errors to an internal error.
+        /// - Throws: Any error which occurred during the processing of the request. Thrown errors
+        ///     of type `RPCError` are mapped to appropriate statuses. All other errors are converted
+        ///     to an internal error.
         """
 
       if !method.isOutputStreaming {
