@@ -14,9 +14,9 @@ The following is a map of the libraries and their documentation:
 - term **[grpc-swift-nio-transport](https://github.com/grpc/grpc-swift-nio-transport)**: A package that provides two transport libraries for gRPC clients and servers, and an umbrella module ([`GRPCNIOTransportHTTP2`](https://swiftpackageindex.com/grpc/grpc-swift-nio-transport/documentation/grpcniotransporthttp2)) that re-exports both backends. Use the umbrella module to get `.http2NIOPosix` and `.http2NIOTS` from one package dependency and pick per-platform in code, rather than deciding at the manifest level.
 
   - term [`GRPCNIOTransportHTTP2Posix`](https://swiftpackageindex.com/grpc/grpc-swift-nio-transport/documentation/grpcniotransporthttp2posix): A gRPC transport built on SwiftNIO's `NIOPosix`, that uses [NIOSSL](https://swiftpackageindex.com/apple/swift-nio-ssl/documentation/niossl) and [swift-certificates](https://swiftpackageindex.com/apple/swift-certificates/documentation/x509) to provide TLS support. Use when your service code runs on Linux, or on a platform that doesn't require the use of Apple's `Network` framework.
-  - term [`GRPCNIOTransportHTTP2TransportServices`](https://swiftpackageindex.com/grpc/grpc-swift-nio-transport/documentation/grpcniotransporthttp2transportservices): a gRPC transport built on (Apple's [Network](https://developer.apple.com/documentation/network) framework), a recommended transport for Apple platforms.
+  - term [`GRPCNIOTransportHTTP2TransportServices`](https://swiftpackageindex.com/grpc/grpc-swift-nio-transport/documentation/grpcniotransporthttp2transportservices): A gRPC transport built on Apple's [Network](https://developer.apple.com/documentation/network) framework, a recommended transport for Apple platforms.
 
-- term **[grpc-swift-protobuf](https://github.com/grpc/grpc-swift-protobuf)**: Bridges the GRPC core to [SwiftProtobuf](https://swiftpackageindex.com/apple/swift-protobuf/documentation/swiftprotobuf) using [`GRPCProtobuf`](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf) for runtime serialization libraries.
+- term **[grpc-swift-protobuf](https://github.com/grpc/grpc-swift-protobuf)**: Bridges the gRPC core to [SwiftProtobuf](https://swiftpackageindex.com/apple/swift-protobuf/documentation/swiftprotobuf) using [`GRPCProtobuf`](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf) for runtime serialization libraries.
   The package also provides the `protoc-gen-grpc-swift-2` plugin for the Protocol Buffers compiler, `protoc`, and two SwiftPM plugins (`GRPCProtobufGenerator`, `generate-grpc-code-from-protos`) that generate code stubs from your Swift package build process. Read [Generating Stubs](https://swiftpackageindex.com/grpc/grpc-swift-protobuf/documentation/grpcprotobuf/generating-stubs) for details on creating client and service stubs.
 
 - term **[grpc-swift-extras](https://github.com/grpc/grpc-swift-extras)**: Opt-in add-ons for convenience when creating and providing gRPC services. Add the depdendencies fpr each feature you want, not as a bundle:
@@ -40,12 +40,12 @@ include 3 of the packages above as dependencies:
 
 Set the dependencies for your internal based on your choice of transport, or use the umbrella library from the `grpc-swift-nio-transport` to choose in code.
 
-In your code, you often import multiple GRPC modules. For example, when creating a gRPC client, you may include the following imports:
+In your code, you often import multiple gRPC modules. For example, when creating a gRPC client, you may include the following imports:
 
 ```swift
 import GRPCCore 
 import GRPCNIOTransportHTTP2 // transport and its configuration
-import GRPCProtobuf // for status and error handling
+import GRPCProtobuf // for message (de)serialization and error details
 ```
 
 ## Topics
