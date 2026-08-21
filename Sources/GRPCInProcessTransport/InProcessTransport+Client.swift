@@ -28,16 +28,16 @@ extension InProcessTransport {
   /// as a `ServiceConfig`.
   ///
   /// Once you have a client, you must keep a long-running task executing ``connect()``, which
-  /// will return only once all streams have been finished and ``beginGracefulShutdown()`` has been called on this client, or
-  /// when the containing task is cancelled.
+  /// will return only once all streams have finished and you have called ``beginGracefulShutdown()``
+  /// on this client, or when the containing task is cancelled.
   ///
-  /// To execute requests using this client, use ``withStream(descriptor:options:_:)``. If this function is
-  /// called before ``connect()`` is called, then any streams will remain pending and the call will
-  /// block until ``connect()`` is called or the task is cancelled.
+  /// To execute requests using this client, use ``withStream(descriptor:options:_:)``. If you call
+  /// this function before calling ``connect()``, then any streams will remain pending and the call
+  /// will block until you call ``connect()`` or the task is cancelled.
   ///
   /// - SeeAlso: `ClientTransport`
   public final class Client: ClientTransport {
-    /// The type of bytes this client sends and receives, represented as an array of bytes.
+    /// The type of bytes this client sends and receives: an array of bytes.
     public typealias Bytes = [UInt8]
 
     private enum State: Sendable {
@@ -104,7 +104,7 @@ extension InProcessTransport {
 
     /// The retry throttle configuration.
     ///
-    /// This is derived from the `ServiceConfig` passed to the transport's initializer; it's
+    /// The transport derives this from the `ServiceConfig` you pass to its initializer; it's
     /// `nil` if the service config doesn't specify a retry-throttling policy.
     public let retryThrottle: RetryThrottle?
 
@@ -131,13 +131,13 @@ extension InProcessTransport {
 
     /// Establishes and maintains a connection to the remote destination.
     ///
-    /// Maintains a long-lived connection, or set of connections, to a remote destination.
-    /// Connections may be added or removed over time as required by the implementation and the
-    /// demand for streams by the client.
+    /// Maintains a long-lived connection, or set of connections, to a remote destination. The
+    /// implementation may add or remove connections over time to meet the client's demand for
+    /// streams.
     ///
     /// Implementations of this function will typically create a long-lived task group that
-    /// maintains connections. The function exits either when all open streams have been closed
-    /// and new connections are no longer required by the caller — signaled by calling
+    /// maintains connections. The function exits either when all open streams have closed and the
+    /// caller no longer requires new connections — which it signals by calling
     /// ``beginGracefulShutdown()`` — or when the task this function runs in is cancelled.
     public func connect() async throws {
       let (stream, continuation) = AsyncStream<Void>.makeStream()
@@ -195,10 +195,10 @@ extension InProcessTransport {
       }
     }
 
-    /// Signals to the transport that no new streams may be created.
+    /// Signals to the transport to stop creating new streams.
     ///
     /// Existing streams may run to completion naturally, but calling ``withStream(descriptor:options:_:)``
-    /// will result in an `RPCError` with code `RPCError/Code/failedPrecondition` being thrown.
+    /// throws an `RPCError` with code `RPCError/Code/failedPrecondition`.
     ///
     /// If you want to forcefully cancel all active streams, then cancel the task running ``connect()``.
     public func beginGracefulShutdown() {
@@ -224,20 +224,20 @@ extension InProcessTransport {
 
     /// Opens a stream using the transport, and uses it as input to a user-provided closure alongside the given context.
     ///
-    /// - Important: The opened stream is closed after the closure is finished.
+    /// - Important: The opened stream closes after the closure finishes.
     ///
     /// This transport implementation throws `RPCError/Code/failedPrecondition` if the transport
-    /// is closing or has been closed.
+    /// is closing or has already closed.
     ///
-    ///   This implementation will queue any streams (and thus block this call) if this function is called before
-    ///   ``connect()``, until a connection is established — at which point all streams will be
-    ///   created.
+    ///   This implementation will queue any streams (and thus block this call) if you call this
+    ///   function before calling ``connect()``, until ``connect()`` establishes a connection — at
+    ///   which point it will create all streams.
     ///
     /// - Parameters:
     ///   - descriptor: A description of the method to open a stream for.
     ///   - options: Options specific to the stream.
     ///   - closure: A closure that takes the opened stream and the client context as its parameters.
-    /// - Returns: Whatever value was returned from `closure`.
+    /// - Returns: Whatever value `closure` returns.
     public func withStream<T>(
       descriptor: MethodDescriptor,
       options: CallOptions,

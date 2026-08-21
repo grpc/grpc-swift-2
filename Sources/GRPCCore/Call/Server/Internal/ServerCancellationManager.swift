@@ -54,9 +54,9 @@ package final class ServerCancellationManager: Sendable {
     }
   }
 
-  /// Adds a handler which is invoked when the RPC is cancelled.
+  /// Adds a handler that this manager invokes when the RPC is cancelled.
   ///
-  /// - Returns: The ID of the handler, if it was added, or `nil` if the RPC is already cancelled.
+  /// - Returns: The ID of the handler if this method added it, or `nil` if the RPC is already cancelled.
   package func addRPCCancelledHandler(_ handler: @Sendable @escaping () -> Void) -> UInt64? {
     return self.state.withLock { state -> UInt64? in
       state.addRPCCancelledHandler(handler)

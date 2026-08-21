@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-/// An RPC service which can register its methods with an ``RPCRouter``.
+/// An RPC service that can register its own methods.
+///
+/// Registers with an ``RPCRouter``.
 ///
 /// You typically won't have to implement this protocol yourself as the generated service code
 /// provides conformance for your generated service type. However, if you need to customise which
-/// methods your service offers or how the methods are registered, then you can override the
+/// methods your service offers or how it registers the methods, then override the
 /// generated conformance by implementing ``registerMethods(with:)`` manually by calling
 /// ``RPCRouter/registerHandler(forMethod:deserializer:serializer:handler:)`` for each method
 /// you want to register with the router.
 @available(gRPCSwift 2.0, *)
 public protocol RegistrableRPCService: Sendable {
-  /// Registers the service's methods with the provided ``RPCRouter``.
+  /// Registers the service's methods for handling RPCs.
+  ///
+  /// This method registers methods with the provided ``RPCRouter``.
   ///
   /// - Parameter router: The router to register methods with.
   func registerMethods<Transport: ServerTransport>(with router: inout RPCRouter<Transport>)

@@ -1,7 +1,7 @@
 # Service Lifecycle
 
 This example demonstrates gRPC Swift’s integration with Swift Service Lifecycle,
-which is provided by the gRPC Swift Extras package.
+which the gRPC Swift Extras package provides.
 
 ## Overview
 

@@ -16,7 +16,7 @@
 
 /// A request created by the client for a single message.
 ///
-/// This is used for unary and server-streaming RPCs.
+/// Use this for unary and server-streaming RPCs.
 ///
 /// See ``StreamingClientRequest`` for streaming requests and ``ServerRequest`` for the
 /// server's representation of a single-message request.
@@ -32,11 +32,11 @@
 public struct ClientRequest<Message: Sendable>: Sendable {
   /// Caller-specified metadata to send to the server at the start of the RPC.
   ///
-  /// Both gRPC Swift and its transport layer may insert additional metadata. Keys prefixed with
-  /// "grpc-" are prohibited and may result in undefined behaviour. Transports may also insert
-  /// their own metadata; you should avoid using key names that may clash with transport-specific
-  /// metadata. Note that transports may also impose limits on the amount of metadata that may
-  /// be sent.
+  /// Both gRPC Swift and its transport layer may insert additional metadata. gRPC prohibits keys
+  /// prefixed with "grpc-"; using them may result in undefined behaviour. Transports may also
+  /// insert their own metadata; avoid key names that may clash with
+  /// transport-specific metadata. Note that transports may also impose limits on the amount of
+  /// metadata you can send.
   public var metadata: Metadata
 
   /// The message to send to the server.
@@ -58,7 +58,7 @@ public struct ClientRequest<Message: Sendable>: Sendable {
 
 /// A request created by the client for a stream of messages.
 ///
-/// This is used for client-streaming and bidirectional-streaming RPCs.
+/// Use this for client-streaming and bidirectional-streaming RPCs.
 ///
 /// See ``ClientRequest`` for single-message requests and ``StreamingServerRequest`` for the
 /// server's representation of a streaming-message request.
@@ -66,18 +66,18 @@ public struct ClientRequest<Message: Sendable>: Sendable {
 public struct StreamingClientRequest<Message: Sendable>: Sendable {
   /// Caller-specified metadata sent to the server at the start of the RPC.
   ///
-  /// Both gRPC Swift and its transport layer may insert additional metadata. Keys prefixed with
-  /// "grpc-" are prohibited and may result in undefined behaviour. Transports may also insert
-  /// their own metadata; you should avoid using key names that may clash with transport-specific
-  /// metadata. Note that transports may also impose limits on the amount of metadata that may
-  /// be sent.
+  /// Both gRPC Swift and its transport layer may insert additional metadata. gRPC prohibits keys
+  /// prefixed with "grpc-"; using them may result in undefined behaviour. Transports may also
+  /// insert their own metadata; avoid key names that may clash with
+  /// transport-specific metadata. Note that transports may also impose limits on the amount of
+  /// metadata you can send.
   public var metadata: Metadata
 
   /// A closure that, when called, writes messages to the writer.
   ///
-  /// The producer will only be consumed once by gRPC and therefore isn't required to be
-  /// idempotent. If the producer throws an error, then the RPC will be cancelled. Once the
-  /// producer returns, the request stream is closed.
+  /// gRPC will only consume the producer once, so it doesn't need to be idempotent. If the
+  /// producer throws an error, then gRPC will cancel the RPC. Once the producer returns, gRPC
+  /// closes the request stream.
   public var producer: @Sendable (RPCWriter<Message>) async throws -> Void
 
   /// Creates a new streaming client request.

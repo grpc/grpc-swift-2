@@ -16,8 +16,8 @@
 
 /// A collection of ``MethodConfig``s, mapped to specific methods or services.
 ///
-/// When creating a new instance, no overrides and no default will be set for using when getting
-/// a configuration for a method that has not been given a specific override.
+/// Creating a new instance sets no overrides and no default, so getting a configuration for
+/// a method without a specific override returns none.
 /// Use ``setDefaultConfig(_:forService:)`` to set a specific override for a whole
 /// service, or set a default configuration for all methods by calling ``setDefaultConfig(_:)``.
 ///
@@ -41,12 +41,12 @@ package struct MethodConfigs: Sendable, Hashable {
 
   /// Get or set the corresponding ``MethodConfig`` for the given ``MethodDescriptor``.
   ///
-  /// Configuration is hierarchical and can be set per-method, per-service
-  /// (``setDefaultConfig(_:forService:)``) and globally (``setDefaultConfig(_:)``).
+  /// Configuration is hierarchical: set it per-method, per-service
+  /// (``setDefaultConfig(_:forService:)``), or globally (``setDefaultConfig(_:)``).
   /// This subscript sets the per-method configuration but retrieves a configuration respecting
-  /// the hierarchy. If no per-method configuration is present, the per-service configuration is
-  /// checked and returned if present. If the per-service configuration isn't present then the
-  /// global configuration is returned, if present.
+  /// the hierarchy. If no per-method configuration is present, this subscript checks and returns
+  /// the per-service configuration if present. If the per-service configuration isn't present,
+  /// this subscript returns the global configuration if present.
   ///
   /// - Parameters:
   ///  - descriptor: The ``MethodDescriptor`` for which to get or set a ``MethodConfig``.
@@ -93,7 +93,7 @@ package struct MethodConfigs: Sendable, Hashable {
   /// Set a default configuration for a service.
   ///
   /// If getting a configuration for a method that's part of a service, and the method itself doesn't have an
-  /// override, then this configuration will be used instead of the default configuration passed when creating
+  /// override, then this configuration takes precedence over the default configuration passed when creating
   /// this instance of ``MethodConfigs``.
   ///
   /// - Parameters:

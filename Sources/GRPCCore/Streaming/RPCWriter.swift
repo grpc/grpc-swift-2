@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-/// A type-erasing ``RPCWriterProtocol``.
+/// A type-erasing writer.
+///
+/// Wraps any ``RPCWriterProtocol``.
 @available(gRPCSwift 2.0, *)
 public struct RPCWriter<Element: Sendable>: Sendable, RPCWriterProtocol {
   private let writer: any RPCWriterProtocol<Element>
 
-  /// Creates an ``RPCWriter`` by wrapping the `other` writer.
+  /// Creates a new writer that wraps another writer.
   ///
   /// - Parameter other: The writer to wrap.
   public init(wrapping other: some RPCWriterProtocol<Element>) {
@@ -28,8 +30,8 @@ public struct RPCWriter<Element: Sendable>: Sendable, RPCWriterProtocol {
 
   /// Writes a single element.
   ///
-  /// This function suspends until the element has been accepted. Implementers can use this
-  /// to exert backpressure on callers.
+  /// This function suspends until the wrapped writer accepts the element. Implementers can use
+  /// this to exert backpressure on callers.
   ///
   /// - Parameter element: The element to write.
   public func write(_ element: Element) async throws {
@@ -38,8 +40,8 @@ public struct RPCWriter<Element: Sendable>: Sendable, RPCWriterProtocol {
 
   /// Writes a sequence of elements.
   ///
-  /// This function suspends until the elements have been accepted. Implementers can use this
-  /// to exert backpressure on callers.
+  /// This function suspends until the wrapped writer accepts the elements. Implementers can use
+  /// this to exert backpressure on callers.
   ///
   /// - Parameter elements: The elements to write.
   public func write(contentsOf elements: some Sequence<Element>) async throws {

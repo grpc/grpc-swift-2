@@ -30,7 +30,8 @@ extension Result {
 
   /// Attempts to map the error to the given error type.
   ///
-  /// If the cast fails then the provided closure is used to create an error of the given type.
+  /// If the cast fails, this function uses the provided closure to create an error of the given
+  /// type.
   ///
   /// - Parameters:
   ///   - errorType: The type of error to cast to.
@@ -48,7 +49,8 @@ extension Result {
 
   /// Attempt to map or convert the error to an `RPCError`.
   ///
-  /// If the cast or conversion is not possible then the provided closure is used to create an error of the given type.
+  /// If the cast or conversion is not possible, this function uses the provided closure to create
+  /// an error of the given type.
   ///
   /// - Parameter buildError: A closure which constructs the desired error if conversion is not possible.
   @inlinable

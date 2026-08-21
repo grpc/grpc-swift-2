@@ -4,13 +4,13 @@ Transport-agnostic Swift source generation for gRPC services.
 
 ## Overview
 
-``GRPCCodeGen`` generates Swift client and server code for RPC services described by a
-language-neutral intermediate representation. It builds a structured Swift representation of
+``GRPCCodeGen`` generates Swift client and server code for RPC services that a
+language-neutral intermediate representation describes. It builds a structured Swift representation of
 the generated code and renders that representation to text; it doesn't itself parse any
 interface definition language (IDL), such as Protocol Buffers.
 
 Consumers construct a ``CodeGenerationRequest`` describing the services, methods, and
-dependencies parsed from an IDL file, and pass it to ``CodeGenerator/generate(_:)`` to produce
+dependencies that they parse from an IDL file, and pass it to ``CodeGenerator/generate(_:)`` to produce
 a ``SourceFile`` containing the generated Swift source. For example, `protoc-gen-grpc-swift-2`
 in [`grpc-swift-protobuf`](https://github.com/grpc/grpc-swift-protobuf) parses `.proto` files
 and uses this module to generate the corresponding Swift source.

@@ -65,9 +65,9 @@ struct ClientCodeTranslatorSnippetBasedTests {
               ///   - serializer: A serializer for `NamespaceA_ServiceARequest` messages.
               ///   - deserializer: A deserializer for `NamespaceA_ServiceAResponse` messages.
               ///   - options: Options to apply to this RPC.
-              ///   - handleResponse: A closure which handles the response, the result of which is
-              ///       returned to the caller. Returning from the closure will cancel the RPC if it
-              ///       hasn't already finished.
+              ///   - handleResponse: A closure which handles the response and returns its result to
+              ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+              ///       already finished.
               /// - Returns: The result of `handleResponse`.
               func methodA<Result>(
                   request: GRPCCore.ClientRequest<NamespaceA_ServiceARequest>,
@@ -109,9 +109,9 @@ struct ClientCodeTranslatorSnippetBasedTests {
               ///   - serializer: A serializer for `NamespaceA_ServiceARequest` messages.
               ///   - deserializer: A deserializer for `NamespaceA_ServiceAResponse` messages.
               ///   - options: Options to apply to this RPC.
-              ///   - handleResponse: A closure which handles the response, the result of which is
-              ///       returned to the caller. Returning from the closure will cancel the RPC if it
-              ///       hasn't already finished.
+              ///   - handleResponse: A closure which handles the response and returns its result to
+              ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+              ///       already finished.
               /// - Returns: The result of `handleResponse`.
               public func methodA<Result>(
                   request: GRPCCore.ClientRequest<NamespaceA_ServiceARequest>,
@@ -145,9 +145,9 @@ struct ClientCodeTranslatorSnippetBasedTests {
           /// - Parameters:
           ///   - request: A request containing a single `NamespaceA_ServiceARequest` message.
           ///   - options: Options to apply to this RPC.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           public func methodA<Result>(
               request: GRPCCore.ClientRequest<NamespaceA_ServiceARequest>,
@@ -178,9 +178,9 @@ struct ClientCodeTranslatorSnippetBasedTests {
           ///   - message: request message to send.
           ///   - metadata: Additional metadata to send, defaults to empty.
           ///   - options: Options to apply to this RPC, defaults to `.defaults`.
-          ///   - handleResponse: A closure which handles the response, the result of which is
-          ///       returned to the caller. Returning from the closure will cancel the RPC if it
-          ///       hasn't already finished.
+          ///   - handleResponse: A closure which handles the response and returns its result to
+          ///       the caller. Returning from the closure will cancel the RPC if it hasn't
+          ///       already finished.
           /// - Returns: The result of `handleResponse`.
           public func methodA<Result>(
               _ message: NamespaceA_ServiceARequest,

@@ -19,13 +19,13 @@
 public enum RPCRequestPart<Bytes: GRPCContiguousBytes> {
   /// Key-value pairs sent at the start of a request stream.
   ///
-  /// Only one ``metadata(_:)`` value may be sent to the server.
+  /// The client may send only one ``metadata(_:)`` value to the server.
   case metadata(Metadata)
 
   /// The bytes of a serialized message to send to the server.
   ///
-  /// A stream may have any number of messages sent on it. Restrictions for unary request or
-  /// response streams are imposed at a higher level.
+  /// A stream may have any number of messages sent on it. A higher level imposes restrictions
+  /// for unary request or response streams.
   case message(Bytes)
 }
 
@@ -41,14 +41,14 @@ extension RPCRequestPart: Equatable where Bytes: Equatable {}
 public enum RPCResponsePart<Bytes: GRPCContiguousBytes> {
   /// Key-value pairs sent at the start of the response stream.
   ///
-  /// At most one ``metadata(_:)`` value may be sent to the client. If the server sends
+  /// The server may send at most one ``metadata(_:)`` value to the client. If the server sends
   /// ``metadata(_:)``, it must be the first part in the response stream.
   case metadata(Metadata)
 
   /// The bytes of a serialized message to send to the client.
   ///
-  /// A stream may have any number of messages sent on it. Restrictions for unary request or
-  /// response streams are imposed at a higher level.
+  /// A stream may have any number of messages sent on it. A higher level imposes restrictions
+  /// for unary request or response streams.
   case message(Bytes)
 
   /// A status and key-value pairs sent to the client at the end of the response stream.

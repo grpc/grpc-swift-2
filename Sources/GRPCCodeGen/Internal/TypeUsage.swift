@@ -35,19 +35,19 @@
 ///
 /// To define a type, use `TypeName`, and to refer to a type, use `TypeUsage`.
 ///
-/// This type is not meant to represent all the various ways types can be
-/// wrapped in Swift, only the ways we wrap things in this project. For example,
-/// double optionals (`String??`) are automatically collapsed into a single
+/// This type is not meant to represent every way Swift can wrap types, only
+/// the ways we wrap things in this project. For example, this type
+/// automatically collapses double optionals (`String??`) into a single
 /// optional, and so on.
 struct TypeUsage {
 
   /// Describes either a type name or a type usage.
   fileprivate indirect enum Wrapped {
 
-    /// A type name, used to define a type.
+    /// A type name that you use to define a type.
     case name(TypeName)
 
-    /// A type usage, used to refer to a type.
+    /// A type usage that you use to refer to a type.
     case usage(TypeUsage)
   }
 
@@ -142,7 +142,7 @@ extension TypeUsage {
     }
   }
 
-  /// The type name wrapped by the current type usage.
+  /// The type name that the current type usage wraps.
   var typeName: TypeName {
     switch wrapped {
     case .name(let typeName): return typeName

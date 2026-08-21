@@ -16,18 +16,18 @@
 
 /// Serializes a message into a sequence of bytes.
 ///
-/// Message serializers convert an input message to a sequence of bytes. Serializers are used to
-/// convert messages into a form that is suitable for sending over a network. The reverse
-/// operation, deserialization, is performed by a ``MessageDeserializer``.
+/// Message serializers convert an input message to a sequence of bytes. gRPC uses
+/// serializers to convert messages into a form suitable for sending over a network. A
+/// ``MessageDeserializer`` performs the reverse operation, deserialization.
 ///
-/// Serializers are used frequently and implementations should take care to ensure that
+/// Callers use serializers frequently, so implementations should take care to ensure that
 /// serialization is as cheap as possible.
 @available(gRPCSwift 2.0, *)
 public protocol MessageSerializer<Message>: Sendable {
   /// The type of message this serializer can serialize.
   associatedtype Message
 
-  /// Serializes a ``Message`` into a sequence of bytes.
+  /// Serializes a message into a sequence of bytes.
   ///
   /// - Parameter message: The message to serialize.
   /// - Returns: The serialized bytes of a message.
@@ -36,18 +36,18 @@ public protocol MessageSerializer<Message>: Sendable {
 
 /// Deserializes a sequence of bytes into a message.
 ///
-/// Message deserializers convert a sequence of bytes into a message. Deserializers are used to
-/// convert bytes received from the network into an application-specific message. The reverse
-/// operation, serialization, is performed by a ``MessageSerializer``.
+/// Message deserializers convert a sequence of bytes into a message. gRPC uses
+/// deserializers to convert bytes received from the network into an application-specific
+/// message. A ``MessageSerializer`` performs the reverse operation, serialization.
 ///
-/// Deserializers are used frequently and implementations should take care to ensure that
+/// Callers use deserializers frequently, so implementations should take care to ensure that
 /// deserialization is as cheap as possible.
 @available(gRPCSwift 2.0, *)
 public protocol MessageDeserializer<Message>: Sendable {
   /// The type of message this deserializer can deserialize.
   associatedtype Message
 
-  /// Deserializes a sequence of bytes into a ``Message``.
+  /// Deserializes a sequence of bytes into a message.
   ///
   /// - Parameter serializedMessageBytes: The bytes to deserialize.
   /// - Returns: The deserialized message.

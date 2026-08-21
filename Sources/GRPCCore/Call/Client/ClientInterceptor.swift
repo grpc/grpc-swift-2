@@ -18,16 +18,16 @@
 
 /// A type that intercepts requests and responses for clients.
 ///
-/// Interceptors allow you to inspect and modify requests and responses. Requests are intercepted
-/// before they are handed to a transport, and responses are intercepted after they have been
-/// received from the transport. They are typically used for cross-cutting concerns like injecting
+/// Interceptors allow you to inspect and modify requests and responses. The client intercepts
+/// requests before handing them to a transport, and intercepts responses after receiving them
+/// from the transport. You typically use interceptors for cross-cutting concerns like injecting
 /// metadata, validating messages, logging additional data, and tracing.
 ///
-/// Interceptors are registered with the client via ``ConditionalInterceptor``s.
-/// You may register them for all services registered with a server, for RPCs directed to specific services, or
-/// for RPCs directed to specific methods. If you need to modify the behavior of an interceptor on a
+/// Register interceptors with the client via ``ConditionalInterceptor``s. You may register them
+/// for all services registered with a server, for RPCs directed to specific services, or for
+/// RPCs directed to specific methods. If you need to modify the behavior of an interceptor on a
 /// per-RPC basis in more detail, then you can use the ``ClientContext/descriptor`` to determine
-/// which RPC is being called and conditionalise behavior accordingly.
+/// which RPC the client is calling and conditionalise behavior accordingly.
 ///
 /// Some examples of simple interceptors follow.
 ///
@@ -59,7 +59,7 @@
 /// }
 /// ```
 ///
-/// Interceptors can also be used to print information about RPCs.
+/// Also use interceptors to print information about RPCs.
 ///
 /// ## Logging interceptor
 ///

@@ -17,15 +17,16 @@
 /// A context passed to the client containing additional information about the RPC.
 @available(gRPCSwift 2.0, *)
 public struct ClientContext: Sendable {
-  /// A description of the method being called.
+  /// A description of the method the client is calling.
   public var descriptor: MethodDescriptor
 
   /// A description of the remote peer.
   ///
   /// The format of the description should follow the pattern "<transport>:<address>" where
   /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
-  /// "in-process"). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format, so you shouldn't make assumptions based on it.
+  /// "in-process"). This is a guideline for how implementations should format descriptions;
+  /// different implementations may not follow this format, so don't make assumptions
+  /// based on it.
   ///
   /// Some examples include:
   /// - "ipv4:127.0.0.1:31415",
@@ -37,8 +38,9 @@ public struct ClientContext: Sendable {
   ///
   /// The format of the description should follow the pattern "<transport>:<address>" where
   /// "<transport>" indicates the underlying network transport (such as "ipv4", "unix", or
-  /// "in-process"). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format, so you shouldn't make assumptions based on it.
+  /// "in-process"). This is a guideline for how implementations should format descriptions;
+  /// different implementations may not follow this format, so don't make assumptions
+  /// based on it.
   ///
   /// Some examples include:
   /// - "ipv4:127.0.0.1:31415",

@@ -24,8 +24,8 @@ struct ServerRPCExecutor: Sendable {
   ///   - stream: The accepted stream to execute the RPC on.
   ///   - deserializer: A deserializer for messages received from the client.
   ///   - serializer: A serializer for messages to send to the client.
-  ///   - interceptors: Server interceptors to apply to this RPC.  The
-  ///       interceptors will be called in the order of the array.
+  ///   - interceptors: Server interceptors to apply to this RPC. This method calls the
+  ///       interceptors in the order of the array.
   ///   - handler: A handler which turns the request into a response.
   @inlinable
   static func execute<Input, Output, Bytes: GRPCContiguousBytes>(

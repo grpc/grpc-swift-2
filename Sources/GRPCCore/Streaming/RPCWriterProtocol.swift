@@ -22,16 +22,16 @@ public protocol RPCWriterProtocol<Element>: Sendable {
 
   /// Writes a single element.
   ///
-  /// This function suspends until the element has been accepted. Implementers can use this
-  /// to exert backpressure on callers.
+  /// This function suspends until the implementation accepts the element. Implementers can use
+  /// this to exert backpressure on callers.
   ///
   /// - Parameter element: The element to write.
   func write(_ element: Element) async throws
 
   /// Writes a sequence of elements.
   ///
-  /// This function suspends until the elements have been accepted. Implementers can use this
-  /// to exert backpressure on callers.
+  /// This function suspends until the implementation accepts the elements. Implementers can use
+  /// this to exert backpressure on callers.
   ///
   /// - Parameter elements: The elements to write.
   func write(contentsOf elements: some Sequence<Element>) async throws
@@ -39,7 +39,7 @@ public protocol RPCWriterProtocol<Element>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension RPCWriterProtocol {
-  /// Writes an `AsyncSequence` of values into the sink.
+  /// Writes an asynchronous sequence of values into the sink.
   ///
   /// - Parameter elements: The elements to write.
   public func write<Elements: AsyncSequence>(
@@ -54,15 +54,13 @@ extension RPCWriterProtocol {
 /// A type into which values can be written until it is finished.
 @available(gRPCSwift 2.0, *)
 public protocol ClosableRPCWriterProtocol<Element>: RPCWriterProtocol {
-  /// Indicates to the writer that no more writes are to be accepted.
+  /// Tells the writer to reject any further writes.
   ///
-  /// All writes after ``finish()`` has been called should result in an error
-  /// being thrown.
+  /// After a caller calls ``finish()``, any further write should throw an error.
   func finish() async
 
-  /// Indicates to the writer that no more writes are to be accepted because an error occurred.
+  /// Tells the writer to reject any further writes because an error occurred.
   ///
-  /// All writes after ``finish(throwing:)`` has been called should result in an error
-  /// being thrown.
+  /// After a caller calls ``finish(throwing:)``, any further write should throw an error.
   func finish(throwing error: any Error) async
 }

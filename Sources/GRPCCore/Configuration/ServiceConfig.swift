@@ -19,9 +19,9 @@
 /// A service config mostly contains parameters describing how clients connecting to a service
 /// should behave (for example, the load balancing policy to use).
 ///
-/// The schema is described by [`grpc/service_config/service_config.proto`](https://github.com/grpc/grpc-proto/blob/0b30c8c05277ab78ec72e77c9cbf66a26684673d/grpc/service_config/service_config.proto)
-/// in the `grpc/grpc-proto` GitHub repository, although gRPC uses it in its JSON form rather than
-/// the Protobuf form.
+/// [`grpc/service_config/service_config.proto`](https://github.com/grpc/grpc-proto/blob/0b30c8c05277ab78ec72e77c9cbf66a26684673d/grpc/service_config/service_config.proto)
+/// in the `grpc/grpc-proto` GitHub repository describes the schema, although gRPC uses it in
+/// its JSON form rather than the Protobuf form.
 @available(gRPCSwift 2.0, *)
 public struct ServiceConfig: Hashable, Sendable {
   /// Per-method configuration.
@@ -30,15 +30,15 @@ public struct ServiceConfig: Hashable, Sendable {
   /// Load balancing policies.
   ///
   /// The client iterates through the list in order and picks the first configuration it supports.
-  /// If no policies are supported, then the configuration is considered to be invalid.
+  /// If the client doesn't support any policies, gRPC considers the configuration invalid.
   public var loadBalancingConfig: [LoadBalancingConfig]
 
   /// The policy for throttling retries.
   ///
-  /// If ``RetryThrottling`` is provided, gRPC will automatically throttle retry attempts
+  /// If you provide ``RetryThrottling``, gRPC will automatically throttle retry attempts
   /// and hedged RPCs when the client's ratio of failures to successes exceeds a threshold.
   ///
-  /// For each server name, the gRPC client will maintain a `token_count` that is initially set
+  /// For each server name, the gRPC client will maintain a `token_count`, initially set
   /// to ``RetryThrottling-swift.struct/maxTokens``. Every outgoing RPC (regardless of service or
   /// method invoked) will change `token_count` as follows:
   ///
@@ -46,11 +46,11 @@ public struct ServiceConfig: Hashable, Sendable {
   ///   - Every successful RPC will increment the `token_count` by
   ///   ``RetryThrottling-swift.struct/tokenRatio``.
   ///
-  /// If `token_count` is less than or equal to `max_tokens / 2`, then RPCs will not be retried
-  /// and hedged RPCs will not be sent.
+  /// If `token_count` is less than or equal to `max_tokens / 2`, gRPC will not retry RPCs
+  /// and will not send hedged RPCs.
   public var retryThrottling: RetryThrottling?
 
-  /// Creates a new ``ServiceConfig``.
+  /// Creates a new service configuration.
   ///
   /// - Parameters:
   ///   - methodConfig: Per-method configuration.
@@ -121,8 +121,8 @@ extension ServiceConfig {
 
     /// Creates a pick-first load balancing policy with the given address-shuffling behavior.
     ///
-    /// - Parameter shuffleAddressList: Whether resolved addresses should be shuffled before
-    ///     attempting to connect to them.
+    /// - Parameter shuffleAddressList: Whether to shuffle resolved addresses before attempting
+    ///     to connect to them.
     public static func pickFirst(shuffleAddressList: Bool) -> Self {
       Self(.pickFirst(PickFirst(shuffleAddressList: shuffleAddressList)))
     }
@@ -175,11 +175,11 @@ extension ServiceConfig {
 extension ServiceConfig.LoadBalancingConfig {
   /// Configuration for the pick-first load balancing policy.
   public struct PickFirst: Hashable, Sendable, Codable {
-    /// Whether the resolved addresses should be shuffled before attempting to connect to them.
+    /// Whether to shuffle the resolved addresses before attempting to connect to them.
     public var shuffleAddressList: Bool
 
     /// Creates a new pick-first load balancing policy.
-    /// - Parameter shuffleAddressList: Whether the resolved addresses should be shuffled before
+    /// - Parameter shuffleAddressList: Whether to shuffle the resolved addresses before
     ///     attempting to connect to them.
     public init(shuffleAddressList: Bool = false) {
       self.shuffleAddressList = shuffleAddressList
@@ -232,6 +232,7 @@ extension ServiceConfig.LoadBalancingConfig: Codable {
 
 @available(gRPCSwift 2.0, *)
 extension ServiceConfig {
+  /// Configuration for throttling retries and hedging attempts.
   public struct RetryThrottling: Hashable, Sendable, Codable {
     /// The initial and maximum number of tokens.
     ///
@@ -240,8 +241,8 @@ extension ServiceConfig {
 
     /// The amount of tokens to add on each successful RPC.
     ///
-    /// Typically this will be some number between 0 and 1, for example, 0.1. Up to three decimal
-    /// places are supported.
+    /// Typically, this is some number between 0 and 1, for example, 0.1. gRPC supports up to
+    /// three decimal places.
     ///
     /// - Precondition: Must be greater than zero.
     public var tokenRatio: Double

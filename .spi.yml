@@ -2,8 +2,6 @@ version: 1
 builder:
   configs:
     - documentation_targets: [GRPCCore, GRPCCodeGen]
-      swift_version: 6.0
     - documentation_targets: [GRPCInProcessTransport]
-      swift_version: 6.0
       # Don't include @_exported types from GRPCCore
       custom_documentation_parameters: [--exclude-extended-types]

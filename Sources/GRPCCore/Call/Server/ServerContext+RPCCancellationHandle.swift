@@ -25,7 +25,7 @@ extension ServerContext {
   ///
   /// gRPC signals cancellation through this handle, not by cancelling your handler's `Task`. If
   /// you don't check ``isCancelled`` or use ``withRPCCancellationHandler(operation:onCancelRPC:)``,
-  /// your handler keeps running after the RPC is cancelled. For a streaming response, this means
+  /// your handler keeps running after gRPC cancels the RPC. For a streaming response, this means
   /// it keeps writing messages the client will never see.
   public struct RPCCancellationHandle: Sendable {
     internal let manager: ServerCancellationManager
@@ -47,7 +47,7 @@ extension ServerContext {
     ///
     /// Throws a `CancellationError` if the `Task` is cancelled.
     ///
-    /// You can also be notified when an RPC is cancelled by using
+    /// Also learn when an RPC is cancelled by using
     /// ``withRPCCancellationHandler(operation:onCancelRPC:)``.
     public var cancelled: Void {
       get async throws {
@@ -55,7 +55,7 @@ extension ServerContext {
       }
     }
 
-    /// Signals that the RPC should be cancelled.
+    /// Cancels the RPC.
     ///
     /// This is idempotent: calling it more than once has no effect.
     public func cancel() {
@@ -64,7 +64,7 @@ extension ServerContext {
   }
 }
 
-/// Executes an operation with an RPC cancellation handler that's immediately invoked
+/// Executes an operation with an RPC cancellation handler that gRPC invokes immediately
 /// if the RPC is cancelled.
 ///
 /// RPCs can be cancelled for a number of reasons including:
@@ -76,7 +76,7 @@ extension ServerContext {
 /// - Important: This only applies to RPCs on the server.
 /// - Parameters:
 ///   - operation: The operation to execute.
-///   - handler: The handler which is invoked when the RPC is cancelled.
+///   - handler: The handler that gRPC invokes when the RPC is cancelled.
 /// - Throws: Any error thrown by the `operation` closure.
 /// - Returns: The result of the `operation` closure.
 @available(gRPCSwift 2.0, *)
@@ -99,13 +99,13 @@ public func withRPCCancellationHandler<Result, Failure: Error>(
 
 /// Provides scoped access to a server RPC cancellation handle.
 ///
-/// The cancellation handle should be passed to a ``ServerContext`` and last
+/// Pass the cancellation handle to a ``ServerContext``; the handle should last
 /// the duration of the RPC.
 ///
-/// - Important: This function is intended for use when implementing
+/// - Important: Use this function when implementing
 ///   a ``ServerTransport``.
 ///
-/// If you want to be notified about RPCs being cancelled,
+/// If you want to know about RPCs being cancelled,
 /// use ``withRPCCancellationHandler(operation:onCancelRPC:)``.
 ///
 /// - Parameter operation: The operation to execute with the handle.

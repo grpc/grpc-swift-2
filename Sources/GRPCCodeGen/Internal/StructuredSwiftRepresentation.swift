@@ -45,7 +45,7 @@ package struct ImportDescription: Equatable, Codable, Sendable {
 
   /// An array of module types imported from the module, if applicable.
   ///
-  /// For example, if there are type imports like `import Foo.Bar`, they would be listed here.
+  /// For example, this array lists type imports like `import Foo.Bar`.
   var moduleTypes: [String]?
 
   /// The name of the private interface for an `@_spi` import.
@@ -207,7 +207,7 @@ enum IdentifierDescription: Equatable, Codable, Sendable {
 /// For example `foo.bar`.
 struct MemberAccessDescription: Equatable, Codable, Sendable {
 
-  /// The expression of which a member `right` is accessed.
+  /// The expression that provides the member `right`.
   ///
   /// For example, in `foo.bar`, `left` represents `foo`.
   var left: Expression?
@@ -239,12 +239,12 @@ struct FunctionArgumentDescription: Equatable, Codable, Sendable {
 /// For example `foo(bar: 42)`.
 struct FunctionCallDescription: Equatable, Codable, Sendable {
 
-  /// The expression that returns the function to be called.
+  /// The expression that returns the function to call.
   ///
   /// For example, in `foo(bar: 42)`, `calledExpression` represents `foo`.
   var calledExpression: Expression
 
-  /// The arguments to be passed to the function.
+  /// The arguments to pass to the function.
   var arguments: [FunctionArgumentDescription]
 
   /// A trailing closure.
@@ -252,8 +252,8 @@ struct FunctionCallDescription: Equatable, Codable, Sendable {
 
   /// Creates a new function call description.
   /// - Parameters:
-  ///   - calledExpression: An expression that returns the function to be called.
-  ///   - arguments: Arguments to be passed to the function.
+  ///   - calledExpression: An expression that returns the function to call.
+  ///   - arguments: Arguments to pass to the function.
   ///   - trailingClosure: A trailing closure.
   init(
     calledExpression: Expression,
@@ -267,8 +267,8 @@ struct FunctionCallDescription: Equatable, Codable, Sendable {
 
   /// Creates a new function call description.
   /// - Parameters:
-  ///   - calledExpression: An expression that returns the function to be called.
-  ///   - arguments: Arguments to be passed to the function.
+  ///   - calledExpression: An expression that returns the function to call.
+  ///   - arguments: Arguments to pass to the function.
   ///   - trailingClosure: A trailing closure.
   init(
     calledExpression: Expression,
@@ -317,7 +317,7 @@ struct VariableDescription: Equatable, Codable, Sendable {
   /// For example, in `let foo: Int = 42`, `type` is `Int`.
   var type: ExistingTypeDescription?
 
-  /// The expression to be assigned to the variable.
+  /// The expression to assign to the variable.
   ///
   /// For example, in `let foo = 42`, `right` represents `42`.
   var right: Expression? = nil
@@ -359,7 +359,7 @@ enum WhereClauseRequirement: Equatable, Codable, Sendable {
 /// For example: `extension Array where Element: Foo {`.
 struct WhereClause: Equatable, Codable, Sendable {
 
-  /// One or more requirements to be added after the `where` keyword.
+  /// One or more requirements to add after the `where` keyword.
   var requirements: [WhereClauseRequirement]
 }
 
@@ -841,7 +841,7 @@ struct DeprecationDescription: Equatable, Codable, Sendable {
 ///
 /// For example: `@available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)`
 package struct AvailabilityDescription: Equatable, Codable, Sendable {
-  /// The array of OSes and versions which are specified in the availability guard.
+  /// The array of OSes and versions that the availability guard specifies.
   package var osVersions: [OSVersion]
   package init(osVersions: [OSVersion]) {
     self.osVersions = osVersions
@@ -943,7 +943,7 @@ struct SwitchDescription: Equatable, Codable, Sendable {
 struct IfBranch: Equatable, Codable, Sendable {
 
   /// The expressions evaluated by the if statement and their corresponding
-  /// body blocks. If more than one is provided, an `else if` branch is added.
+  /// body blocks. Providing more than one condition adds an `else if` branch.
   ///
   /// For example, in `if foo { bar }`, `condition` is `foo`.
   var condition: Expression
@@ -967,7 +967,7 @@ struct IfStatementDescription: Equatable, Codable, Sendable {
 
   /// The body of an else block.
   ///
-  /// No `else` statement is added when `elseBody` is nil.
+  /// If nil, adds no `else` statement.
   var elseBody: [CodeBlock]?
 }
 
@@ -984,7 +984,7 @@ struct DoStatementDescription: Equatable, Codable, Sendable {
 
   /// The code blocks in the `catch` statement.
   ///
-  /// If nil, no `catch` statement is added.
+  /// If nil, adds no `catch` statement.
   ///
   /// For example, in `do { try foo() } catch { return bar }`,
   /// `catchBody` is `return bar`.
@@ -1273,7 +1273,7 @@ extension Declaration {
   ///   - kind: The variable binding kind.
   ///   - left: The name of the variable.
   ///   - type: The type of the variable.
-  ///   - right: The expression to be assigned to the variable.
+  ///   - right: The expression to assign to the variable.
   ///   - getter: Body code for the getter of the variable.
   ///   - getterEffects: Effects of the getter.
   ///   - setter: Body code for the setter of the variable.
@@ -1316,7 +1316,7 @@ extension Declaration {
   ///   - kind: The variable binding kind.
   ///   - left: The name of the variable.
   ///   - type: The type of the variable.
-  ///   - right: The expression to be assigned to the variable.
+  ///   - right: The expression to assign to the variable.
   ///   - getter: Body code for the getter of the variable.
   ///   - getterEffects: Effects of the getter.
   ///   - setter: Body code for the setter of the variable.
@@ -1604,8 +1604,8 @@ extension Expression {
   ///
   /// For example `foo(bar: 42)`.
   /// - Parameters:
-  ///   - calledExpression: The expression to be called as a function.
-  ///   - arguments: The arguments to be passed to the function call.
+  ///   - calledExpression: The expression to call as a function.
+  ///   - arguments: The arguments to pass to the function call.
   ///   - trailingClosure: A trailing closure.
   /// - Returns: A new expression representing a function call with the specified called expression and arguments.
   static func functionCall(
@@ -1820,16 +1820,16 @@ extension VariableDescription {
 
 extension Expression {
 
-  /// Creates a new assignment description where the called expression is
-  /// assigned the value of the specified expression.
+  /// Creates a new assignment description that assigns the value of the
+  /// specified expression to the called expression.
   /// - Parameter rhs: The right-hand side of the assignment expression.
   /// - Returns: An assignment description representing the assignment.
   func equals(_ rhs: Expression) -> AssignmentDescription { .init(left: self, right: rhs) }
 }
 
 extension FunctionSignatureDescription {
-  /// Returns a new function signature description that has the access
-  /// modifier updated to the specified one.
+  /// Returns a new function signature description with the access
+  /// modifier set to the specified one.
   /// - Parameter accessModifier: The access modifier to use.
   /// - Returns: A function signature description with the specified access modifier.
   func withAccessModifier(_ accessModifier: AccessModifier?) -> Self {

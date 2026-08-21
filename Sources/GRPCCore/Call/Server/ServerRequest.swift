@@ -48,7 +48,7 @@ public struct StreamingServerRequest<Message: Sendable>: Sendable {
 
   /// A sequence of messages received from the client.
   ///
-  /// The sequence may be iterated at most once.
+  /// You may iterate the sequence at most once.
   public var messages: RPCAsyncSequence<Message, any Error>
 
   /// Creates a new streaming request.

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-/// Creates a representation for the client code that will be generated based on the ``CodeGenerationRequest`` object
-/// specifications, using types from ``StructuredSwiftRepresentation``.
+/// Creates a representation for the client code that ``ClientCodeTranslator`` generates based
+/// on the ``CodeGenerationRequest`` object's specifications, using types from
+/// ``StructuredSwiftRepresentation``.
 ///
 /// For example, in the case of a service called "Bar", in the "foo" namespace which has
 /// one method "baz" with input type "Input" and output type "Output", the ``ClientCodeTranslator`` will create

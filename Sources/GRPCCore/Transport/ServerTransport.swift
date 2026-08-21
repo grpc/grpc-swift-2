@@ -40,14 +40,14 @@ public protocol ServerTransport<Bytes>: Sendable {
 
   /// Starts the transport.
   ///
-  /// Implementations will typically bind to a listening port when this function is called
-  /// and start accepting new connections. Each accepted inbound RPC stream will be handed over to
-  /// the provided `streamHandler` to handle accordingly.
+  /// Implementations will typically bind to a listening port when you call this function
+  /// and start accepting new connections. Implementations hand each accepted inbound RPC stream
+  /// over to the provided `streamHandler` to handle accordingly.
   ///
-  /// You can call ``beginGracefulShutdown()`` to stop the transport from accepting new streams. Existing
-  /// streams must be allowed to complete naturally. However, transports may also enforce a grace
-  /// period after which any open streams may be cancelled. You can also cancel the task running
-  /// ``listen(streamHandler:)`` to abruptly close connections and streams.
+  /// Call ``beginGracefulShutdown()`` to stop the transport from accepting new streams.
+  /// Transports must allow existing streams to complete naturally. However, transports may also
+  /// enforce a grace period after which they may cancel any open streams. Alternatively, cancel
+  /// the task running ``listen(streamHandler:)`` to abruptly close connections and streams.
   func listen(
     streamHandler:
       @escaping @Sendable (
@@ -56,10 +56,10 @@ public protocol ServerTransport<Bytes>: Sendable {
       ) async -> Void
   ) async throws
 
-  /// Indicates to the transport that no new streams should be accepted.
+  /// Indicates to the transport that it should not accept new streams.
   ///
-  /// Existing streams are permitted to run to completion. However, the transport may also enforce
-  /// a grace period, after which remaining streams are cancelled.
+  /// The transport permits existing streams to run to completion. However, it may also enforce
+  /// a grace period, after which it cancels remaining streams.
   func beginGracefulShutdown()
 }
 

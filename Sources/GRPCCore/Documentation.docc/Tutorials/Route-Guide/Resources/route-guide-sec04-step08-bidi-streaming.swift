@@ -12,7 +12,7 @@ struct RouteGuideService: Routeguide_RouteGuide.SimpleServiceProtocol {
     self.features = features
   }
 
-  /// Returns the first feature found at the given location, if one exists.
+  /// Returns the first feature at the given location, if one exists.
   private func findFeature(latitude: Int32, longitude: Int32) -> Routeguide_Feature? {
     self.features.first {
       $0.location.latitude == latitude && $0.location.longitude == longitude

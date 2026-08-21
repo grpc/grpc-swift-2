@@ -16,11 +16,14 @@
 
 @available(gRPCSwift 2.0, *)
 extension RPCWriter {
+  /// A concrete, closable writer.
+  ///
+  /// Wraps another ``ClosableRPCWriterProtocol``.
   public struct Closable: ClosableRPCWriterProtocol {
     @usableFromInline
     let writer: any ClosableRPCWriterProtocol<Element>
 
-    /// Creates an ``RPCWriter/Closable`` by wrapping the `other` writer.
+    /// Creates a new writer that wraps another writer.
     ///
     /// - Parameter other: The writer to wrap.
     @inlinable
@@ -30,8 +33,8 @@ extension RPCWriter {
 
     /// Writes a single element.
     ///
-    /// This function suspends until the element has been accepted. Implementers can use this
-    /// to exert backpressure on callers.
+    /// This function suspends until the wrapped writer accepts the element. Implementers can use
+    /// this to exert backpressure on callers.
     ///
     /// - Parameter element: The element to write.
     @inlinable
@@ -41,8 +44,8 @@ extension RPCWriter {
 
     /// Writes a sequence of elements.
     ///
-    /// This function suspends until the elements have been accepted. Implementers can use this
-    /// to exert backpressure on callers.
+    /// This function suspends until the wrapped writer accepts the elements. Implementers can use
+    /// this to exert backpressure on callers.
     ///
     /// - Parameter elements: The elements to write.
     @inlinable
@@ -50,19 +53,17 @@ extension RPCWriter {
       try await self.writer.write(contentsOf: elements)
     }
 
-    /// Indicates to the writer that no more writes are to be accepted.
+    /// Tells the writer to reject any further writes.
     ///
-    /// All writes after ``finish()`` has been called should result in an error
-    /// being thrown.
+    /// After a caller calls ``finish()``, any further write should throw an error.
     @inlinable
     public func finish() async {
       await self.writer.finish()
     }
 
-    /// Indicates to the writer that no more writes are to be accepted because an error occurred.
+    /// Tells the writer to reject any further writes because an error occurred.
     ///
-    /// All writes after ``finish(throwing:)`` has been called should result in an error
-    /// being thrown.
+    /// After a caller calls ``finish(throwing:)``, any further write should throw an error.
     @inlinable
     public func finish(throwing error: any Error) async {
       await self.writer.finish(throwing: error)

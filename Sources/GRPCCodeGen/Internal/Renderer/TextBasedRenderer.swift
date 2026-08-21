@@ -43,7 +43,7 @@ final class StringCodeWriter {
   internal let indentation: Int
 
   /// Whether the next call to `writeLine` will continue writing to the last
-  /// stored line. Otherwise a new line is appended.
+  /// stored line. Otherwise, `writeLine` appends a new line.
   private var nextWriteAppendsToLastLine: Bool = false
 
   /// Creates a new empty writer.
@@ -59,7 +59,7 @@ final class StringCodeWriter {
 
   /// Writes a line of code.
   ///
-  /// By default, a new line is appended to the file.
+  /// By default, this method appends a new line to the file.
   ///
   /// To continue the last line, make a call to `nextLineAppendsToLastLine`
   /// before calling `writeLine`.
@@ -102,7 +102,7 @@ final class StringCodeWriter {
   /// Sets a flag on the writer so that the next call to `writeLine` continues
   /// the last stored line instead of starting a new line.
   ///
-  /// Safe to call repeatedly, it gets reset by `writeLine`.
+  /// Safe to call repeatedly; `writeLine` resets the flag.
   func nextLineAppendsToLastLine() { nextWriteAppendsToLastLine = true }
 }
 
@@ -1184,8 +1184,7 @@ extension Array {
 }
 
 extension Array where Element == String {
-  /// Returns a string where the elements of the array are joined
-  /// by a space character.
+  /// Returns a string that joins the array's elements with a space character.
   /// - Returns: A string with the elements of the array joined by space characters.
   fileprivate func joinedWords() -> String { joined(separator: " ") }
 }
@@ -1202,7 +1201,7 @@ extension String {
   /// Returns a new string where the provided closure transforms each line.
   /// The closure takes a string representing one line as a parameter.
   /// - Parameter work: The closure that transforms each line.
-  /// - Returns: A new string where each line has been transformed using the given closure.
+  /// - Returns: A new string where the given closure transformed each line.
   fileprivate func transformingLines(_ work: (String, Bool) -> String?) -> [String] {
     asLines().enumeratedWithLastMarker().compactMap(work)
   }

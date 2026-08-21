@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// Describes the conditions under which an interceptor should be applied.
+/// Describes the conditions under which an interceptor applies.
 ///
 /// You can configure interceptors to be applied to:
 /// - all RPCs and services; or
@@ -28,16 +28,17 @@
 ///   server interceptors, respectively.
 @available(gRPCSwift 2.0, *)
 public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
+  /// Describes which RPCs an interceptor applies to.
   public struct Subject: Sendable {
 
     private let predicate: @Sendable (_ descriptor: MethodDescriptor) -> Bool
 
-    /// An operation subject specifying an interceptor that applies to all RPCs across all services will be registered with this client.
+    /// An operation subject specifying an interceptor that applies to all RPCs across all services you register with this client.
     public static var all: Self {
       Self { _ in true }
     }
 
-    /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified services.
+    /// An operation subject specifying an interceptor that applies only to RPCs directed to the specified services.
     ///
     /// - Parameters:
     ///   - services: The list of service descriptors for which this interceptor should intercept RPCs.
@@ -47,7 +48,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
       }
     }
 
-    /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified service methods.
+    /// An operation subject specifying an interceptor that applies only to RPCs directed to the specified service methods.
     ///
     /// - Parameters:
     ///   - methods: The list of method descriptors for which this interceptor should intercept RPCs.
@@ -57,7 +58,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
       }
     }
 
-    /// An operation subject specifying an interceptor that will be applied only to RPCs directed to the specified services or service methods.
+    /// An operation subject specifying an interceptor that applies only to RPCs directed to the specified services or service methods.
     ///
     /// - Parameters:
     ///   - services: The list of service descriptors for which this interceptor should intercept RPCs.
@@ -72,7 +73,7 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
       }
     }
 
-    /// An operation subject specifying an interceptor that will be applied to all RPCs across all services for this client excluding the specified services or service methods.
+    /// An operation subject specifying an interceptor that applies to all RPCs across all services for this client, excluding the specified services or service methods.
     ///
     /// - Parameters:
     ///   - services: The list of service descriptors for which this interceptor should **not** intercept RPCs.
@@ -87,11 +88,14 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
       }
     }
 
-    /// An operation subject specifying an interceptor that will be applied to RPCs whose ``MethodDescriptor`` satisfies a `predicate`.
+    /// An operation subject specifying an interceptor that applies to RPCs matching a custom predicate.
     ///
-    /// - Important: The result of `predicate` is **cached per `MethodDescriptor`** by the client.
-    ///   The predicate is evaluated the first time a given method is encountered, and that result
-    ///   is reused for subsequent RPCs of the same method for the lifetime of the client.
+    /// The predicate receives the RPC's ``MethodDescriptor`` and returns whether the interceptor
+    /// should apply.
+    ///
+    /// - Important: The client **caches the result of `predicate` per `MethodDescriptor`**.
+    ///   The client evaluates the predicate the first time it encounters a given method, and
+    ///   reuses that result for subsequent RPCs of the same method for the lifetime of the client.
     ///   As a consequence, the `predicate` closure should be **deterministic**.
     ///   Do **not** base it on dynamic state, such as time, session, or feature flags.
     ///   If you need per-call decisions, put that logic inside the interceptor itself.
@@ -133,7 +137,8 @@ public struct ConditionalInterceptor<Interceptor: Sendable>: Sendable {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
-  /// Creates an operation, specifying which ``ClientInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation that applies a client interceptor to a specific set of RPCs.
+  ///
   /// - Parameters:
   ///   - interceptor: The ``ClientInterceptor`` to register with the client.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.
@@ -147,7 +152,8 @@ extension ConditionalInterceptor where Interceptor == any ClientInterceptor {
 
 @available(gRPCSwift 2.0, *)
 extension ConditionalInterceptor where Interceptor == any ServerInterceptor {
-  /// Creates an operation, specifying which ``ServerInterceptor`` to apply and to which ``Subject``.
+  /// Creates an operation that applies a server interceptor to a specific set of RPCs.
+  ///
   /// - Parameters:
   ///   - interceptor: The ``ServerInterceptor`` to register with the server.
   ///   - subject: The ``Subject`` to which the `interceptor` applies.

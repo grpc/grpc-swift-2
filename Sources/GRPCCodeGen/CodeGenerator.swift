@@ -38,9 +38,9 @@ public struct CodeGenerator: Sendable {
     public var accessLevelOnImports: Bool
     /// The indentation of the generated code as the number of spaces.
     public var indentation: Int
-    /// Whether or not client code should be generated.
+    /// Whether to generate client code.
     public var client: Bool
-    /// Whether or not server code should be generated.
+    /// Whether to generate server code.
     public var server: Bool
     /// The name of the core gRPC module.
     public var grpcCoreModuleName: String
@@ -52,8 +52,8 @@ public struct CodeGenerator: Sendable {
     /// - Parameters:
     ///   - accessLevel: The access level the generated code will have.
     ///   - accessLevelOnImports: Whether imports have explicit access levels.
-    ///   - client: Whether or not client code should be generated.
-    ///   - server: Whether or not server code should be generated.
+    ///   - client: Whether to generate client code.
+    ///   - server: Whether to generate server code.
     ///   - indentation: The indentation of the generated code as the number of spaces.
     public init(
       accessLevel: AccessLevel,

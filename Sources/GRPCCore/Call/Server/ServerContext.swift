@@ -28,8 +28,8 @@ public struct ServerContext: Sendable {
   ///
   /// The format of the description should follow the pattern `<transport>:<address>` where
   /// `<transport>` indicates the underlying network transport (such as `ipv4`, `unix`, or
-  /// `in-process`). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format so you shouldn't make assumptions based on it.
+  /// `in-process`). This is a guideline for how transports should format descriptions; different
+  /// implementations may not follow this format, so don't make assumptions based on it.
   ///
   /// Some examples include:
   /// - `ipv4:127.0.0.1:31415`,
@@ -41,8 +41,8 @@ public struct ServerContext: Sendable {
   ///
   /// The format of the description should follow the pattern `<transport>:<address>` where
   /// `<transport>` indicates the underlying network transport (such as `ipv4`, `unix`, or
-  /// `in-process`). This is a guideline for how descriptions should be formatted; different
-  /// implementations may not follow this format so you shouldn't make assumptions based on it.
+  /// `in-process`). This is a guideline for how transports should format descriptions; different
+  /// implementations may not follow this format, so don't make assumptions based on it.
   ///
   /// Some examples include:
   /// - `ipv4:127.0.0.1:31415`,
@@ -55,8 +55,8 @@ public struct ServerContext: Sendable {
   /// Refer to the transport documentation to understand what type of
   /// value this field will contain, if any.
   ///
-  /// An example of what this field can be used for would be to store
-  /// things like a peer certificate from an mTLS connection.
+  /// For example, a transport might use this field to store something like a peer certificate
+  /// from an mTLS connection.
   public var transportSpecific: (any TransportSpecific)?
 
   /// A handle for checking the cancellation status of an RPC.

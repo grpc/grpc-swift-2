@@ -26,10 +26,10 @@ enum ClientRPCExecutor: Sendable {
   ///   - serializer: A serializer to convert input messages to bytes.
   ///   - deserializer: A deserializer to convert bytes to output messages.
   ///   - transport: The transport to execute the request on.
-  ///   - interceptors: An array of interceptors which the request and response pass through. The
-  ///       interceptors will be called in the order of the array.
-  ///   - handler: A closure for handling the response. Once the closure returns, any resources from
-  ///       the RPC will be torn down.
+  ///   - interceptors: An array of interceptors which the request and response pass through. This
+  ///       function calls the interceptors in the order of the array.
+  ///   - handler: A closure for handling the response. Once the closure returns, this function
+  ///       tears down any resources from the RPC.
   /// - Returns: The result returns from the `handler`.
   @inlinable
   static func execute<Input: Sendable, Output: Sendable, Result: Sendable>(
@@ -110,8 +110,8 @@ extension ClientRPCExecutor {
   ///   - attempt: The attempt number of the request.
   ///   - serializer: A serializer to convert input messages to bytes.
   ///   - deserializer: A deserializer to convert bytes to output messages.
-  ///   - interceptors: An array of interceptors which the request and response pass through. The
-  ///       interceptors will be called in the order of the array.
+  ///   - interceptors: An array of interceptors which the request and response pass through. This
+  ///       function calls the interceptors in the order of the array.
   ///   - stream: The stream to excecute the RPC on.
   /// - Returns: The deserialized response.
   @inlinable  // would be private

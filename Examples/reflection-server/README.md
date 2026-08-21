@@ -1,7 +1,7 @@
 # Reflection Server
 
-This example demonstrates the gRPC Reflection service, which is described in more
-detail in the [gRPC documentation](https://github.com/grpc/grpc/blob/6fa8043bf9befb070b846993b59a3348248e6566/doc/server-reflection.md).
+This example demonstrates the gRPC Reflection service; the [gRPC documentation](https://github.com/grpc/grpc/blob/6fa8043bf9befb070b846993b59a3348248e6566/doc/server-reflection.md)
+describes it in more detail.
 
 ## Overview
 

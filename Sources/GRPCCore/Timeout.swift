@@ -16,7 +16,7 @@
 
 /// A timeout for a gRPC call.
 ///
-/// It's a combination of an amount (expressed as an integer of at maximum 8 digits), and a unit, which is
+/// It's a combination of an amount (an integer with at most 8 digits), and a unit, which is
 /// one of ``Timeout/Unit`` (hours, minutes, seconds, milliseconds, microseconds or nanoseconds).
 ///
 /// Timeouts must be positive and at most 8-digits long.
@@ -33,7 +33,7 @@ struct Timeout: CustomStringConvertible, Hashable, Sendable {
     case nanoseconds = "n"
   }
 
-  /// The largest amount of any unit of time which may be represented by a gRPC timeout.
+  /// The largest amount of any unit of time that a gRPC timeout may represent.
   static let maxAmount: Int64 = 99_999_999
 
   private let amount: Int64
@@ -44,7 +44,7 @@ struct Timeout: CustomStringConvertible, Hashable, Sendable {
     Duration(amount: amount, unit: unit)
   }
 
-  /// The wire encoding of this timeout as described in the gRPC protocol.
+  /// The wire encoding of this timeout, as the gRPC protocol describes.
   /// See "Timeout" in https://github.com/grpc/grpc/blob/6c0578099835c854b0ff36a4b8db98ed49278ed5/doc/PROTOCOL-HTTP2.md#requests
   var wireEncoding: String {
     "\(amount)\(unit.rawValue)"
@@ -72,10 +72,10 @@ struct Timeout: CustomStringConvertible, Hashable, Sendable {
 
   /// Create a ``Timeout`` from a ``Duration``.
   ///
-  /// - Important: It's not possible to know with what precision the duration was created: that is,
-  /// it's not possible to know whether `Duration.seconds(value)` or `Duration.milliseconds(value)`
-  /// was used. For this reason, the unit chosen for the ``Timeout`` (and thus the wire encoding) may be
-  /// different from the one originally used to create the `Duration`. Despite this, we guarantee that
+  /// - Important: It's not possible to know with what precision you created the duration: that is,
+  /// it's not possible to know whether you used `Duration.seconds(value)` or `Duration.milliseconds(value)`.
+  /// For this reason, the unit that ``Timeout`` chooses (and thus the wire encoding) may be
+  /// different from the one you originally used to create the `Duration`. Despite this, we guarantee that
   /// both durations will be equivalent if there was no loss in precision during the transformation.
   /// For example, `Duration.hours(123)` will yield a ``Timeout`` with `wireEncoding` equal to
   /// `"442800S"`, which is in seconds. However, 442800 seconds and 123 hours are equivalent.
@@ -117,8 +117,7 @@ struct Timeout: CustomStringConvertible, Hashable, Sendable {
     }
   }
 
-  /// Create a timeout by rounding up the timeout so that it may be represented in the gRPC
-  /// wire format.
+  /// Create a timeout by rounding up the timeout so that the gRPC wire format can represent it.
   private init(rounding amount: Int64, unit: Unit) {
     var roundedAmount = amount
     var roundedUnit = unit
@@ -170,7 +169,7 @@ struct Timeout: CustomStringConvertible, Hashable, Sendable {
 }
 
 extension Int64 {
-  /// Returns the quotient of this value when divided by `divisor` rounded up to the nearest
+  /// Returns the quotient when you divide this value by `divisor`, rounded up to the nearest
   /// multiple of `divisor` if the remainder is non-zero.
   ///
   /// - Parameter divisor: The value to divide this value by.
@@ -182,7 +181,7 @@ extension Int64 {
 
 @available(gRPCSwift 2.0, *)
 extension Duration {
-  /// Construct a `Duration` given a number of minutes represented as an `Int64`.
+  /// Construct a `Duration` given a number of minutes as an `Int64`.
   ///
   ///       let d: Duration = .minutes(5)
   ///
@@ -191,7 +190,7 @@ extension Duration {
     return Self.init(secondsComponent: 60 * minutes, attosecondsComponent: 0)
   }
 
-  /// Construct a `Duration` given a number of hours represented as an `Int64`.
+  /// Construct a `Duration` given a number of hours as an `Int64`.
   ///
   ///       let d: Duration = .hours(3)
   ///

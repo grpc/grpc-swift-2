@@ -16,21 +16,21 @@
 
 /// A type that intercepts requests and responses for a server.
 ///
-/// Interceptors allow you to inspect and modify requests and responses. Requests are intercepted
-/// after they have been received by the transport and responses are intercepted after they have
-/// been returned from a service. They are typically used for cross-cutting concerns like filtering
-/// requests, validating messages, logging additional data, and tracing.
+/// Interceptors allow you to inspect and modify requests and responses. The server intercepts
+/// requests after the transport receives them, and intercepts responses after a service returns
+/// them. You typically use interceptors for cross-cutting concerns like filtering requests,
+/// validating messages, logging additional data, and tracing.
 ///
-/// Interceptors can be registered with the server either directly or via ``ConditionalInterceptor``s.
+/// Register interceptors with the server either directly or via ``ConditionalInterceptor``s.
 /// You may register them for all services registered with a server, for RPCs directed to specific services, or
 /// for RPCs directed to specific methods. If you need to modify the behavior of an interceptor on a
 /// per-RPC basis in more detail, then you can use the ``ServerContext/descriptor`` to determine
-/// which RPC is being called and conditionalise behavior accordingly.
+/// which RPC the client is calling and conditionalise behavior accordingly.
 ///
 /// ## RPC filtering
 ///
 /// A common use of server-side interceptors is to filter requests from clients. Interceptors can
-/// reject requests that are invalid without service code being called. The following example
+/// reject invalid requests without calling service code. The following example
 /// demonstrates this.
 ///
 /// ```swift

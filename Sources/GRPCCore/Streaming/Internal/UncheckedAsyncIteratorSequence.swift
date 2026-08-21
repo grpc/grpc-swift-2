@@ -39,7 +39,7 @@ final class UncheckedAsyncIteratorSequence<
   @usableFromInline
   private(set) var base: Base
 
-  /// Set to `true` when an iterator has been made.
+  /// Set to `true` after a caller makes an iterator.
   @usableFromInline
   let _hasMadeIterator = Atomic(false)
 

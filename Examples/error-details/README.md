@@ -4,11 +4,11 @@ This example demonstrates how to create and unpack detailed errors.
 
 ## Overview
 
-A command line tool that demonstrates how a detailed error can be thrown by a
-service and unpacked and inspected by a client. The detailed error model is
-described in more detail in the [gRPC Error
-Guide](https://grpc.io/docs/guides/error/) and is made available via the
-[grpc-swift-protobuf](https://github.com/grpc-swift-protobuf) package.
+A command line tool that demonstrates how a service can throw a detailed error
+and how a client can unpack and inspect it. The [gRPC Error
+Guide](https://grpc.io/docs/guides/error/) describes the detailed error model in more
+detail, and the [grpc-swift-protobuf](https://github.com/grpc-swift-protobuf) package
+makes it available.
 
 ## Usage
 

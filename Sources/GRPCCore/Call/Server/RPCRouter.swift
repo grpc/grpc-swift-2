@@ -17,7 +17,7 @@
 /// Stores and provides handlers for RPCs.
 ///
 /// The router stores a handler for each RPC it knows about. Each handler encapsulates the business
-/// logic for the RPC that is typically implemented by service owners. To register a handler, you
+/// logic for the RPC, which service owners typically implement. To register a handler, you
 /// can call ``registerHandler(forMethod:deserializer:serializer:handler:)``. You can check whether
 /// the router has a handler for a method with ``hasHandler(forMethod:)`` or get a list of all
 /// methods with handlers registered by calling ``methods``. You can also remove the handler for a
@@ -33,7 +33,7 @@
 ///
 /// 1. Remove individual methods by calling ``removeHandler(forMethod:)``, or
 /// 2. Implement ``RegistrableRPCService/registerMethods(with:)`` to register only the methods you
-///    want to be served.
+///    want the router to serve.
 @available(gRPCSwift 2.0, *)
 public struct RPCRouter<Transport: ServerTransport>: Sendable {
   @usableFromInline
@@ -140,7 +140,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
 
   /// Registers a handler with the router.
   ///
-  /// - Note: If a handler already exists for a given method, then it will be replaced.
+  /// - Note: If a handler already exists for a given method, the router replaces it.
   ///
   /// - Parameters:
   ///   - descriptor: A descriptor for the method to register a handler for.
@@ -170,7 +170,7 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
   /// Removes any handler registered for the specified method.
   ///
   /// - Parameter descriptor: A descriptor of the method to remove a handler for.
-  /// - Returns: Whether a handler was removed.
+  /// - Returns: Whether this call removed a handler.
   @discardableResult
   public mutating func removeHandler(forMethod descriptor: MethodDescriptor) -> Bool {
     return self.handlers.removeValue(forKey: HandlerKey(descriptor)) != nil
@@ -178,10 +178,10 @@ public struct RPCRouter<Transport: ServerTransport>: Sendable {
 
   /// Registers applicable interceptors to all currently-registered handlers.
   ///
-  /// - Important: Calling this method will apply the interceptors only to existing handlers. Any handlers registered via
-  ///  ``registerHandler(forMethod:deserializer:serializer:handler:)`` _after_ calling this method will not have
-  ///    any interceptors applied to them. If you want to make sure all registered methods have any applicable interceptors applied,
-  ///    only call this method _after_ you have registered all handlers.
+  /// - Important: Calling this method will apply the interceptors only to existing handlers. If you register handlers via
+  ///  ``registerHandler(forMethod:deserializer:serializer:handler:)`` _after_ calling this method, the router won't apply
+  ///    any interceptors to them. If you want every registered method to receive any applicable interceptors,
+  ///    call this method only after you have registered all handlers.
   /// - Parameter pipeline: The interceptor pipeline operations to register to all currently-registered handlers. The order of the
   ///  interceptors matters.
   @inlinable

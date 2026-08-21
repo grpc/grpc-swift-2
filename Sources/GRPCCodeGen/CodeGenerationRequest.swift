@@ -23,14 +23,14 @@ public struct CodeGenerationRequest {
 
   /// Any comments at the top of the file such as documentation and copyright headers.
   ///
-  /// They will be placed at the top of the generated file. They are already formatted,
-  /// meaning they contain "///" and new lines.
+  /// The code generator places them at the top of the generated file. They are already
+  /// formatted, meaning they contain "///" and new lines.
   public var leadingTrivia: String
 
   /// The Swift imports that the generated file depends on.
   ///
-  /// The gRPC-specific imports aren't required as they will be added by default in the generated
-  /// file.
+  /// The gRPC-specific imports aren't required because the code generator adds them by default
+  /// in the generated file.
   ///
   /// - SeeAlso: ``Dependency``.
   public var dependencies: [Dependency]
@@ -43,8 +43,8 @@ public struct CodeGenerationRequest {
   /// Closure that receives a message type as a `String` and returns a code snippet to
   /// initialize a `MessageSerializer` for that type as a `String`.
   ///
-  /// The result is inserted in the generated code, where clients serialize RPC inputs and
-  /// servers serialize RPC outputs.
+  /// The code generator inserts the result into the generated code, where clients serialize
+  /// RPC inputs and servers serialize RPC outputs.
   ///
   /// For example, to serialize Protobuf messages you could specify a serializer as:
   /// ```swift
@@ -57,8 +57,8 @@ public struct CodeGenerationRequest {
   /// Closure that receives a message type as a `String` and returns a code snippet to
   /// initialize a `MessageDeserializer` for that type as a `String`.
   ///
-  /// The result is inserted in the generated code, where clients deserialize RPC outputs and
-  /// servers deserialize RPC inputs.
+  /// The code generator inserts the result into the generated code, where clients deserialize
+  /// RPC outputs and servers deserialize RPC inputs.
   ///
   /// For example, to deserialize Protobuf messages you could specify a deserializer as:
   /// ```swift
@@ -135,10 +135,10 @@ public struct Dependency: Equatable, Sendable {
   /// If the dependency is a module, this property is nil.
   public var item: Item?
 
-  /// The access level to be included in imports of this dependency.
+  /// The access level to include in imports of this dependency.
   public var accessLevel: CodeGenerator.Config.AccessLevel
 
-  /// The name of the imported module or of the module an item is imported from.
+  /// The name of the imported module, or of the module that an item comes from.
   public var module: String
 
   /// The name of the private interface for an `@_spi` import.
@@ -400,27 +400,28 @@ extension MethodDescriptor {
 public struct ServiceName: Hashable, Sendable {
   /// The identifying name as used in the service/method descriptors, including any namespace.
   ///
-  /// This value is also used to identify the service to the remote peer, usually as part of the
-  /// ":path" pseudoheader if doing gRPC over HTTP/2.
+  /// Generated code also uses this value to identify the service to the remote peer, usually as
+  /// part of the ":path" pseudoheader if doing gRPC over HTTP/2.
   ///
-  /// If the service is declared in package "foo.bar" and the service is called "Baz" then this
+  /// If you declare the service in package "foo.bar" and call it "Baz", then this
   /// value should be "foo.bar.Baz".
   public var identifyingName: String
 
   /// The name as used on types, including any namespace.
   ///
-  /// This is used to generate a namespace for each service which contains a number of client and
-  /// server protocols and concrete types.
+  /// The code generator uses this to generate a namespace for each service, which contains a
+  /// number of client and server protocols and concrete types.
   ///
-  /// If the service is declared in package "foo.bar" and the service is called "Baz", then this
+  /// If you declare the service in package "foo.bar" and call it "Baz", then this
   /// value should be "Foo\_Bar\_Baz".
   public var typeName: String
 
   /// The name as used as a property.
   ///
-  /// This is used to provide a convenience getter for a descriptor of the service.
+  /// The code generator uses this to provide a convenience getter for a descriptor of the
+  /// service.
   ///
-  /// If the service is declared in package "foo.bar" and the service is called "Baz", then this
+  /// If you declare the service in package "foo.bar" and call it "Baz", then this
   /// value should be "foo\_bar\_Baz".
   public var propertyName: String
 
@@ -435,16 +436,16 @@ public struct ServiceName: Hashable, Sendable {
 public struct MethodName: Hashable, Sendable {
   /// The identifying name as used in the service/method descriptors.
   ///
-  /// This value is also used to identify the method to the remote peer, usually as part of the
-  /// ":path" pseudoheader if doing gRPC over HTTP/2.
+  /// Generated code also uses this value to identify the method to the remote peer, usually as
+  /// part of the ":path" pseudoheader if doing gRPC over HTTP/2.
   ///
   /// This value typically starts with an uppercase character, for example "Get".
   public var identifyingName: String
 
   /// The name as used on types, including any namespace.
   ///
-  /// This is used to generate a namespace for each method which contains information about
-  /// the method.
+  /// The code generator uses this to generate a namespace for each method, which contains
+  /// information about the method.
   ///
   /// This value typically starts with an uppercase character, for example "Get".
   public var typeName: String
@@ -468,20 +469,20 @@ public struct Name: Hashable, Sendable {
   /// The base name is the name used for the namespace/service/method in the IDL file, so it should follow
   /// the specific casing of the IDL.
   ///
-  /// The base name is also used in the descriptors that identify a specific method or service:
+  /// Descriptors that identify a specific method or service also use the base name:
   /// `<service_namespace_baseName>.<service_baseName>.<method_baseName>`.
   public var base: String
 
-  /// The `generatedUpperCase` name is used in the generated code.
+  /// Generated code uses the `generatedUpperCase` name.
   ///
-  /// It is expected to be the UpperCamelCase version of the base name.
+  /// It should be the UpperCamelCase version of the base name.
   ///
   /// For example, if `base` is "fooBar", then `generatedUpperCase` is "FooBar".
   public var generatedUpperCase: String
 
-  /// The `generatedLowerCase` name is used in the generated code.
+  /// Generated code uses the `generatedLowerCase` name.
   ///
-  /// It is expected to be the lowerCamelCase version of the base name.
+  /// It should be the lowerCamelCase version of the base name.
   ///
   /// For example, if `base` is "FooBar", then `generatedLowerCase` is "fooBar".
   public var generatedLowerCase: String

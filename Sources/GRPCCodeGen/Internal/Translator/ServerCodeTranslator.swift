@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-/// Creates a representation for the server code that will be generated based on the ``CodeGenerationRequest`` object
-/// specifications, using types from ``StructuredSwiftRepresentation``.
+/// Creates a representation for the server code that ``ServerCodeTranslator`` generates based
+/// on the ``CodeGenerationRequest`` object's specifications, using types from
+/// ``StructuredSwiftRepresentation``.
 ///
 /// For example, in the case of a service called "Bar", in the "foo" namespace which has
 /// one method "baz" with input type "Input" and output type "Output", the ``ServerCodeTranslator`` will create
@@ -191,8 +192,9 @@ struct ServerCodeTranslator {
       /// This protocol is the lowest-level of the service protocols generated for this service
       /// giving you the most flexibility over the implementation of your service. This comes at
       /// the cost of more verbose and less strict APIs. Each RPC requires you to implement it in
-      /// terms of a request stream and response stream. Where only a single request or response
-      /// message is expected, you are responsible for enforcing this invariant is maintained.
+      /// terms of a request stream and response stream. Where the RPC expects only a single
+      /// request or response message, you are responsible for ensuring your implementation
+      /// maintains this invariant.
       ///
       /// Where possible, prefer using the stricter, less-verbose ``ServiceProtocol``
       /// or ``SimpleServiceProtocol`` instead.

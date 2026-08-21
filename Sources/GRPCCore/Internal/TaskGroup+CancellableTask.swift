@@ -19,7 +19,7 @@ extension TaskGroup {
   /// Adds a child task to the group which is individually cancellable.
   ///
   /// - Parameter operation: The task to add to the group.
-  /// - Returns: A handle which can be used to cancel the task without cancelling the rest of
+  /// - Returns: A handle that a caller can use to cancel the task without cancelling the rest of
   ///     the group.
   @inlinable
   mutating func addCancellableTask(

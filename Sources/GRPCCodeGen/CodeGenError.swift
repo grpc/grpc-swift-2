@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/// An error thrown by the ``SourceGenerator`` to signal errors in the ``CodeGenerationRequest`` object.
+/// ``SourceGenerator`` throws this error to signal errors in the ``CodeGenerationRequest`` object.
 @available(gRPCSwift 2.0, *)
 public struct CodeGenError: Error, Hashable, Sendable {
   /// The code indicating the domain of the error.
@@ -48,17 +48,17 @@ extension CodeGenError {
       self.value = value
     }
 
-    /// The same name is used for two services that either are in the same namespace or don't have a namespace.
+    /// Two services that are either in the same namespace or don't have a namespace use the same name.
     public static var nonUniqueServiceName: Self {
       Self(.nonUniqueServiceName)
     }
 
-    /// The same name is used for two methods of the same service.
+    /// Two methods of the same service use the same name.
     public static var nonUniqueMethodName: Self {
       Self(.nonUniqueMethodName)
     }
 
-    /// An invalid kind name is used for an import.
+    /// An import uses an invalid kind name.
     public static var invalidKind: Self {
       Self(.invalidKind)
     }
