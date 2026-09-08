@@ -6,21 +6,30 @@ backed by an in-memory demo certificate authority generated with the package `sw
 
 ## Overview
 
-`InMemoryPKI.CertificateAuthority` generates a throwaway certificate authority (using the package
-`swift-certificates`) and can create and sign new leaf (server or client) certificates on demand.
-`Greeter` is the `Helloworld_Greeter` implementation: when it's talking to a client over mTLS, it reads
-the client certificate's Subject Alternative Name from `ServerContext.transportSpecific` and
-reports it back --- both in the RPC reply and to its console output.
+The `generate` subcommand calls `InMemoryPKI.CertificateAuthority` to generate a throwaway certificate
+authority (using the package `swift-certificates`) and can create and sign new leaf (server or client)
+certificates on demand. `serve` and `greet` read and use the PEM files it writes.
+
+When `Greeter`, the `Helloworld_Greeter` implementation, talks to a client over mTLS, it reads the
+client certificate's Subject Alternative Name from `ServerContext.transportSpecific` and reports it
+both in the RPC reply and its console output.
 
 ## Usage
 
-Start the server in one terminal. `serve` generates a new Certificate Authority (CA) and server certificate,
-writes the CA's certificate (and, for this demo only, its private key) to a temporary
-directory, and prints where:
+Generate the CA, server certificate, and a client certificate for the identity `alice`:
+
+```console
+$ swift run tls-hello-world generate --client-id alice
+Generated demo CA in /var/folders/.../tls-hello-world-demo-pki
+Generated server certificate for 'localhost'
+Generated client certificate for 'alice' (identity: spiffe://tls-hello-world.example/client/alice)
+```
+
+Start the server in one terminal, pointing at the same directory (the default, so no flag is
+needed if you didn't pass `--pki-directory` above):
 
 ```console
 $ swift run tls-hello-world serve --mode tls
-Demo CA written to /var/folders/.../tls-hello-world-demo-pki
 Greeter listening on [ipv4]127.0.0.1:31415 (tls)
 ```
 
@@ -32,46 +41,61 @@ With plain `--mode tls`, the client secures the connection and only verifies the
 server --- there's no client identity to report:
 
 ```console
-$ swift run tls-hello-world greet --mode tls
+$ swift run tls-hello-world greet --mode tls --name stranger
 Hello, stranger! This connection was verified.
 ```
 
 ### mTLS
 
-In the first terminal, restart `serve` and use `--mode mtls` to also require a client certificate. 
-Each time the client `greet` is run, it generates a new client certificate signed by the CA, and 
-embeds a SPIFFE-style identity into the Subject Alternative Name (SAN) using the client option of `--client-id`.
-The server reads that identity back off the peer certificate chain and includes it in its reply:
+In the first terminal, restart `serve` and use `--mode mtls` to also require a client certificate.
+`greet --client-id` selects which pre-generated client certificate to present; the server reads
+the SPIFFE-style identity back off the peer certificate chain and includes it in its reply:
 
 ```console
 $ swift run tls-hello-world serve --mode mtls
-Demo CA written to /var/folders/.../tls-hello-world-demo-pki
 Greeter listening on [ipv4]127.0.0.1:31415 (mtls)
 
-$ swift run tls-hello-world greet --mode mtls --client-id alice
+$ swift run tls-hello-world greet --mode mtls --client-id alice --name stranger
 Hello, stranger! Verified client identity: spiffe://tls-hello-world.example/client/alice.
+```
 
-$ swift run tls-hello-world greet --mode mtls --client-id bob
+Generate a second identity into the same directory --- it reuses the CA already there, so the
+server (already running, and unchanged) trusts it too --- and greet as `bob`:
+
+```console
+$ swift run tls-hello-world generate --client-id bob
+Reusing existing demo CA in /var/folders/.../tls-hello-world-demo-pki
+Generated server certificate for 'localhost'
+Generated client certificate for 'bob' (identity: spiffe://tls-hello-world.example/client/bob)
+
+$ swift run tls-hello-world greet --mode mtls --client-id bob --name stranger
 Hello, stranger! Verified client identity: spiffe://tls-hello-world.example/client/bob.
 ```
 
-`serve` and `greet` agree on the CA's location by default, so no flags are needed to share it
-across the two invocations; pass `--pki-dir` to both if you want to point them somewhere else.
+`serve` and `greet` agree on the PKI directory by default, so no flags are required;
+pass `--pki-directory` to all three subcommands if you want to point them
+somewhere else.
 
-> Warning: `serve` writes the demo CA's private key to disk so `greet` can mint client
-> certificates signed by it. This is not appropriate secure behavior, and is set up only to support
-> illustrating the code for how this works. A real CA's private key should never leave the CA.
+> Warning: `generate` writes the demo CA's private key to disk so it can mint more client
+> certificates signed by it in later invocations (like `bob`, above). This is not appropriate
+> secure behavior, and is set up only to support illustrating the code for how this works. A real
+> CA's private key should never leave the CA.
 
 ### Forcing mTLS failure: use an untrusted client CA
 
-To see what an mTLS trust failure looks like, pass `--untrusted-ca` to `greet`. Rather than
-signing the client certificate with the known CA, it creates a new CA 
-(that the server has no knowledge of) and signs the client certificate with it.
+To see what an mTLS trust failure looks like, generate a client certificate signed by a separate,
+untrusted CA with `generate --untrusted-ca`, then present it with `greet --untrusted-ca`.
 Everything else about the connection is unchanged:
 
 ```console
-$ swift run tls-hello-world greet --mode mtls --client-id alice --untrusted-ca
-Signing client certificate with an untrusted CA (expect this to fail)...
+$ swift run tls-hello-world generate --untrusted-ca
+Reusing existing demo CA in /var/folders/.../tls-hello-world-demo-pki
+Generated server certificate for 'localhost'
+Generated client certificate for 'demo-client' (identity: spiffe://tls-hello-world.example/client/demo-client)
+Generated client certificate signed by an untrusted CA (for greet --untrusted-ca)
+
+$ swift run tls-hello-world greet --mode mtls --untrusted-ca --name stranger
+Presenting a client certificate signed by an untrusted CA (expect this to fail)...
 Request failed: unavailable: "The server accepted the TCP connection but closed the connection
 before completing the HTTP/2 connection preface." (cause: "sslError([Error: ... SSL routines:
 OPENSSL_internal:TLSV1_ALERT_UNKNOWN_CA ...])")
@@ -93,12 +117,12 @@ Real TLS over a real socket, using in-memory certificates from `InMemoryPKI`:
 2. **mTLS**: the server also requires and verifies a client certificate; the client presents
    one. Both certificates are signed by the same CA, so a single `trustRoots` value on each side
    verifies the other.
-3. **mTLS with an on-demand client identity**: the same on-demand certificate `greet`
-   uses, exercised end-to-end --- a fresh client certificate with a SPIFFE-style SAN, and an
-   assertion that the server reads that exact identity back off the peer certificate chain.
-4. **mTLS rejects a client certificate signed by an untrusted CA**: the same failure `greet
-   --untrusted-ca` demonstrates, exercised end-to-end --- the handshake itself fails, so the
-   request never reaches `Greeter`.
+3. **mTLS with an on-demand client identity**: the same on-demand certificate `generate
+   --client-id` uses: a fresh client certificate with a SPIFFE-style SAN,
+   and an assertion that the server reads that exact identity back off the peer certificate chain.
+4. **mTLS rejects a client certificate signed by an untrusted CA**: the same failure 
+   `generate --untrusted-ca` followed by `greet --untrusted-ca` demonstrates: the handshake itself
+   fails, so the request never reaches `Greeter`.
 
 ### `Tests/InProcessGreeterTests`
 

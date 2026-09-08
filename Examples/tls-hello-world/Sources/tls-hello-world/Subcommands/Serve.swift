@@ -33,36 +33,33 @@ struct Serve: AsyncParsableCommand {
 
   @Option(
     help:
-      "Directory to write the demo certificate authority's certificate and private key to, so `greet` can trust (and, for mTLS, mint client certificates signed by) the same CA"
+      "Directory to read the certificates `generate` wrote from --- must match the directory `generate` (and, for mTLS, `greet`) used"
   )
   var pkiDirectory: String = InMemoryPKIFiles.defaultDirectory.path
 
   func run() async throws {
-    let authority = try InMemoryPKI.CertificateAuthority.makeDemoAuthority()
-    let server = try authority.makeLeafCertificate(
-      commonName: "Example Demo Server",
-      extendedKeyUsage: .serverAuth,
-      subjectAlternativeNames: [.dnsName("localhost")]
-    )
-
     let directory = URL(fileURLWithPath: self.pkiDirectory)
-    try InMemoryPKIFiles.write(authority, to: directory)
-    print("Demo CA written to \(directory.path)")
+    let serverCertificatePath = InMemoryPKIFiles.certificatePath(named: "server", in: directory)
+    let serverPrivateKeyPath = InMemoryPKIFiles.privateKeyPath(named: "server", in: directory)
+    try requirePKIFilesExist([serverCertificatePath, serverPrivateKeyPath])
 
     let transportSecurity: HTTP2ServerTransport.Posix.TransportSecurity
     switch self.mode {
     case .tls:
       transportSecurity = .tls(
-        certificateChain: [.bytes(server.certificateDER, format: .der)],
-        privateKey: .bytes(server.privateKeyDER, format: .der)
+        certificateChain: [.file(path: serverCertificatePath.path, format: .pem)],
+        privateKey: .file(path: serverPrivateKeyPath.path, format: .pem)
       )
 
     case .mtls:
+      let caCertificatePath = InMemoryPKIFiles.certificatePath(named: "ca", in: directory)
+      try requirePKIFilesExist([caCertificatePath])
+
       transportSecurity = .mTLS(
-        certificateChain: [.bytes(server.certificateDER, format: .der)],
-        privateKey: .bytes(server.privateKeyDER, format: .der)
+        certificateChain: [.file(path: serverCertificatePath.path, format: .pem)],
+        privateKey: .file(path: serverPrivateKeyPath.path, format: .pem)
       ) { config in
-        config.trustRoots = .certificates([.bytes(authority.certificateDER, format: .der)])
+        config.trustRoots = .certificates([.file(path: caCertificatePath.path, format: .pem)])
       }
     }
 

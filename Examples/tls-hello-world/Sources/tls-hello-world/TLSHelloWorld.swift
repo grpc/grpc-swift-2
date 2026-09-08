@@ -22,6 +22,6 @@ struct TLSHelloWorld: AsyncParsableCommand {
     commandName: "tls-hello-world",
     abstract:
       "A TLS/mTLS variant of the greeter example: run a server and make requests with connections secured with TLS or mTLS.",
-    subcommands: [Serve.self, Greet.self]
+    subcommands: [Generate.self, Serve.self, Greet.self]
   )
 }

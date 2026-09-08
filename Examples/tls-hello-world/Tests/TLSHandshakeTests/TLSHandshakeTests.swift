@@ -108,10 +108,10 @@ struct TLSHandshakeTests {
     }
   }
 
-  // Mints a client certificate on demand, the way `tls-hello-world greet --mode mtls
-  // --client-id <name>` does: rather than a pre-baked `InMemoryPKI.client`, a fresh leaf
-  // certificate is signed by the CA with a SPIFFE-style URI SAN baked in, and the server reads
-  // that identity back off the peer certificate chain via `ServerContext.transportSpecific`.
+  // Creates a client certificate the same way as `generate --client-id alice`: a
+  // fresh leaf certificate signed by the CA with a SPIFFE-style URI SAN embedded.
+  // The server then reads the identity from the peer certificate chain using
+  // `ServerContext.transportSpecific`.
   @Test("mTLS with an on-demand client identity")
   func mtlsWithOnDemandClientIdentity() async throws {
     let authority = try InMemoryPKI.CertificateAuthority.makeDemoAuthority()
@@ -165,10 +165,9 @@ struct TLSHandshakeTests {
     }
   }
 
-  // The mirror image of the previous test, the way `tls-hello-world greet --mode mtls
-  // --untrusted-ca` demonstrates an mTLS trust failure: the client certificate is signed by a
-  // CA the server never trusted, so the handshake itself fails --- the server never gets far
-  // enough to run `Greeter` at all.
+  // The mirror image of the previous test, using `generate --untrusted-ca`, then
+  // `greet --mode mtls --untrusted-ca` to demonstrate mTLS trust failure. The client
+  // certificate is signed by a CA the server never trusted, so the handshake fails.
   @Test("mTLS rejects a client certificate signed by an untrusted CA")
   func mtlsRejectsUntrustedClientCA() async throws {
     let authority = try InMemoryPKI.CertificateAuthority.makeDemoAuthority()

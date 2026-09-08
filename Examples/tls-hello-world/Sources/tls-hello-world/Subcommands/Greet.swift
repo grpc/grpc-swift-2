@@ -35,58 +35,51 @@ struct Greet: AsyncParsableCommand {
 
   @Option(
     help:
-      "Directory to read the demo certificate authority's certificate (and, for mTLS, private key) from --- must match the directory `serve` wrote to"
+      "Directory to read the certificates `generate` wrote from --- must match the directory `generate` (and `serve`) used"
   )
   var pkiDirectory: String = InMemoryPKIFiles.defaultDirectory.path
 
   @Option(
     help:
-      "Workload identity to mint into a fresh client certificate's SAN for this request (mTLS only); the server reads this back and reports it"
+      "Workload identity whose pre-generated client certificate to present (mTLS only) --- must match a --client-id previously passed to `generate`"
   )
   var clientID: String = "demo-client"
 
   @Flag(
     help:
-      "Sign the client certificate with a throwaway, untrusted CA instead of the real one, to demonstrate an mTLS trust failure (mTLS only)"
+      "Present the client certificate generate --untrusted-ca produced, signed by a CA the server doesn't trust, to demonstrate an mTLS trust failure (mTLS only)"
   )
   var untrustedCA: Bool = false
 
   func run() async throws {
     let directory = URL(fileURLWithPath: self.pkiDirectory)
-    let authority = try InMemoryPKIFiles.loadCertificateAuthority(from: directory)
+    let caCertificatePath = InMemoryPKIFiles.certificatePath(named: "ca", in: directory)
+    try requirePKIFilesExist([caCertificatePath])
 
     let transportSecurity: HTTP2ClientTransport.Posix.TransportSecurity
     switch self.mode {
     case .tls:
       transportSecurity = .tls { config in
-        config.trustRoots = .certificates([.bytes(authority.certificateDER, format: .der)])
+        config.trustRoots = .certificates([.file(path: caCertificatePath.path, format: .pem)])
       }
 
     case .mtls:
-      let signingAuthority: InMemoryPKI.CertificateAuthority
+      let clientName = self.untrustedCA ? "untrusted-client" : "client-\(self.clientID)"
+      let clientCertificatePath = InMemoryPKIFiles.certificatePath(named: clientName, in: directory)
+      let clientPrivateKeyPath = InMemoryPKIFiles.privateKeyPath(named: clientName, in: directory)
+      try requirePKIFilesExist([clientCertificatePath, clientPrivateKeyPath])
+
       if self.untrustedCA {
-        print("Signing client certificate with an untrusted CA (expect this to fail)...")
-        signingAuthority = try InMemoryPKI.CertificateAuthority.makeDemoAuthority(
-          commonName: "Untrusted Impostor CA"
-        )
-      } else {
-        signingAuthority = authority
+        print("Presenting a client certificate signed by an untrusted CA (expect this to fail)...")
       }
 
-      let identity = "spiffe://tls-hello-world.example/client/\(self.clientID)"
-      let client = try signingAuthority.makeLeafCertificate(
-        commonName: "Example Demo Client (\(self.clientID))",
-        extendedKeyUsage: .clientAuth,
-        subjectAlternativeNames: [.uniformResourceIdentifier(identity)]
-      )
-
       transportSecurity = .mTLS(
-        certificateChain: [.bytes(client.certificateDER, format: .der)],
-        privateKey: .bytes(client.privateKeyDER, format: .der)
+        certificateChain: [.file(path: clientCertificatePath.path, format: .pem)],
+        privateKey: .file(path: clientPrivateKeyPath.path, format: .pem)
       ) { config in
         // The client still trusts the real server CA --- only the client's own certificate is
         // (optionally) signed by a CA the server doesn't recognize.
-        config.trustRoots = .certificates([.bytes(authority.certificateDER, format: .der)])
+        config.trustRoots = .certificates([.file(path: caCertificatePath.path, format: .pem)])
       }
     }
 
