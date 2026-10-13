@@ -58,6 +58,10 @@ import GRPCProtobuf // for message (de)serialization and error details
 - <doc:client>
 - <doc:server>
 
+### Security
+
+- <doc:TLS>
+- <doc:mTLS>
 
 ### Streaming primitives
 
